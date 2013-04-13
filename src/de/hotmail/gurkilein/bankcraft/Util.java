@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 public class Util {
 	
+	//Used to calculate the REAL total experience of a player
 	public static int getTotalExperience(Player player) {
 		int currentLevel = player.getLevel();
 		float experienceTowardsNextLevel = player.getExp();
