@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
+import de.hotmail.gurkilein.bankcraft.banking.ExperienceBukkitHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
 
 public class MinecraftCommandListener implements CommandExecutor{
@@ -112,6 +113,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 												
 											bankcraft.getSignDatabaseInterface().addAmount(x, y, z, w, vars[1]);
 											coHa.printMessage(p, "message.amountAddedSuccessfullyToSign", vars[1], p.getName());
+											bankcraft.getSignHandler().updateSign(signblock,0);
 											return true;
 											}
 
@@ -122,25 +124,45 @@ public class MinecraftCommandListener implements CommandExecutor{
 						
 
 						else if (vars[0].equalsIgnoreCase(coHa.getString("command.deposit")) && (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Double amount = Double.parseDouble(vars[1]);
+							double amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = Bankcraft.econ.getBalance(p.getName());
+							} else {
+								amount = Double.parseDouble(vars[1]);
+							}
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromPocketToAccount(p, p.getName(), amount,p);
 							return true;
 						}
 
 
-						else if (vars[0].equalsIgnoreCase(coHa.getString("command.debit")) && (Bankcraft.perms.has(p, "bankcraft.command.debit") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Double amount = Double.parseDouble(vars[1]);
+						else if (vars[0].equalsIgnoreCase(coHa.getString("command.withdraw")) && (Bankcraft.perms.has(p, "bankcraft.command.withdraw") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+							double amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Double.parseDouble(vars[1]);
+							}
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToPocket(p.getName(), p, amount,p);
 							return true;
 						}
 
 						else if (vars[0].equalsIgnoreCase(coHa.getString("command.depositxp")) && (Bankcraft.perms.has(p, "bankcraft.command.depositxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Integer amount = Integer.parseInt(vars[1]);
+							int amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = ExperienceBukkitHandler.getTotalExperience(p);
+							} else {
+								amount = Integer.parseInt(vars[1]);
+							}
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromPocketToAccount(p, p.getName(), amount,p);
 							return true;
 						}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("command.debitxp")) && (Bankcraft.perms.has(p, "bankcraft.command.debitxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Integer amount = Integer.parseInt(vars[1]);
+						else if (vars[0].equalsIgnoreCase(coHa.getString("command.withdrawxp")) && (Bankcraft.perms.has(p, "bankcraft.command.withdrawxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+							int amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Integer.parseInt(vars[1]);
+							}
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(p.getName(), p, amount,p);
 							return true;
 						}
@@ -180,7 +202,12 @@ public class MinecraftCommandListener implements CommandExecutor{
 				if (vars.length == 3) {
 					if (Util.isPositive(vars[2]) || vars[2].equalsIgnoreCase("all")) {
 						if (vars[0].equalsIgnoreCase(coHa.getString("command.transfer")) && (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							double amount = new Double(vars[2]);
+							double amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Double.parseDouble(vars[1]);
+							}
 						
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
 							coHa.printMessage(p, "message.transferedSuccessfully", amount+"", vars[1]);
@@ -191,7 +218,12 @@ public class MinecraftCommandListener implements CommandExecutor{
 							
 						if (vars[0].equalsIgnoreCase(coHa.getString("command.transferxp")) && (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 
-							int amount = new Integer(vars[2]);
+							int amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Integer.parseInt(vars[1]);
+							}
 							
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
 							coHa.printMessage(p, "message.transferedSuccessfullyXp", amount+"", vars[1]);

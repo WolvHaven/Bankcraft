@@ -85,7 +85,7 @@ public class SignHandler {
 				//Deposit
 				double amount;
 				if (all == true) {
-					amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
+					amount = Bankcraft.econ.getBalance(p.getName());
 				} else {
 					amount = Double.parseDouble(amountAsString);
 				}
@@ -96,7 +96,7 @@ public class SignHandler {
 				//Deposit XP
 				int amount;
 				if (all == true) {
-					amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
+					amount = ExperienceBukkitHandler.getTotalExperience(p);
 				} else {
 					amount = Integer.parseInt(amountAsString);
 				}
@@ -104,10 +104,10 @@ public class SignHandler {
 			}
 
 			if (typ == 2 | typ == 4) {
-				//Debit
+				//Withdraw
 				double amount;
 				if (all == true) {
-					amount = Bankcraft.econ.getBalance(p.getName());
+					amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
 				} else {
 					amount = Double.parseDouble(amountAsString);
 				}
@@ -116,10 +116,10 @@ public class SignHandler {
 				
 			}
 			if (typ == 7 | typ == 9) {
-				//Debit XP
+				//Withdraw XP
 				int amount;
 				if (all == true) {
-					amount = p.getTotalExperience();
+					amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
 				} else {
 					amount = Integer.parseInt(amountAsString);
 				}

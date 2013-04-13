@@ -17,7 +17,6 @@ public class ExperienceFlatFileInterface implements
 
 	public ExperienceFlatFileInterface(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
-		System.out.println("blub");
     	(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts")).mkdir();
 	}
 	

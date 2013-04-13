@@ -3,7 +3,6 @@ package de.hotmail.gurkilein.bankcraft.banking;
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
-import de.hotmail.gurkilein.bankcraft.Util;
 
 public class ExperienceBankingHandler implements BankingHandler<Integer>{
 
@@ -16,12 +15,9 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean transferFromPocketToAccount(Player pocketOwner,
 			String accountOwner, Integer amount, Player observer) {
-		if (Util.getT >= amount) {
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimit"))-amount) {
-				Integer currentExp = pocketOwner.getTotalExperience();
-				pocketOwner.setLevel(0);
-				pocketOwner.setExp(0);
-				pocketOwner.giveExp(currentExp-amount);
+		if (ExperienceBukkitHandler.getTotalExperience(pocketOwner) >= amount) {
+			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+				ExperienceBukkitHandler.removeExperienceFromPocket(pocketOwner, amount);
 				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfullyXp", amount+"", accountOwner);
 				return true;
@@ -38,9 +34,9 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	public boolean transferFromAccountToPocket(String accountOwner,
 			   Player pocketOwner, Integer amount, Player observer) {
 			  if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner) >= amount) {
-			   if (Util.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimit"))-amount) {
+			   if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
-			    pocketOwner.giveExp(amount);
+			    ExperienceBukkitHandler.addExperienceToPocket(pocketOwner, amount);
 			    bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfullyXp", amount+"", accountOwner);
 			    return true;
 			   } else {
@@ -93,7 +89,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 				messageKey = "message.couldNotGrantInterestOnXp";
 			}
 			Player player;
-			if (bankcraft.getConfigurationHandler().getString("interest.interestOnXp").equals(true) && (player =bankcraft.getServer().getPlayer(accountName)) != null) {
+			if (bankcraft.getConfigurationHandler().getString("interest.broadcastXp").equals("true") && (player =bankcraft.getServer().getPlayer(accountName)) != null) {
 				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getName());
 			}
 		}

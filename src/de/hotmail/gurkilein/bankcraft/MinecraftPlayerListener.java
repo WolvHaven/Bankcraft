@@ -149,9 +149,10 @@ public class MinecraftPlayerListener implements Listener{
 							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 								bankcraft.getSignHandler().leftClickSign(p, ((Sign) event.getClickedBlock().getState()).getLine(2), typ, event.getClickedBlock(), ((Sign) event.getClickedBlock().getState()).getLine(3));
 							}
-						}
+						
 					} else {
 						coHa.printMessage(p, "message.notAllowed", "0", p.getName());
+					}
 					}
 				}
 				((Sign) event.getClickedBlock().getState()).update();

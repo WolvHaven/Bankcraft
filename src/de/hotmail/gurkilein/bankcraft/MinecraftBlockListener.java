@@ -36,8 +36,7 @@ public class MinecraftBlockListener implements Listener{
 
 			//if sign found
 			if (type == Material.WALL_SIGN) {
-				if ((nachbarblock.getData() == 3 & face.equals(BlockFace.WEST)) | (nachbarblock.getData() == 2 & face.equals(BlockFace.EAST)) | (nachbarblock.getData() == 4 & face.equals(BlockFace.NORTH)) | (nachbarblock.getData() == 5 & face.equals(BlockFace.SOUTH))) {
-
+				if ((nachbarblock.getData() == 4 & face.equals(BlockFace.WEST)) | (nachbarblock.getData() == 5 & face.equals(BlockFace.EAST)) | (nachbarblock.getData() == 2 & face.equals(BlockFace.NORTH)) | (nachbarblock.getData() == 3 & face.equals(BlockFace.SOUTH))) {
 					//check the found sign for the players name.
 					Sign sign = (Sign) testblock.getRelative(face).getState();
 					if (sign.getLine(0).contains("[Bank]")) {
@@ -63,6 +62,7 @@ public class MinecraftBlockListener implements Listener{
 				}
 				if (Bankcraft.perms.has(p, "bankcraft.admin")) {
 					bankcraft.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
+					coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getName());
 				} else {
 					event.setCancelled(true);
 					coHa.printMessage(p, "message.notAllowed", "0", p.getName());

@@ -24,19 +24,19 @@ public class ConfigurationHandler {
 		if (bankcraft.getConfig().contains(messageKey)) {
 			String message = bankcraft.getConfig().getString(messageKey);
 
-			if (player2 != null) {
+			if (player2 != null && !player2.equals("")) {
 				message = message.replaceAll("%player2", player2);
 			}
 			
-			if (amount != null) {
-				message = message.replaceAll("%amount", amount);
+			DecimalFormat f = new DecimalFormat("#0.00");
+			
+			if (amount != null && !amount.equals("")) {
+				message = message.replaceAll("%amount", f.format(Double.parseDouble(amount)));
 			}
 
 			message = message.replaceAll("%pocketXp", ""+player.getTotalExperience());
 			message = message.replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player.getName()));
 			
-			
-			DecimalFormat f = new DecimalFormat("#0.00");
 			
 			message = message.replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2));
 			message = message.replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2)));

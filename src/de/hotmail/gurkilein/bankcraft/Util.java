@@ -1,41 +1,9 @@
 package de.hotmail.gurkilein.bankcraft;
 
-import org.bukkit.entity.Player;
 
 public class Util {
 	
-	//Used to calculate the REAL total experience of a player
-	public static int getTotalExperience(Player player) {
-		int currentLevel = player.getLevel();
-		float experienceTowardsNextLevel = player.getExp();
-		int experienceFromLevels = 0;
-		int experienceNeededFromCurrentLevelToNext = 0;
-		
-		
-		//calculate experience from levels see http://www.minecraftwiki.net/wiki/Experience
-		if (currentLevel <= 15) {
-			experienceFromLevels = currentLevel*17;
-		} else
-		if (currentLevel <= 30) {
-			experienceFromLevels = (int)((1.5*currentLevel*currentLevel)-(29.5*currentLevel)+360);
-		} else {
-			experienceFromLevels = (int)((3.5*currentLevel*currentLevel)-(151.5*currentLevel)+2220);
-		}
-			
-		
-		//calculate experience needed to level up
-		if (currentLevel <= 14) {
-			experienceNeededFromCurrentLevelToNext = 17;
-		} else
-		if (currentLevel <= 29) {
-			experienceNeededFromCurrentLevelToNext = (int)((3*currentLevel)-28);
-		} else {
-			experienceNeededFromCurrentLevelToNext = (int)((7*currentLevel)-148);
-		}
-			
-		//calculate total xp	
-		return experienceFromLevels+(int)(experienceTowardsNextLevel*experienceNeededFromCurrentLevelToNext);
-	}
+
 	
 	
 	public static Boolean isInteger(String string) {

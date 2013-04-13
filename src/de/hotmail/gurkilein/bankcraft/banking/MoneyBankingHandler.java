@@ -39,7 +39,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Double.MAX_VALUE-amount) {
 				bankcraft.getMoneyDatabaseInterface().removeFromAccount(accountOwner, amount);
 				Bankcraft.econ.depositPlayer(pocketOwner.getName(), amount);
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.debitedSuccessfully", amount+"", accountOwner);
+				bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfully", amount+"", accountOwner);
 				return true;
 			} else {
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumMoneyInPocket", amount+"", pocketOwner.getName());
@@ -88,7 +88,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 				messageKey = "message.couldNotGrantInterestOnMoney";
 			}
 			Player player;
-			if (bankcraft.getConfigurationHandler().getString("interest.interestOnMoney").equals(true) && (player =bankcraft.getServer().getPlayer(accountName)) != null) {
+			if (bankcraft.getConfigurationHandler().getString("interest.broadcastMoney").equals("true") && (player =bankcraft.getServer().getPlayer(accountName)) != null) {
 				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getName());
 			}
 		}

@@ -4,19 +4,20 @@ database:
 general: 
 #What is the maximum amount of money that you want any player to have in their bank?
     maxBankLimit: 50000
+    maxBankLimitXp: 50000
 interest:
     interestOnMoney: 0.0005
     interestOnXp: 0.001
     timeBetweenInterestsInMinutes: 2
     broadcastMoney: true
-    brodcastXp: true
+    broadcastXp: true
 message:
     createdSignSuccessfully: 'Created sign succesfully!'
     notAllowed: 'You are not allowed to do this!'
     removedSignSuccessfully: 'Sign removed!'
     errorWhileCreatingSign: 'Could not create Sign!'
     balance: '%player2: %balance Dollars!'
-    balancexp: '%player2: %balancexp Experience!'
+    balancexp: '%player2: %balanceXp Experience!'
     amountAddedSuccessfullyToSign: 'Added %amount to Sign'
     transferedSuccessfully: 'Transfered %amount Dollars from %player to %player2!'
     transferedSuccessfullyXp: 'Transfered %amount Experience from %player to %player2!'
