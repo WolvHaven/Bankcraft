@@ -1,0 +1,75 @@
+# default config.yml for Bankcraft
+database:
+    typeOfDatabase: flatFile
+general: 
+#What is the maximum amount of money that you want any player to have in their bank?
+    maxBankLimit: 50000
+interest:
+    interestOnMoney: 0.0005
+    interestOnXp: 0.001
+    timeBetweenInterestsInMinutes: 2
+    broadcastMoney: true
+    brodcastXp: true
+message:
+    createdSignSuccessfully: 'Created sign succesfully!'
+    notAllowed: 'You are not allowed to do this!'
+    removedSignSuccessfully: 'Sign removed!'
+    errorWhileCreatingSign: 'Could not create Sign!'
+    balance: '%player2: %balance Dollars!'
+    balancexp: '%player2: %balancexp Experience!'
+    amountAddedSuccessfullyToSign: 'Added %amount to Sign'
+    transferedSuccessfully: 'Transfered %amount Dollars from %player to %player2!'
+    transferedSuccessfullyXp: 'Transfered %amount Experience from %player to %player2!'
+    depositedSuccessfully: 'Deposited %amount Dollar successfully!'
+    reachedMaximumMoneyInAccount: 'Reached Accountlimit! (Money)'
+    notEnoughMoneyInPoket: 'You dont have %amount money in your pocket!'
+    withdrewSuccessfully: 'Withdrew %amount Dollar successfully!'
+    reachedMaximumMoneyInPocket: 'Reached Limit of money you can carry around!'
+    notEnoughMoneyInAccount: 'You dont have %amount money in your account'
+    accountDoesNotExist: 'Account %player2 does not exist!'
+    grantedInterestOnMoney: 'You just got %amount Dollar interest on your account!'
+    couldNotGrantInterestOnMoney: 'Could not grant interest! Accountlimit reached! (Money)'
+    depositedSuccessfullyXp: 'Deposited %amount Experience successfully!'
+    reachedMaximumXpInAccount: 'Reached Accountlimit! (XP)'
+    notEnoughXpInPoket: 'You dont have %amount xp in your pocket!'
+    withdrewSuccessfullyXp: 'Withdrew %amount Experience successfully!'
+    reachedMaximumXpInPocket: 'Reached Limit of xp you can carry around!'
+    notEnoughXpInAccount: 'You dont have %amount xp in your account'
+    grantedInterestOnXp: 'You just got %amount Experience interest on your account!'
+    couldNotGrantInterestOnXp: 'Could not grant interest! Accountlimit reached! (XP)'
+sign:
+    balance: balance
+    balancexp: balancexp
+    deposit: deposit
+    withdraw: withdraw
+    depositxp: depositxp
+    withdrawxp: withdrawxp
+    exchange: exchange
+    exchangexp: exchangexp
+    color: 3
+chat:
+    prefix: '[Bankcraft]'
+    color: 3
+command:
+    help: help
+    balance: balance
+    balancexp: balancexp
+    deposit: deposit
+    withdraw: withdraw
+    depositxp: depositxp
+    withdrawxp: withdrawxp
+    exchange: exchange
+    exchangexp: exchangexp
+    transfer: transfer
+    transferxp: transferxp
+    admin:
+        help: help
+        clear: clear
+        clearxp: clearxp
+        set: set
+        setxp: setxp
+        grant: grant
+        grantxp: grantxp
+        
+        
+        
