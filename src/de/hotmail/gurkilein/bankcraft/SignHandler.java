@@ -3,6 +3,8 @@ package de.hotmail.gurkilein.bankcraft;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -134,7 +136,21 @@ public class SignHandler {
 				//exchangexp
 				//TODO
 			}
+			
+			//16 = interestSign!!!
 		}
+	}
+	
+	public Sign[] getSigns(World world, int type) {
+		
+		Location[] locations = bankcraft.getSignDatabaseInterface().getLocations(type, world);
+		Sign[] signs = new Sign[locations.length];
+		
+		for (int i = 0; i<locations.length; i++) {
+			signs[i] = ((Sign)locations[i].getBlock().getState());
+		}
+		
+		return signs;
 	}
 
 	

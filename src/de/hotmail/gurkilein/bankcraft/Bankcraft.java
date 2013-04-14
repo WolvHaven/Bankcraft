@@ -31,8 +31,10 @@ public final class Bankcraft extends JavaPlugin{
     private ConfigurationHandler configurationHandler;
     private SignHandler signHandler;
 	private BankingHandler<?>[] bankingHandlers;
+	private InterestGrantingTask interestGrantingTask;
 	private static int taskId = -1;
 
+	
     @Override
     public void onEnable(){
     	log = getLogger();
@@ -87,16 +89,14 @@ public final class Bankcraft extends JavaPlugin{
     	log.info("Bankcraft has been successfully loaded! ;D");
     }
  
-    @SuppressWarnings("deprecation")
 	private void toggleTimerTask() {
     	Integer timer = Integer.parseInt(configurationHandler.getString("interest.timeBetweenInterestsInMinutes"));
     if (taskId != -1) {
     	getServer().getScheduler().cancelTask(taskId);
     	taskId = -1;
     	} else {
-    	taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(
-    	this, new InterestGrantingTask(this), 1200 * timer,
-    	1200 * timer);
+    	interestGrantingTask = new InterestGrantingTask(this, timer);
+    	taskId = getServer().getScheduler().scheduleSyncRepeatingTask(this, interestGrantingTask, 1200 ,1200);
     	}
 	}
 
@@ -150,6 +150,10 @@ public final class Bankcraft extends JavaPlugin{
 
 	public SignHandler getSignHandler() {
 		return signHandler;
+	}
+	
+	public InterestGrantingTask getInterestGrantingTask() {
+		return interestGrantingTask;
 	}
 	
 }

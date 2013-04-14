@@ -40,6 +40,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 		p.sendMessage("/bank withdrawxp AMOUNT Withdraws XP from your Account.");
 		p.sendMessage("/bank transfer PLAYER AMOUNT Transfers money to another Account.");
 		p.sendMessage("/bank transferxp PLAYER AMOUNT Transfers XP to another Account.");
+		p.sendMessage("/bank interesttimer Shows the remaining time until the next wave of interests.");
 		p.sendMessage("/bank exchange AMOUNT Exchanges money to XP.");
 		p.sendMessage("/bank exchangexp AMOUNT Exchanges XP to money.");
 	}
@@ -79,6 +80,11 @@ public class MinecraftCommandListener implements CommandExecutor{
 					}
 					if (vars[0].equalsIgnoreCase(coHa.getString("command.balancexp")) && (Bankcraft.perms.has(p, "bankcraft.command.balancexp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 						bankcraft.getConfigurationHandler().printMessage(p, "message.balancexp", "", p.getName());
+						return true;
+					}
+					
+					if (vars[0].equalsIgnoreCase(coHa.getString("command.interesttimer")) && (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+						bankcraft.getConfigurationHandler().printMessage(p, "message.interestTimer", "", p.getName());
 						return true;
 					}
 				}

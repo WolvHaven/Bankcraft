@@ -43,6 +43,9 @@ public class ConfigurationHandler {
 			
 			message = message.replaceAll("%player", player.getName());
 			
+			message = message.replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+"");
+			message = message.replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+"");
+			
 			
 			player.sendMessage(getString("chat.color")+getString("chat.prefix")+message);
 		} else {

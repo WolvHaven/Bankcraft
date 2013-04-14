@@ -6,7 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
@@ -192,6 +195,34 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 				bankcraft.getLogger().severe("Could not remove Sign in Database!");
 			}
 			return false;
+	}
+
+	@Override
+	public Location[] getLocations(int type, World world) {
+		try {
+			FileReader fr = new FileReader(signFile);
+			BufferedReader br = new BufferedReader(fr);
+			
+			List <Location> loadingLocationList = new ArrayList <Location> ();
+			String line;
+			
+			while ((line = br.readLine()) != null) {
+				String[] lineSplit = line.split(":");
+				if (world == null || lineSplit[3].equalsIgnoreCase(world.getName())) {
+					if (type == -1 || Integer.parseInt(lineSplit[4]) == type) {
+						loadingLocationList.add(new Location(bankcraft.getServer().getWorld(lineSplit[3]), Integer.parseInt(lineSplit[0]), Integer.parseInt(lineSplit[1]), Integer.parseInt(lineSplit[2])));
+					}
+				}
+			}
+			
+			br.close();
+			fr.close();
+			
+			return loadingLocationList.toArray(new Location[0]);
+			} catch (Exception e) {
+				bankcraft.getLogger().severe("Could not get Locations of Signs in Database!");
+			}
+			return null;
 	}
 
 }

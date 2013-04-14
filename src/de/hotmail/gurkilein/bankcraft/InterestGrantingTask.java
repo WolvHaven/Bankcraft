@@ -2,25 +2,55 @@ package de.hotmail.gurkilein.bankcraft;
 
 import java.util.TimerTask;
 
+import org.bukkit.block.Sign;
+
 import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
 
 public class InterestGrantingTask extends TimerTask{
 	
 	private Bankcraft bankcraft;
+	private final int amountOfTimeUntilInterestInMinutes;
+	private int currentTimeUntilInterestInMinutes;
 
-	public InterestGrantingTask (Bankcraft bankcraft) {
+	public InterestGrantingTask (Bankcraft bankcraft, int amountOfTimeUntilInterestInMinutes) {
 		this.bankcraft = bankcraft;
+		this.amountOfTimeUntilInterestInMinutes = amountOfTimeUntilInterestInMinutes;
+		this.currentTimeUntilInterestInMinutes = this.amountOfTimeUntilInterestInMinutes;
 	}
 
 	@Override
 	public void run() {
-		//Grant interests
-		for (BankingHandler<?> bankingHandler: bankcraft.getBankingHandlers()) {
-			bankingHandler.grantInterests(null);
+		
+		//Decrease counter
+		currentTimeUntilInterestInMinutes--;
+		
+		//Update signs
+		for (Sign sign: bankcraft.getSignHandler().getSigns(null, 16)) {
+			sign.setLine(2, currentTimeUntilInterestInMinutes+"");
+			sign.update(true);
 		}
-		bankcraft.getLogger().info("[Bankcraft] Granted interest to all players.");
 		
 		
+		if (currentTimeUntilInterestInMinutes<= 0) {
+			//Grant interests
+			for (BankingHandler<?> bankingHandler: bankcraft.getBankingHandlers()) {
+				bankingHandler.grantInterests(null);
+			}
+			bankcraft.getLogger().info("Granted interest to all players.");
+			
+			//Reset counter
+			currentTimeUntilInterestInMinutes = amountOfTimeUntilInterestInMinutes;
+		}
+		
+		
+	}
+	
+	public int getRemainingTime() {
+		return this.currentTimeUntilInterestInMinutes;
+	}
+	
+	public int getTotalTime() {
+		return this.amountOfTimeUntilInterestInMinutes;
 	}
 
 }

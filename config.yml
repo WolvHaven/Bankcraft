@@ -38,6 +38,7 @@ message:
     notEnoughXpInAccount: 'You dont have %amount xp in your account'
     grantedInterestOnXp: 'You just got %amount Experience interest on your account!'
     couldNotGrantInterestOnXp: 'Could not grant interest! Accountlimit reached! (XP)'
+    interestTimer: 'Interests will be granted in %interestTimeRemaining minutes! Total time: %interestTimeTotal'
 sign:
     balance: balance
     balancexp: balancexp
@@ -47,6 +48,7 @@ sign:
     withdrawxp: withdrawxp
     exchange: exchange
     exchangexp: exchangexp
+    interesttimer: interesttimer
     color: 3
 chat:
     prefix: '[Bankcraft]'
@@ -63,6 +65,7 @@ command:
     exchangexp: exchangexp
     transfer: transfer
     transferxp: transferxp
+    interesttimer: interesttimer
     admin:
         help: help
         clear: clear

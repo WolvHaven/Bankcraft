@@ -1,6 +1,7 @@
 package de.hotmail.gurkilein.bankcraft.database;
 
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 public interface SignDatabaseInterface {
@@ -11,4 +12,5 @@ public interface SignDatabaseInterface {
 	public boolean removeSign(int x, int y, int z, World world);
 	public boolean changeType(int x, int y, int z, Integer type, World world);
 	public String[] getAmounts(int x, int y, int z, World world);
+	public Location[] getLocations(int type, World world);
 }
