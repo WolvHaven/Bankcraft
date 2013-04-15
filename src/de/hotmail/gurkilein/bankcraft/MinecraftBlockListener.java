@@ -159,7 +159,7 @@ public class MinecraftBlockListener implements Listener{
 								
 							}
 						} else 
-						if (event.getLine(1).equals(coHa.getString("sign.balancexp"))) {
+						if (event.getLine(1).equals(coHa.getString("sign.balance"))) {
 							if (event.getLine(2).isEmpty()) {
 								bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 0, "0");
 								
