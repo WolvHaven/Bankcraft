@@ -1,6 +1,12 @@
 # default config.yml for Bankcraft
 database:
     typeOfDatabase: flatFile
+    mysql:
+        host: 127.0.0.1
+        port: 3306
+        databaseName: 'mydatabase'
+        user: 'Gurke1993'
+        password: 'cheesecake'
 general: 
 #What is the maximum amount of money that you want any player to have in their bank?
     maxBankLimit: 50000

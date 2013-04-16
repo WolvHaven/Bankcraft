@@ -14,10 +14,16 @@ import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
 import de.hotmail.gurkilein.bankcraft.database.AccountDatabaseInterface;
+import de.hotmail.gurkilein.bankcraft.database.DatabaseManagerInterface;
 import de.hotmail.gurkilein.bankcraft.database.SignDatabaseInterface;
+import de.hotmail.gurkilein.bankcraft.database.flatfile.DatabaseManagerFlatFile;
 import de.hotmail.gurkilein.bankcraft.database.flatfile.ExperienceFlatFileInterface;
 import de.hotmail.gurkilein.bankcraft.database.flatfile.MoneyFlatFileInterface;
 import de.hotmail.gurkilein.bankcraft.database.flatfile.SignFlatFileInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.DatabaseManagerMysql;
+import de.hotmail.gurkilein.bankcraft.database.mysql.ExperienceMysqlInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.MoneyMysqlInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public final class Bankcraft extends JavaPlugin{
 	
@@ -30,6 +36,7 @@ public final class Bankcraft extends JavaPlugin{
     private SignDatabaseInterface signDatabaseInterface;
     private ConfigurationHandler configurationHandler;
     private SignHandler signHandler;
+    private DatabaseManagerInterface databaseManager;
 	private BankingHandler<?>[] bankingHandlers;
 	private InterestGrantingTask interestGrantingTask;
 	private static int taskId = -1;
@@ -56,7 +63,14 @@ public final class Bankcraft extends JavaPlugin{
         configurationHandler = new ConfigurationHandler(this);
         
         //Setup Database
-        if (configurationHandler.getString("database.typeOfDatabase").equalsIgnoreCase("flatfile")) {
+        if (configurationHandler.getString("database.typeOfDatabase").equalsIgnoreCase("mysql")) {
+        	databaseManager = new DatabaseManagerMysql(this);
+        	moneyDatabaseInterface = new MoneyMysqlInterface(this);
+        	experienceDatabaseInterface = new ExperienceMysqlInterface(this);
+        	signDatabaseInterface = new SignMysqlInterface(this);
+        } else {
+        	//Go for FlatFile
+        	databaseManager = new DatabaseManagerFlatFile(this);
         	moneyDatabaseInterface = new MoneyFlatFileInterface(this);
         	experienceDatabaseInterface = new ExperienceFlatFileInterface(this);
         	signDatabaseInterface = new SignFlatFileInterface(this);
@@ -154,6 +168,10 @@ public final class Bankcraft extends JavaPlugin{
 	
 	public InterestGrantingTask getInterestGrantingTask() {
 		return interestGrantingTask;
+	}
+	
+	public DatabaseManagerInterface getDatabaseManagerInterface() {
+		return databaseManager;
 	}
 	
 }
