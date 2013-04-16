@@ -9,8 +9,10 @@ database:
         password: 'cheesecake'
 general: 
 #What is the maximum amount of money that you want any player to have in their bank?
-    maxBankLimit: 50000
+    maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
+    exchangerateFromMoneyToXp: 0.01
+    exchangerateFromXpToMoney: 90
 interest:
     interestOnMoney: 0.0005
     interestOnXp: 0.001
@@ -24,7 +26,7 @@ message:
     errorWhileCreatingSign: 'Could not create Sign!'
     balance: '%player2: %balance Dollars!'
     balancexp: '%player2: %balanceXp Experience!'
-    amountAddedSuccessfullyToSign: 'Added %amount to Sign'
+    amountAddedSuccessfullyToSign: 'Added %amount to Sign!'
     transferedSuccessfully: 'Transfered %amount Dollars from %player to %player2!'
     transferedSuccessfullyXp: 'Transfered %amount Experience from %player to %player2!'
     depositedSuccessfully: 'Deposited %amount Dollar successfully!'
@@ -44,6 +46,8 @@ message:
     notEnoughXpInAccount: 'You dont have %amount xp in your account'
     grantedInterestOnXp: 'You just got %amount Experience interest on your account!'
     couldNotGrantInterestOnXp: 'Could not grant interest! Accountlimit reached! (XP)'
+    exchangedMoneySuccessfully: 'Exchanged %amount money for xp!'
+    exchangedXpSuccessfully: 'Exchanged %amount xp for money!'
     interestTimer: 'Interests will be granted in %interestTimeRemaining minutes! Total time: %interestTimeTotal'
 sign:
     balance: balance

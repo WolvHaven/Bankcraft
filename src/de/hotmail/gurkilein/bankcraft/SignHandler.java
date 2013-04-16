@@ -130,14 +130,42 @@ public class SignHandler {
 			}
 			if (typ == 12 | typ == 14) {
 				//exchange
-				//TODO
+				double amount;
+				if (all == true) {
+					amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
+				} else {
+					amount = Double.parseDouble(amountAsString);
+				}
+				
+				if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(p.getName(), (double)(int)amount, p)) {
+					 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(p.getName(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),p)) {
+						 bankcraft.getConfigurationHandler().printMessage(p, "message.exchangedMoneySuccessfully", amount+"", p.getName());
+					 } else {
+						 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(p.getName(), (double)(int)amount, p);
+					 }
+					
+				}
 			}
 			if (typ == 13 | typ == 15) {
 				//exchangexp
-				//TODO
+				double amount;
+				if (all == true) {
+					amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
+				} else {
+					amount = Double.parseDouble(amountAsString);
+				}
+				
+				if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(p.getName(), (int)amount, p)) {
+					if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(p.getName(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),p)) {
+						bankcraft.getConfigurationHandler().printMessage(p, "message.exchangedXpSuccessfully", amount+"", p.getName());
+					} else {
+						((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(p.getName(), (int)amount, p);
+					}
+				}
 			}
 			
-			//16 = interestSign!!!
+			//16 = interestSign
+			//does nothing on click
 		}
 	}
 	

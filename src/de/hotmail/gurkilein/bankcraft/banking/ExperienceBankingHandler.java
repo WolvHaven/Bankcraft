@@ -59,7 +59,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		}
 		
 		if (bankcraft.getExperienceDatabaseInterface().getBalance(givingPlayer) >= amount) {
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimit"))-amount) {
+			if (bankcraft.getExperienceDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				bankcraft.getExperienceDatabaseInterface().removeFromAccount(givingPlayer, amount);
 				bankcraft.getExperienceDatabaseInterface().addToAccount(gettingPlayer, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.transferedSuccessfullyXp", amount+"", gettingPlayer);
@@ -82,7 +82,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this);
 			int amount = (int)(interest*bankcraft.getExperienceDatabaseInterface().getBalance(accountName));
 			
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimit"))-amount) {
+			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				bankcraft.getExperienceDatabaseInterface().addToAccount(accountName, amount);
 				messageKey = "message.grantedInterestOnXp";
 			} else {
@@ -94,6 +94,42 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean depositToAccount(String accountOwner, Integer amount,
+			Player observer) {
+		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
+			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
+			return false;
+		}
+		
+			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
+				return true;
+			} else {
+				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
+			}
+		return false;
+	}
+
+	@Override
+	public boolean withdrawFromAccount(String accountOwner, Integer amount,
+			Player observer) {
+		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
+				bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
+				return false;
+			}
+		
+		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner) >= amount) {
+			
+			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
+			    return true;
+		} else {
+			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
+		}
+		
+		return false;
 	}
 
 

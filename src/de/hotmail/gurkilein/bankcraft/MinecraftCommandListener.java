@@ -174,14 +174,39 @@ public class MinecraftCommandListener implements CommandExecutor{
 						}
 
 						else if (vars[0].equalsIgnoreCase(coHa.getString("command.exchange")) && (Bankcraft.perms.has(p, "bankcraft.command.exchange") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							//TODO
-							//bankInteract.use(p, vars[1], 12, null, "");
+							double amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Double.parseDouble(vars[1]);
+							}
+							
+							if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(p.getName(), (double)(int)amount, p)) {
+								 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(p.getName(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),p)) {
+									 bankcraft.getConfigurationHandler().printMessage(p, "message.exchangedMoneySuccessfully", amount+"", p.getName());
+								 } else {
+									 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(p.getName(), (double)(int)amount, p);
+								 }
+								
+							}
 							return true;
 						}
 
 						else if (vars[0].equalsIgnoreCase(coHa.getString("command.exchangexp")) && (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							//TODO
-							//bankInteract.use(p, vars[1], 13, null, "");
+							double amount;
+							if (vars[1].equalsIgnoreCase("all")) {
+								amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
+							} else {
+								amount = Double.parseDouble(vars[1]);
+							}
+							
+							if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(p.getName(), (int)amount, p)) {
+								if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(p.getName(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),p)) {
+									bankcraft.getConfigurationHandler().printMessage(p, "message.exchangedXpSuccessfully", amount+"", p.getName());
+								} else {
+									((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(p.getName(), (int)amount, p);
+								}
+							}
 							return true;
 						}
 
