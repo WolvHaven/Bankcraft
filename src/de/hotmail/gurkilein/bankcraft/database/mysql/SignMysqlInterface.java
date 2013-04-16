@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +26,17 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 	@Override
 	public int getType(int x, int y, int z, World world) {
 		
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "SELECT type FROM bc_signs WHERE x = "+x+" AND y = "+y+" AND z = "+z+" AND world = "+world.getName();
-	        ResultSet result = query.executeQuery(sql);
+	        String sql = "SELECT `type` FROM `bc_signs` WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
+	        
+	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+	        
+	        preparedStatement.setString(1, x+"");
+	        preparedStatement.setString(2, y+"");
+	        preparedStatement.setString(3, z+"");
+	        preparedStatement.setString(4, world.getName());
+	        ResultSet result = preparedStatement.executeQuery();
 
 	        while (result.next()) {
 	        	return Integer.parseInt(result.getString("type"));
@@ -49,7 +53,7 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 			String amount) {
 		try {
 			 
-	        String sql = "INSERT INTO bc_signs(x, y, z, world, type, amount) " +
+	        String sql = "INSERT INTO `bc_signs`(`x`, `y`, `z`, `world`, `type`, `amount`) " +
 	                     "VALUES(?, ?, ?, ?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
@@ -79,13 +83,17 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 			
 			newAmount += amount;
 			
-			String updateSql = "UPDATE bc_signs " +
-			        "SET amount = ?" +
-			        "WHERE x = "+x+" AND y = "+y+" AND z = "+z+" AND world = "+world.getName();
+			String updateSql = "UPDATE `bc_signs` " +
+			        "SET `amount` = ?" +
+			        "WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			
 			preparedUpdateStatement.setString(1, newAmount);
-			
+			preparedUpdateStatement.setString(2, x+"");
+			preparedUpdateStatement.setString(3, y+"");
+			preparedUpdateStatement.setString(4, z+"");
+			preparedUpdateStatement.setString(5, world.getName());
+	        
 			preparedUpdateStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -96,12 +104,17 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 
 	@Override
 	public boolean removeSign(int x, int y, int z, World world) {
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "DELETE FROM bc_signs WHERE x = "+x+" AND y = "+y+" AND z = "+z+" AND world = "+world.getName();
-	        query.executeUpdate(sql);
+	        String sql = "DELETE FROM `bc_signs` WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
+	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+			
+			preparedUpdateStatement.setString(1, x+"");
+			preparedUpdateStatement.setString(2, y+"");
+			preparedUpdateStatement.setString(3, z+"");
+			preparedUpdateStatement.setString(4, world.getName());
+	        
+			preparedUpdateStatement.executeUpdate();
 	 
 	        return true;
 	      } catch (SQLException e) {
@@ -114,11 +127,15 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 	@Override
 	public boolean changeType(int x, int y, int z, Integer type, World world) {
 		try {
-			String updateSql = "UPDATE bc_signs " +
-			        "SET type = ?" +
-			        "WHERE x = "+x+" AND y = "+y+" AND z = "+z+" AND world = "+world.getName();
+			String updateSql = "UPDATE `bc_signs` " +
+			        "SET `type` = ?" +
+			        "WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, type+"");
+			preparedUpdateStatement.setString(2, x+"");
+			preparedUpdateStatement.setString(3, y+"");
+			preparedUpdateStatement.setString(4, z+"");
+			preparedUpdateStatement.setString(5, world.getName());
 			
 			preparedUpdateStatement.executeUpdate();
 			return true;
@@ -130,12 +147,17 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 
 	@Override
 	public String[] getAmounts(int x, int y, int z, World world) {
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "SELECT amount FROM bc_signs WHERE x = "+x+" AND y = "+y+" AND z = "+z+" AND world = "+world.getName();
-	        ResultSet result = query.executeQuery(sql);
+	        String sql = "SELECT `amount` FROM `bc_signs` WHERE `x` = ? AND `y` = ? AND `z` = ? AND `world` = ?";
+	        
+			PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+			preparedUpdateStatement.setString(1, x+"");
+			preparedUpdateStatement.setString(2, y+"");
+			preparedUpdateStatement.setString(3, z+"");
+			preparedUpdateStatement.setString(4, world.getName());
+	        
+	        ResultSet result = preparedUpdateStatement.executeQuery();
 
 	        while (result.next()) {
 	        	return (result.getString("amount")).split(":");
@@ -148,23 +170,29 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 
 	@Override
 	public Location[] getLocations(int type, World world) {
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "SELECT x,y,z,world FROM bc_signs";
+	        String sql = "SELECT `x`,`y`,`z`,`world` FROM `bc_signs`";
 	        
+	        PreparedStatement preparedUpdateStatement = null;
 	        if (type != -1 && world != null) {
-	        	sql += " WHERE type = "+type+" AND world = "+world.getName();
+	        	sql += " WHERE `type` = ? AND `world` = ?";
+	        	preparedUpdateStatement = conn.prepareStatement(sql);
+				preparedUpdateStatement.setString(1, type+"");
+				preparedUpdateStatement.setString(2, world.getName());
 	        } else 
 	        if (type != -1) {
-	        	sql += " WHERE type = "+type;
+	        	sql += " WHERE `type` = ?";
+	        	preparedUpdateStatement = conn.prepareStatement(sql);
+				preparedUpdateStatement.setString(1, type+"");
 	        } else
 	        if (world != null) {
-	        	sql += " WHERE world = "+world.getName();
+	        	sql += " WHERE `world` = ?";
+	        	preparedUpdateStatement = conn.prepareStatement(sql);
+				preparedUpdateStatement.setString(1, world.getName());
 	        }
 
-	        ResultSet result = query.executeQuery(sql);
+	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        List <Location> loadingList= new ArrayList <Location>();
 	        while (result.next()) {

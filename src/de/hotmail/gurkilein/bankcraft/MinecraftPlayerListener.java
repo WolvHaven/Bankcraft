@@ -32,7 +32,7 @@ public class MinecraftPlayerListener implements Listener{
 							if (Bankcraft.perms.has(p, "bankcraft.admin")) {
 								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Bankcraftsign...");
 								Sign sign = (Sign) event.getClickedBlock().getState();
-								if (((sign.getLine(1).contains(coHa.getString("sign.deposit")) | sign.getLine(1).contains(coHa.getString("sign.exchange")) | sign.getLine(1).contains(coHa.getString("sign.exchangexp")) | sign.getLine(1).contains(coHa.getString("sign.debit")) | sign.getLine(1).contains(coHa.getString("sign.debitxp")) | sign.getLine(1).contains(coHa.getString("sign.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
+								if (((sign.getLine(1).contains(coHa.getString("sign.deposit")) | sign.getLine(1).contains(coHa.getString("sign.exchange")) | sign.getLine(1).contains(coHa.getString("sign.exchangexp")) | sign.getLine(1).contains(coHa.getString("sign.withdraw")) | sign.getLine(1).contains(coHa.getString("sign.withdrawxp")) | sign.getLine(1).contains(coHa.getString("sign.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
 									//ERSTELLEN DER BANK
 									sign.setLine(0, coHa.getString("sign.color") + "[Bank]");
 									double betrag = 0;
@@ -50,7 +50,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										typ = 1;
 									}
-									if (typreihe.equals(coHa.getString("sign.debit"))) {
+									if (typreihe.equals(coHa.getString("sign.withdraw"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -69,7 +69,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										typ = 6;
 									}
-									if (typreihe.equals(coHa.getString("sign.debitxp"))) {
+									if (typreihe.equals(coHa.getString("sign.withdrawxp"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;

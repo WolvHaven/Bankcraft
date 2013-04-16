@@ -16,9 +16,11 @@ public class DatabaseManagerFlatFile implements DatabaseManagerInterface{
 
 	@Override
 	public boolean setupDatabase() {
-		
-		
-		
+		return true;
+	}
+
+	@Override
+	public boolean closeDatabase() {
 		return true;
 	}
 

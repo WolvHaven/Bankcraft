@@ -82,4 +82,15 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
 		return conn;
 	}
 
+	@Override
+	public boolean closeDatabase() {
+		try {
+			conn.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

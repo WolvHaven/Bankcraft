@@ -24,12 +24,14 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 
 	@Override
 	public boolean hasAccount(String player) {
-		   Statement query;
 		      try {
-		        query = conn.createStatement();
 		 
-		        String sql = "SELECT player_name FROM bc_accounts WHERE player_name = "+player;
-		        ResultSet result = query.executeQuery(sql);
+		        String sql = "SELECT `player_name` FROM `bc_accounts` WHERE `player_name` = ?";
+		        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+		        preparedUpdateStatement.setString(1, player);
+		        
+		        
+		        ResultSet result = preparedUpdateStatement.executeQuery();
 		 
 		        while (result.next()) {
 		        	return true;
@@ -44,7 +46,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	public boolean createAccount(String player) {
 		try {
 			 
-	        String sql = "INSERT INTO bc_accounts(player_name, balance, balance_xp) " +
+	        String sql = "INSERT INTO `bc_accounts`(`player_name`, `balance`, `balance_xp`) " +
 	                     "VALUES(?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
@@ -66,12 +68,13 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 			createAccount(player);
 		}
 		
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "SELECT balance_xp FROM bc_accounts WHERE player_name = "+player;
-	        ResultSet result = query.executeQuery(sql);
+	        String sql = "SELECT `balance_xp` FROM `bc_accounts` WHERE `player_name` = ?";
+	        
+	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+	        preparedUpdateStatement.setString(1, player);
+	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        while (result.next()) {
 	        	return Double.parseDouble(result.getString("balance_xp"));
@@ -89,9 +92,9 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		}
 		
         try {
-			String updateSql = "UPDATE bc_accounts " +
-			        "SET balance_xp = ?" +
-			        "WHERE player_name = ?";
+			String updateSql = "UPDATE `bc_accounts` " +
+			        "SET `balance_xp` = ?" +
+			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");
 			preparedUpdateStatement.setString(2, player);
@@ -147,7 +150,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	      try {
 	        query = conn.createStatement();
 	 
-	        String sql = "SELECT player_name FROM bc_accounts";
+	        String sql = "SELECT `player_name` FROM `bc_accounts`";
 	        ResultSet result = query.executeQuery(sql);
 	 
 	        List <String> loadingList= new ArrayList <String>();

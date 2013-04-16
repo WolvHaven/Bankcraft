@@ -24,12 +24,13 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 
 	@Override
 	public boolean hasAccount(String player) {
-		   Statement query;
 		      try {
-		        query = conn.createStatement();
 		 
-		        String sql = "SELECT player_name FROM bc_accounts WHERE player_name = "+player;
-		        ResultSet result = query.executeQuery(sql);
+		        String sql = "SELECT `player_name` FROM `bc_accounts` WHERE `player_name` = ?";;
+		        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		        preparedStatement.setString(1, player);
+		        
+		        ResultSet result = preparedStatement.executeQuery();
 		 
 		        while (result.next()) {
 		        	return true;
@@ -44,7 +45,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 	public boolean createAccount(String player) {
 		try {
 			 
-	        String sql = "INSERT INTO bc_accounts(player_name, balance, balance_xp) " +
+	        String sql = "INSERT INTO `bc_accounts`(`player_name`, `balance`, `balance_xp`) " +
 	                     "VALUES(?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
@@ -66,16 +67,14 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 			createAccount(player);
 		}
 		
-	      Statement query;
 	      try {
-	        query = conn.createStatement();
 	 
-	        String sql = "SELECT balance FROM bc_accounts WHERE player_name = ?";
+	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
 	        preparedUpdateStatement.setString(1, player);
-	        ResultSet result = query.executeQuery(sql);
+	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
-	        // Ergebnissätze durchfahren.
+	        
 	        while (result.next()) {
 	        	return Integer.parseInt(result.getString("balance"));
 	        }
@@ -92,15 +91,12 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 		}
 		
         try {
-			String updateSql = "UPDATE bc_accounts " +
-			        "SET balance = ?" +
-			        "WHERE player_name = ?";
+			String updateSql = "UPDATE `bc_accounts` " +
+			        "SET `balance` = ?" +
+			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
-			// Erstes Fragezeichen durch "firstName" Parameter ersetzen
 			preparedUpdateStatement.setString(1, amount+"");
-			// Zweites Fragezeichen durch "lastName" Parameter ersetzen
 			preparedUpdateStatement.setString(2, player);
-			// SQL ausführen
 			preparedUpdateStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -152,7 +148,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 	      try {
 	        query = conn.createStatement();
 	 
-	        String sql = "SELECT player_name FROM bc_accounts";
+	        String sql = "SELECT `player_name` FROM `bc_accounts`";
 	        ResultSet result = query.executeQuery(sql);
 	 
 	        List <String> loadingList= new ArrayList <String>();
