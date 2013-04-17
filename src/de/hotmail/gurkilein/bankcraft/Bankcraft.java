@@ -27,6 +27,7 @@ import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public final class Bankcraft extends JavaPlugin{
 	
+	//deathnote cant speak his own language
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;
