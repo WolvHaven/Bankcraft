@@ -36,7 +36,7 @@ public class Util {
 		}
 		return false;
 	}
-	
+	//Checks if string is a number and if it's a double.
 	public static Boolean isDouble(String string) {
 		
 		try {
