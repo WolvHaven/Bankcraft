@@ -26,8 +26,7 @@ import de.hotmail.gurkilein.bankcraft.database.mysql.MoneyMysqlInterface;
 import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public final class Bankcraft extends JavaPlugin{
-	
-	//deathnote cant speak his own language
+	//rawr
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;
