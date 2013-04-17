@@ -27,11 +27,9 @@ import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public final class Bankcraft extends JavaPlugin{
 
-	//rawr
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;
-	//i like trains
     
     private AccountDatabaseInterface<Double> moneyDatabaseInterface;
     private AccountDatabaseInterface<Integer> experienceDatabaseInterface;
@@ -92,6 +90,7 @@ public final class Bankcraft extends JavaPlugin{
     	PluginManager pm = getServer().getPluginManager();
     	pm.registerEvents(new MinecraftPlayerListener(this), this);
     	pm.registerEvents(new MinecraftBlockListener(this), this);
+    	pm.registerEvents(new MinecraftChatListener(this), this);
     	MinecraftCommandListener bcl = new MinecraftCommandListener(this);
     	getCommand("bank").setExecutor(bcl);
     	getCommand("bankadmin").setExecutor(bcl);

@@ -15,7 +15,9 @@ public class SignHandler {
 	
 	private Bankcraft bankcraft;
 	private Map<Block, Integer> signPosition = new HashMap<Block, Integer>();
-
+	
+	//0 = not listening, 1 = waiting for method, 2 = Amount
+	private HashMap <Player, Integer> chatSignMAP = new HashMap<Player, Integer>();
 	public SignHandler(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
 	}
@@ -84,7 +86,7 @@ public class SignHandler {
 			
 			
 			if (typ == 1 | typ == 3) {
-				//Deposit
+				//Deposit Money
 				double amount;
 				if (all == true) {
 					amount = Bankcraft.econ.getBalance(p.getName());
@@ -106,7 +108,7 @@ public class SignHandler {
 			}
 
 			if (typ == 2 | typ == 4) {
-				//Withdraw
+				//Withdraw Money
 				double amount;
 				if (all == true) {
 					amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
@@ -129,7 +131,7 @@ public class SignHandler {
 				((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(p.getName(), p, amount,p);
 			}
 			if (typ == 12 | typ == 14) {
-				//exchange
+				//exchange Money
 				double amount;
 				if (all == true) {
 					amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
@@ -147,7 +149,7 @@ public class SignHandler {
 				}
 			}
 			if (typ == 13 | typ == 15) {
-				//exchangexp
+				//exchange xp
 				double amount;
 				if (all == true) {
 					amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
@@ -163,9 +165,14 @@ public class SignHandler {
 					}
 				}
 			}
-			
+			  
 			//16 = interestSign
 			//does nothing on click
+			if (typ == 17) {
+				//Allows for Chatsigns
+				chatSignMAP.put(p, 1);
+				
+				}
 		}
 	}
 	
@@ -179,6 +186,14 @@ public class SignHandler {
 		}
 		
 		return signs;
+	}
+
+
+
+	@SuppressWarnings("rawtypes")
+	public HashMap getChatSignMap() {
+		// TODO Auto-generated method stub
+		return chatSignMAP;
 	}
 
 	
