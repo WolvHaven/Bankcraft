@@ -26,10 +26,15 @@ import de.hotmail.gurkilein.bankcraft.database.mysql.MoneyMysqlInterface;
 import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public final class Bankcraft extends JavaPlugin{
+<<<<<<< HEAD
 	//rawr
+=======
+	
+>>>>>>> 8c488e1b062c7013fa1cb62ad51b64eb04c5566b
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;
+	//i like trains
     
     private AccountDatabaseInterface<Double> moneyDatabaseInterface;
     private AccountDatabaseInterface<Integer> experienceDatabaseInterface;
