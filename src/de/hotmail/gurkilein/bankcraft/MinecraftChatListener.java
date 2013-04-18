@@ -13,15 +13,23 @@ public class MinecraftChatListener implements Listener{
 
 	@EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-		if (!((Integer)bankcraft.getSignHandler().getChatSignMap().get(event.getPlayer()) == 0)) {
+		if (!((Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 0)) {
 		//1 = deposit, xpdeposit, withdraw etc.
-			if ((Integer)bankcraft.getSignHandler().getChatSignMap().get(event.getPlayer()) == 1) {
+			if ((Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 1) {
 			
 		}else
 			//Waiting for player to input a value.
-			if ((Integer)bankcraft.getSignHandler().getChatSignMap().get(event.getPlayer()) == 2) {
+			if ((Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 2) {
 				if (Util.isInteger(event.getMessage())) {
 					
+					//Start interaction
+					
+					
+					//Reset interact
+					bankcraft.getInteractionHandler().getChatSignMap().put(event.getPlayer(), 0);
+					
+				} else {
+					//Send error message
 				}
 			}
 		}

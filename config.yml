@@ -49,21 +49,7 @@ message:
     exchangedMoneySuccessfully: 'Exchanged %amount money for xp!'
     exchangedXpSuccessfully: 'Exchanged %amount xp for money!'
     interestTimer: 'Interests will be granted in %interestTimeRemaining minutes! Total time: %interestTimeTotal'
-sign:
-    balance: balance
-    balancexp: balancexp
-    deposit: deposit
-    withdraw: withdraw
-    depositxp: depositxp
-    withdrawxp: withdrawxp
-    exchange: exchange
-    exchangexp: exchangexp
-    interesttimer: interesttimer
-    color: 3
-chat:
-    prefix: '[Bankcraft]'
-    color: 3
-command:
+signAndCommand:
     help: help
     balance: balance
     balancexp: balancexp
@@ -73,9 +59,11 @@ command:
     withdrawxp: withdrawxp
     exchange: exchange
     exchangexp: exchangexp
+    interesttimer: interesttimer
+    chatinteract: chatinteract
     transfer: transfer
     transferxp: transferxp
-    interesttimer: interesttimer
+    signColor: 3
     admin:
         help: help
         clear: clear
@@ -84,6 +72,11 @@ command:
         setxp: setxp
         grant: grant
         grantxp: grantxp
+chat:
+    prefix: '[Bankcraft]'
+    color: 3
+command:
+
         
         
         

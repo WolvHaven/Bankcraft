@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
+import de.hotmail.gurkilein.bankcraft.banking.InteractionHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
 import de.hotmail.gurkilein.bankcraft.database.AccountDatabaseInterface;
 import de.hotmail.gurkilein.bankcraft.database.DatabaseManagerInterface;
@@ -39,6 +40,7 @@ public final class Bankcraft extends JavaPlugin{
     private DatabaseManagerInterface databaseManager;
 	private BankingHandler<?>[] bankingHandlers;
 	private InterestGrantingTask interestGrantingTask;
+	private InteractionHandler interactionHandler;
 	private static int taskId = -1;
 
 	
@@ -84,6 +86,7 @@ public final class Bankcraft extends JavaPlugin{
         
         //Setup SignHandler
         signHandler = new SignHandler(this);
+        interactionHandler = new InteractionHandler(this);
         
         
     	//Register Listeners
@@ -173,6 +176,10 @@ public final class Bankcraft extends JavaPlugin{
 	
 	public DatabaseManagerInterface getDatabaseManagerInterface() {
 		return databaseManager;
+	}
+	
+	public InteractionHandler getInteractionHandler() {
+		return interactionHandler;
 	}
 	
 }

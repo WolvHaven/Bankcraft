@@ -16,8 +16,6 @@ public class SignHandler {
 	private Bankcraft bankcraft;
 	private Map<Block, Integer> signPosition = new HashMap<Block, Integer>();
 	
-	//0 = not listening, 1 = waiting for method, 2 = Amount
-	private HashMap <Player, Integer> chatSignMAP = new HashMap<Player, Integer>();
 	public SignHandler(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
 	}
@@ -50,6 +48,8 @@ public class SignHandler {
 		return (String) scrollingSignArray[signPosition.get(clickedBlock)];
 	}
 
+	
+	@Deprecated
 	public void leftClickSign(Player p, String thirdLine, Integer typ,
 			Block clickedBlock, String fourthLine) {
 
@@ -170,7 +170,7 @@ public class SignHandler {
 			//does nothing on click
 			if (typ == 17) {
 				//Allows for Chatsigns
-				chatSignMAP.put(p, 1);
+				//chatSignMAP.put(p, 1);
 				
 				}
 		}
@@ -190,11 +190,6 @@ public class SignHandler {
 
 
 
-	@SuppressWarnings("rawtypes")
-	public HashMap getChatSignMap() {
-		// TODO Auto-generated method stub
-		return chatSignMAP;
-	}
 
 	
 }

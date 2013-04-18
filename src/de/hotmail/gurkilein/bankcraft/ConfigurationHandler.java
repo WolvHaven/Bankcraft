@@ -77,7 +77,7 @@ public class ConfigurationHandler {
 	public String getString(String key) {
 		if (!bankcraft.getConfig().contains(key)) {
 			bankcraft.getLogger().severe("Could not locate '"+key+"' in the config.yml inside of the Bankcraft folder!");
-			return "errorCouldNotLocateInConfigYml";
+			return "errorCouldNotLocateInConfigYml:"+key;
 		} else {
 			if (key.contains("color")) {
 				return "§"+bankcraft.getConfig().getString(key);

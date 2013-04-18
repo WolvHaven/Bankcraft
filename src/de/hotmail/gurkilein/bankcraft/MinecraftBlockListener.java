@@ -77,16 +77,16 @@ public class MinecraftBlockListener implements Listener{
 		String firstRow = event.getLine(0);
 		if (firstRow.equalsIgnoreCase("[Bank]")) {
 			if (Bankcraft.perms.has(p, "bankcraft.admin")) {
-				if (((event.getLine(1).equals(coHa.getString("sign.deposit")) | event.getLine(1).equals(coHa.getString("sign.exchange")) | event.getLine(1).equals(coHa.getString("sign.exchangexp")) | event.getLine(1).equals(coHa.getString("sign.withdraw")) | event.getLine(1).equals(coHa.getString("sign.withdrawxp")) | event.getLine(1).equals(coHa.getString("sign.depositxp"))) && (Util.isPositive(event.getLine(2))) || event.getLine(2).equalsIgnoreCase("all")) == true) {
+				if (((event.getLine(1).equals(coHa.getString("signAndCommand.deposit")) | event.getLine(1).equals(coHa.getString("signAndCommand.exchange")) | event.getLine(1).equals(coHa.getString("signAndCommand.exchangexp")) | event.getLine(1).equals(coHa.getString("signAndCommand.withdraw")) | event.getLine(1).equals(coHa.getString("signAndCommand.withdrawxp")) | event.getLine(1).equals(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(event.getLine(2))) || event.getLine(2).equalsIgnoreCase("all")) == true) {
 					//ERSTELLEN DER BANK(setting up a sign)
-					event.setLine(0, coHa.getString("sign.color") + "[Bank]");
+					event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 					double amount = 0;
 					String typeRow = event.getLine(1);
 					int signX = event.getBlock().getX();
 					int signY = event.getBlock().getY();
 					int signZ = event.getBlock().getZ();
 					Integer typ = -1;
-					if (typeRow.equals(coHa.getString("sign.deposit"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.deposit"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -95,7 +95,7 @@ public class MinecraftBlockListener implements Listener{
 						}
 						typ = 1;
 					}
-					if (typeRow.equals(coHa.getString("sign.withdraw"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.withdraw"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -105,7 +105,7 @@ public class MinecraftBlockListener implements Listener{
 						typ = 2;
 					}
 
-					if (typeRow.equals(coHa.getString("sign.depositxp"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.depositxp"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -114,7 +114,7 @@ public class MinecraftBlockListener implements Listener{
 						}
 						typ = 6;
 					}
-					if (typeRow.equals(coHa.getString("sign.withdrawxp"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.withdrawxp"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -123,7 +123,7 @@ public class MinecraftBlockListener implements Listener{
 						}
 						typ = 7;
 					}
-					if (typeRow.equals(coHa.getString("sign.exchange"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.exchange"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -132,7 +132,7 @@ public class MinecraftBlockListener implements Listener{
 						}
 						typ = 12;
 					}
-					if (typeRow.equals(coHa.getString("sign.exchangexp"))) {
+					if (typeRow.equals(coHa.getString("signAndCommand.exchangexp"))) {
 						if (event.getLine(2).equalsIgnoreCase("all")) {
 							event.setLine(2, "All");
 							amount = -1;
@@ -145,12 +145,12 @@ public class MinecraftBlockListener implements Listener{
 					coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getName());
 
 				} else {
-					if (event.getLine(1).equals(coHa.getString("sign.balance")) || event.getLine(1).equals(coHa.getString("sign.balancexp")) || event.getLine(1).equals(coHa.getString("sign.interesttimer"))) {
-						event.setLine(0, coHa.getString("sign.color") + "[Bank]");
+					if (event.getLine(1).equals(coHa.getString("signAndCommand.balance")) || event.getLine(1).equals(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer"))) {
+						event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 						int signX = event.getBlock().getX();
 						int signY = event.getBlock().getY();
 						int signZ = event.getBlock().getZ();
-						if (event.getLine(1).equals(coHa.getString("sign.balancexp"))) {
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.balancexp"))) {
 							if (event.getLine(2).isEmpty()) {
 								bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 5, "0");
 								
@@ -159,7 +159,7 @@ public class MinecraftBlockListener implements Listener{
 								
 							}
 						} else 
-						if (event.getLine(1).equals(coHa.getString("sign.balance"))) {
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.balance"))) {
 							if (event.getLine(2).isEmpty()) {
 								bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 0, "0");
 								
