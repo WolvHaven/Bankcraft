@@ -94,51 +94,51 @@ public class InteractionHandler {
 	
 	
 	//Main method
-	private boolean interact(int type, double amount, Player pocketOwner, String accountOwner) {
+	private boolean interact(int type, double amount, Player interactingPlayer, String targetPlayer) {
 
 			//BALANCE signs
 			if (type == 0) {
-				bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.balance", "", pocketOwner.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getName());
 				return true;
 			}
 			if (type == 5) {
-				bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.balancexp", "", pocketOwner.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", interactingPlayer.getName());
 				return true;
 			}
 			if (type == 10) {
-				bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.balance", "", accountOwner);
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", targetPlayer);
 				return true;
 			}
 			if (type == 11) {
-				bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.balancexp", "", accountOwner);
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", targetPlayer);
 				return true;
 			}
 			
 			if (type == 1 | type == 3) {
 				//Deposit Money
-				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromPocketToAccount(pocketOwner, pocketOwner.getName(), amount,pocketOwner);
+				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getName(), amount,interactingPlayer);
 			}
 			if (type == 6 | type == 8) {
 				//Deposit XP
-				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromPocketToAccount(pocketOwner, pocketOwner.getName(), (int)amount,pocketOwner);
+				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getName(), (int)amount,interactingPlayer);
 			}
 
 			if (type == 2 | type == 4) {
 				//Withdraw Money
-				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToPocket(pocketOwner.getName(), pocketOwner, amount,pocketOwner);
+				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToPocket(interactingPlayer.getName(), interactingPlayer, amount,interactingPlayer);
 			}
 			if (type == 7 | type == 9) {
 				//Withdraw XP
-				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(pocketOwner.getName(), pocketOwner, (int)amount,pocketOwner);
+				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(interactingPlayer.getName(), interactingPlayer, (int)amount,interactingPlayer);
 			}
 			if (type == 12 | type == 14) {
 				//exchange Money
-				if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(pocketOwner.getName(), (double)(int)amount, pocketOwner)) {
-					 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(pocketOwner.getName(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),pocketOwner)) {
-						 bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.exchangedMoneySuccessfully", amount+"", pocketOwner.getName());
+				if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(interactingPlayer.getName(), (double)(int)amount, interactingPlayer)) {
+					 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getName(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),interactingPlayer)) {
+						 bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedMoneySuccessfully", amount+"", interactingPlayer.getName());
 						 return true;
 					 } else {
-						 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(pocketOwner.getName(), (double)(int)amount, pocketOwner);
+						 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getName(), (double)(int)amount, interactingPlayer);
 						 return false;
 					 }
 					
@@ -146,12 +146,12 @@ public class InteractionHandler {
 			}
 			if (type == 13 | type == 15) {
 				//exchange xp
-				if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(pocketOwner.getName(), (int)amount, pocketOwner)) {
-					if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(pocketOwner.getName(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),pocketOwner)) {
-						bankcraft.getConfigurationHandler().printMessage(pocketOwner, "message.exchangedXpSuccessfully", amount+"", pocketOwner.getName());
+				if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(interactingPlayer.getName(), (int)amount, interactingPlayer)) {
+					if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getName(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),interactingPlayer)) {
+						bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedXpSuccessfully", amount+"", interactingPlayer.getName());
 						return true;
 					} else {
-						((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(pocketOwner.getName(), (int)amount, pocketOwner);
+						((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getName(), (int)amount, interactingPlayer);
 						return false;
 					}
 				}
@@ -164,7 +164,7 @@ public class InteractionHandler {
 			
 			if (type == 17) {
 				//Starts interaction with chatSigns (everything else is handled in the MinecraftChatListener)
-				chatSignMap.put(pocketOwner, 1);
+				chatSignMap.put(interactingPlayer, 1);
 				return true;
 				}
 		return false;
