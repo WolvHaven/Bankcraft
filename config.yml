@@ -49,6 +49,10 @@ message:
     exchangedMoneySuccessfully: 'Exchanged %amount money for xp!'
     exchangedXpSuccessfully: 'Exchanged %amount xp for money!'
     interestTimer: 'Interests will be granted in %interestTimeRemaining minutes! Total time: %interestTimeTotal'
+	nonExistingInteraction: 'This is not a valid interaction, please choose another.'
+	wrongAmountSyntax: 'This is either not a number or an invalid amount, please choose something else.'
+	specifyAnInteraction: 'Please type in the Interaction you wish to use.'
+	specifyAnAmount: 'Please type in the amount you wish to do.'
 signAndCommand:
     help: help
     balance: balance

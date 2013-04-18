@@ -165,6 +165,7 @@ public class InteractionHandler {
 			if (type == 17) {
 				//Starts interaction with chatSigns (everything else is handled in the MinecraftChatListener)
 				chatSignMap.put(interactingPlayer, 1);
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.specifyAnInteraction", "", interactingPlayer.getName());
 				return true;
 				}
 		return false;
@@ -182,5 +183,9 @@ public class InteractionHandler {
 	
 	public HashMap<Player, Integer> getChatSignMap() {
 		return chatSignMap;
+	}
+
+	public HashMap<String, Integer> getTypeMap() {
+		return typeMap;
 	}
 }
