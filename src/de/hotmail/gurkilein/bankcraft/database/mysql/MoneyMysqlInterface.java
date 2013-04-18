@@ -70,14 +70,14 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		
 	      try {
 	 
-	        String sql = "SELECT `balance_xp` FROM `bc_accounts` WHERE `player_name` = ?";
+	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
 	        
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
 	        preparedUpdateStatement.setString(1, player);
 	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        while (result.next()) {
-	        	return Double.parseDouble(result.getString("balance_xp"));
+	        	return Double.parseDouble(result.getString("balance"));
 	        }
 	      } catch (SQLException e) {
 	        e.printStackTrace();
@@ -93,7 +93,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		
         try {
 			String updateSql = "UPDATE `bc_accounts` " +
-			        "SET `balance_xp` = ?" +
+			        "SET `balance` = ?" +
 			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");
