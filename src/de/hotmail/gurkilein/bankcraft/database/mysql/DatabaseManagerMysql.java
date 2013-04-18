@@ -19,13 +19,13 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
 	  // Port -- Standard: 3306
 	  private String dbPort;
 	 
-	  // Datenbankname
+	  // Databankname
 	  private String database;
 	 
-	  // Datenbankuser
+	  // Databank username
 	  private String dbUser;
 	 
-	  // Datenbankpasswort
+	  // Databank password
 	  private String dbPassword;
 
 	private Bankcraft bankcraft;
