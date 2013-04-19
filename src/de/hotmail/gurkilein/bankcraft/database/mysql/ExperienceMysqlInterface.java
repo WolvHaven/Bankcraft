@@ -69,14 +69,14 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 		
 	      try {
 	 
-	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
+	        String sql = "SELECT `balance_xp` FROM `bc_accounts` WHERE `player_name` = ?";
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
 	        preparedUpdateStatement.setString(1, player);
 	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        
 	        while (result.next()) {
-	        	return Integer.parseInt(result.getString("balance"));
+	        	return (int)Double.parseDouble(result.getString("balance"));
 	        }
 	      } catch (SQLException e) {
 	        e.printStackTrace();
@@ -92,7 +92,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 		
         try {
 			String updateSql = "UPDATE `bc_accounts` " +
-			        "SET `balance` = ?" +
+			        "SET `balance_xp` = ?" +
 			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");

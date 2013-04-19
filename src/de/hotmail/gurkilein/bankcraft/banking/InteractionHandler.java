@@ -82,10 +82,10 @@ public class InteractionHandler {
 			return bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner);
 		} else
 		if (currencyType == 3) {
-			return ExperienceBukkitHandler.getTotalExperience(pocketOwner);
+			return (int)ExperienceBukkitHandler.getTotalExperience(pocketOwner);
 		} else	
 		if (currencyType == 4) {
-			return bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner);
+			return (int)bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner);
 		}
 		return -1;
 	}

@@ -145,7 +145,7 @@ public class MinecraftBlockListener implements Listener{
 					coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getName());
 
 				} else {
-					if (event.getLine(1).equals(coHa.getString("signAndCommand.balance")) || event.getLine(1).equals(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer"))) {
+					if (event.getLine(1).equals(coHa.getString("signAndCommand.balance")) || event.getLine(1).equals(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer")) || event.getLine(1).equals(coHa.getString("signAndCommand.chatinteract"))) {
 						event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 						int signX = event.getBlock().getX();
 						int signY = event.getBlock().getY();
@@ -167,10 +167,14 @@ public class MinecraftBlockListener implements Listener{
 								bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 10, "0");
 								
 							}
-						} else {
+						} else
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer"))) {
 							//interestTimerSign
 							event.setLine(2, ""+bankcraft.getInterestGrantingTask().getRemainingTime());
 							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 16, "0");
+						} else {
+							//chatsign
+							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 17, "0");
 						}
 						coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
 					} else {
