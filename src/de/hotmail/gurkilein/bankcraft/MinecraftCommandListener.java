@@ -1,6 +1,7 @@
 package de.hotmail.gurkilein.bankcraft;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -12,6 +13,17 @@ import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
+import de.hotmail.gurkilein.bankcraft.database.AccountDatabaseInterface;
+import de.hotmail.gurkilein.bankcraft.database.DatabaseManagerInterface;
+import de.hotmail.gurkilein.bankcraft.database.SignDatabaseInterface;
+import de.hotmail.gurkilein.bankcraft.database.flatfile.DatabaseManagerFlatFile;
+import de.hotmail.gurkilein.bankcraft.database.flatfile.ExperienceFlatFileInterface;
+import de.hotmail.gurkilein.bankcraft.database.flatfile.MoneyFlatFileInterface;
+import de.hotmail.gurkilein.bankcraft.database.flatfile.SignFlatFileInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.DatabaseManagerMysql;
+import de.hotmail.gurkilein.bankcraft.database.mysql.ExperienceMysqlInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.MoneyMysqlInterface;
+import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
 
 public class MinecraftCommandListener implements CommandExecutor{
 
@@ -53,6 +65,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 		p.sendMessage("/bankadmin grantxp PLAYER AMOUNT Grants a player XP.");
 		p.sendMessage("/bankadmin clear PLAYER Clears money from a players Account.");
 		p.sendMessage("/bankadmin clearxp PLAYER Clears XP from a players Account.");
+		p.sendMessage("/bankadmin databaseimport OLDDATA NEWDATA Moves data from one database type to another");
 	}
 
 
@@ -251,7 +264,92 @@ public class MinecraftCommandListener implements CommandExecutor{
 								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Granted "+vars[2]+" Experience to "+vars[1]+"!");
 								return true;
 							}
+						} else {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.databaseimport")) && (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
+								
+								DatabaseManagerInterface loadDataMan = null;
+								AccountDatabaseInterface <Double> loadDataMoney = null;
+								AccountDatabaseInterface <Integer> loadDataXp = null;
+								SignDatabaseInterface loadDataSign = null;
+								
+								DatabaseManagerInterface saveDataMan = null;
+								AccountDatabaseInterface <Double> saveDataMoney = null;
+								AccountDatabaseInterface <Integer> saveDataXp = null;
+								SignDatabaseInterface saveDataSign = null;
+								
+								
+								if (vars[0].equalsIgnoreCase("flatfile")) {
+									//Load flatFile
+									loadDataMan = new DatabaseManagerFlatFile(bankcraft);
+									loadDataMoney = new MoneyFlatFileInterface(bankcraft);
+									loadDataXp = new ExperienceFlatFileInterface(bankcraft);
+									loadDataSign = new SignFlatFileInterface(bankcraft);
+								}
+								
+								if (vars[0].equalsIgnoreCase("mysql")) {
+									//Load mysql
+									loadDataMan = new DatabaseManagerMysql(bankcraft);
+									loadDataMoney = new MoneyMysqlInterface(bankcraft);
+									loadDataXp = new ExperienceMysqlInterface(bankcraft);
+									loadDataSign = new SignMysqlInterface(bankcraft);
+								}
+								
+								if (vars[1].equalsIgnoreCase("flatfile")) {
+									//Load flatFile
+									saveDataMan = new DatabaseManagerFlatFile(bankcraft);
+									saveDataMoney = new MoneyFlatFileInterface(bankcraft);
+									saveDataXp = new ExperienceFlatFileInterface(bankcraft);
+									saveDataSign = new SignFlatFileInterface(bankcraft);
+								}
+								
+								if (vars[1].equalsIgnoreCase("mysql")) {
+									//Load mysql
+									saveDataMan = new DatabaseManagerMysql(bankcraft);
+									saveDataMoney = new MoneyMysqlInterface(bankcraft);
+									saveDataXp = new ExperienceMysqlInterface(bankcraft);
+									saveDataSign = new SignMysqlInterface(bankcraft);
+								}
+								
+								//get them ready
+								loadDataMan.setupDatabase();
+								saveDataMan.setupDatabase();
+								
+								//move money data
+								for (String accountName: loadDataMoney.getAccounts()) {
+									saveDataMoney.setBalance(accountName, loadDataMoney.getBalance(accountName));
+								}
+								
+								//move xp data
+								for (String accountName: loadDataXp.getAccounts()) {
+									saveDataXp.setBalance(accountName, loadDataXp.getBalance(accountName));
+								}
+								
+								//move sign data
+								String amounts;
+								String[] amountsArray;
+								int type;
+								for (Location location: loadDataSign.getLocations(-1, null)) {
+									//Get amounts
+									amountsArray = loadDataSign.getAmounts((int)location.getX(), (int)location.getY(), (int)location.getZ(), location.getWorld());
+									amounts = amountsArray[0];
+									for (int i = 1; i< amountsArray.length; i++) {
+										amounts+=":"+amountsArray[i];
+									}
+									
+									//Get type
+									type = loadDataSign.getType((int)location.getX(), (int)location.getY(), (int)location.getZ(), location.getWorld());
+									
+									//Create new sign in save database
+									saveDataSign.createNewSign((int)location.getX(), (int)location.getY(), (int)location.getZ(), location.getWorld(), type, amounts);
+								}
+								
+								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Moved all data from "+vars[1]+" to "+vars[2]+"!");
+								return true;
+							}
 						}
+						
+						
+						
 					}
 					else {
 						p.sendMessage(ChatColor.RED + coHa.getString("chat.prefix") + "Wrong Syntax or missing permissions! Please see /bank help for more information!");

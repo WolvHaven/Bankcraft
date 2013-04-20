@@ -77,6 +77,7 @@ signAndCommand:
         setxp: setxp
         grant: grant
         grantxp: grantxp
+        databaseimport: databaseimport
 chat:
     prefix: '[Bankcraft]'
     color: 3
