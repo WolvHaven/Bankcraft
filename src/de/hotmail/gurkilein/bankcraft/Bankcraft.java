@@ -47,7 +47,7 @@ public final class Bankcraft extends JavaPlugin{
     @Override
     public void onEnable(){
     	log = getLogger();
-    	log.info("[Bankcraft] Loading Bankcraft "+getDescription().getVersion()+"... ");
+    	log.info("Loading Bankcraft "+getDescription().getVersion()+"... ");
     	
     	//Create Bankcraft folder
     	(new File("plugins"+System.getProperty("file.separator")+"Bankcraft")).mkdir();
@@ -77,6 +77,16 @@ public final class Bankcraft extends JavaPlugin{
         	experienceDatabaseInterface = new ExperienceFlatFileInterface(this);
         	signDatabaseInterface = new SignFlatFileInterface(this);
         }
+        
+        //Importing data from the old bankcraft plugin
+        if (configurationHandler.getString("database.importOldData").equalsIgnoreCase("true")) {
+        	log.info("Importing old data... ");
+        	
+        	OldDataImportHandler odih = new OldDataImportHandler(this);
+        	odih.importOldData();
+        }
+        
+        
         
         //Setup BankingHandlers
         bankingHandlers = new BankingHandler[2];
