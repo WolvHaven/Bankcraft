@@ -1,25 +1,44 @@
 # default config.yml for Bankcraft
+
+
 database:
+#Database in which bankcraft stores information (allowed: flatfile/mysql)
     typeOfDatabase: flatFile
+    
     mysql:
         host: 127.0.0.1
         port: 3306
         databaseName: 'mydatabase'
         user: 'Gurke1993'
         password: 'cheesecake'
+        
+#Import data from the old Bankcraft
     importOldData: false
+    
+    
 general: 
-#What is the maximum amount of money that you want any player to have in their bank?
+#Maximum ammount of money on players accounts
     maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
+    
+#Exchangerate for the exchange from money to experience and visa versa
     exchangerateFromMoneyToXp: 0.01
     exchangerateFromXpToMoney: 90
+    
+    
 interest:
+#Interest granted on money/experience
     interestOnMoney: 0.0005
     interestOnXp: 0.001
+    
+#Time until interests are given
     timeBetweenInterestsInMinutes: 2
+    
+#Should the player get a message if he got interests?
     broadcastMoney: true
     broadcastXp: true
+    
+#Ingame messages
 message:
     createdSignSuccessfully: 'Created sign succesfully!'
     notAllowed: 'You are not allowed to do this!'
@@ -55,6 +74,7 @@ message:
     specifyAnInteraction: 'Please type in the Interaction you wish to use.'
     specifyAnAmount: 'Please type in the amount you wish to do.'
     youHaveQuit: 'You have quit the interaction.'
+
 signAndCommand:
     help: help
     balance: balance
@@ -80,8 +100,11 @@ signAndCommand:
         grantxp: grantxp
         databaseimport: databaseimport
 chat:
+#prefix for all Bankcraft messages
     prefix: '[Bankcraft]'
+#Color of these
     color: 3
+#Word which stops the interaction with a interaction sign
     quit: quit
 
         
