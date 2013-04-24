@@ -267,6 +267,8 @@ public class MinecraftCommandListener implements CommandExecutor{
 						} else {
 							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.databaseimport")) && (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
 								
+								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing...");
+								
 								DatabaseManagerInterface loadDataMan = null;
 								AccountDatabaseInterface <Double> loadDataMoney = null;
 								AccountDatabaseInterface <Integer> loadDataXp = null;
@@ -278,32 +280,36 @@ public class MinecraftCommandListener implements CommandExecutor{
 								SignDatabaseInterface saveDataSign = null;
 								
 								
-								if (vars[0].equalsIgnoreCase("flatfile")) {
+								if (vars[1].equalsIgnoreCase("flatfile")) {
 									//Load flatFile
+									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing from flatfile...");
 									loadDataMan = new DatabaseManagerFlatFile(bankcraft);
 									loadDataMoney = new MoneyFlatFileInterface(bankcraft);
 									loadDataXp = new ExperienceFlatFileInterface(bankcraft);
 									loadDataSign = new SignFlatFileInterface(bankcraft);
 								}
 								
-								if (vars[0].equalsIgnoreCase("mysql")) {
+								if (vars[1].equalsIgnoreCase("mysql")) {
 									//Load mysql
+									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing from mysql...");
 									loadDataMan = new DatabaseManagerMysql(bankcraft);
 									loadDataMoney = new MoneyMysqlInterface(bankcraft);
 									loadDataXp = new ExperienceMysqlInterface(bankcraft);
 									loadDataSign = new SignMysqlInterface(bankcraft);
 								}
 								
-								if (vars[1].equalsIgnoreCase("flatfile")) {
+								if (vars[2].equalsIgnoreCase("flatfile")) {
 									//Load flatFile
+									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Exporting to flatfile...");
 									saveDataMan = new DatabaseManagerFlatFile(bankcraft);
 									saveDataMoney = new MoneyFlatFileInterface(bankcraft);
 									saveDataXp = new ExperienceFlatFileInterface(bankcraft);
 									saveDataSign = new SignFlatFileInterface(bankcraft);
 								}
 								
-								if (vars[1].equalsIgnoreCase("mysql")) {
+								if (vars[2].equalsIgnoreCase("mysql")) {
 									//Load mysql
+									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Exporting to mysql...");
 									saveDataMan = new DatabaseManagerMysql(bankcraft);
 									saveDataMoney = new MoneyMysqlInterface(bankcraft);
 									saveDataXp = new ExperienceMysqlInterface(bankcraft);
@@ -343,12 +349,16 @@ public class MinecraftCommandListener implements CommandExecutor{
 									saveDataSign.createNewSign((int)location.getX(), (int)location.getY(), (int)location.getZ(), location.getWorld(), type, amounts);
 								}
 								
+								//close databases
+								loadDataMan.closeDatabase();
+								saveDataMan.closeDatabase();
+								
+								//Send success message
 								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Moved all data from "+vars[1]+" to "+vars[2]+"!");
 								return true;
 							}
+						
 						}
-						
-						
 						
 					}
 					else {

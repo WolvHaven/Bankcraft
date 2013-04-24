@@ -190,6 +190,8 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 	        	sql += " WHERE `world` = ?";
 	        	preparedUpdateStatement = conn.prepareStatement(sql);
 				preparedUpdateStatement.setString(1, world.getName());
+	        } else {
+	        	preparedUpdateStatement = conn.prepareStatement(sql);
 	        }
 
 	        ResultSet result = preparedUpdateStatement.executeQuery();
