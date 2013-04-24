@@ -42,30 +42,48 @@ public class MinecraftCommandListener implements CommandExecutor{
 
 	public void sendHelp(Player p) {
 		p.sendMessage("---Bankcraft-Help---");
-		p.sendMessage("/bank help Shows the help page.");
-		p.sendMessage("/bank balance PLAYER Shows your banked money.");
-		p.sendMessage("/bank balancexp PLAYER Shows your banked XP.");
-		p.sendMessage("/bank deposit AMOUNT Deposits money to your Account.");
-		p.sendMessage("/bank withdraw AMOUNT Withdraws money from your Account.");
-		p.sendMessage("/bank depositxp AMOUNT Deposits XP to your Account.");
-		p.sendMessage("/bank withdrawxp AMOUNT Withdraws XP from your Account.");
-		p.sendMessage("/bank transfer PLAYER AMOUNT Transfers money to another Account.");
-		p.sendMessage("/bank transferxp PLAYER AMOUNT Transfers XP to another Account.");
-		p.sendMessage("/bank interesttimer Shows the remaining time until the next wave of interests.");
-		p.sendMessage("/bank exchange AMOUNT Exchanges money to XP.");
-		p.sendMessage("/bank exchangexp AMOUNT Exchanges XP to money.");
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.help")+" Shows the help page.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.balance") || Bankcraft.perms.has(p, "bankcraft.command"))
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.balance")+" PLAYER Shows your banked money.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.balancexp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.balancexp")+" PLAYER Shows your banked XP.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.deposit")+" AMOUNT Deposits money to your Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.withdraw") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.withdraw")+" AMOUNT Withdraws money from your Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.depositxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.depositxp")+" AMOUNT Deposits XP to your Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.withdrawxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.withdrawxp")+" AMOUNT Withdraws XP from your Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.transfer")+" PLAYER AMOUNT Transfers money to another Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.transferxp")+" PLAYER AMOUNT Transfers XP to another Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.interesttimer")+" Shows the remaining time until the next wave of interests.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.exchange") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchange")+" AMOUNT Exchanges money to XP.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchangexp")+" AMOUNT Exchanges XP to money.");
 	}
 
 	public void sendAdminHelp(Player p) {
 		p.sendMessage("---Bankcraft-AdminHelp---");
 		p.sendMessage("/bankadmin help Shows the help page.");
-		p.sendMessage("/bankadmin set PLAYER AMOUNT Sets a players money.");
-		p.sendMessage("/bankadmin setxp PLAYER AMOUNT Sets a players XP.");
-		p.sendMessage("/bankadmin grant PLAYER AMOUNT Grants a Player money.");
-		p.sendMessage("/bankadmin grantxp PLAYER AMOUNT Grants a player XP.");
-		p.sendMessage("/bankadmin clear PLAYER Clears money from a players Account.");
-		p.sendMessage("/bankadmin clearxp PLAYER Clears XP from a players Account.");
-		p.sendMessage("/bankadmin databaseimport OLDDATA NEWDATA Moves data from one database type to another");
+		if (Bankcraft.perms.has(p, "bankcraft.command.set") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.set")+" PLAYER AMOUNT Sets a players money.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.setxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.setxp")+" PLAYER AMOUNT Sets a players XP.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.grant") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.grant")+" PLAYER AMOUNT Grants a Player money.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.grantxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.grantxp")+" PLAYER AMOUNT Grants a player XP.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.clear") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.clear")+" PLAYER Clears money from a players Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.clearxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.clearxp")+" PLAYER Clears XP from a players Account.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.databaseimport")+" OLDDATA NEWDATA Moves data from one database type to another");
 	}
 
 
