@@ -66,7 +66,7 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
 	      try {
 	        query = conn.createStatement();
 	        
-	        String accounts = "CREATE TABLE IF NOT EXISTS `bc_accounts` (id int(10) AUTO_INCREMENT, player_name varchar(50) NOT NULL, balance varchar(50) NOT NULL, balance_xp varchar(50) NOT NULL, PRIMARY KEY(id));";
+	        String accounts = "CREATE TABLE IF NOT EXISTS `bc_accounts` (id int(10) AUTO_INCREMENT, player_name varchar(50) NOT NULL UNIQUE, balance DOUBLE(30,2) NOT NULL, balance_xp DOUBLE(30,2) NOT NULL, PRIMARY KEY(id));";
 	        String signs = "CREATE TABLE IF NOT EXISTS `bc_signs` (id int(10) AUTO_INCREMENT, x int(10) NOT NULL, y int(10) NOT NULL, z int(10) NOT NULL, world varchar(100) NOT NULL, type int(10) NOT NULL, amount varchar(250) NOT NULL, PRIMARY KEY(id));";
 	        query.executeUpdate(accounts);
 	        query.executeUpdate(signs);

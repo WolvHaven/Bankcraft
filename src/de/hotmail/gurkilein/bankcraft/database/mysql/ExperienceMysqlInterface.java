@@ -76,7 +76,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 	 
 	        
 	        while (result.next()) {
-	        	return (int)Double.parseDouble(result.getString("balance"));
+	        	return (int)Double.parseDouble(result.getString("balance_xp"));
 	        }
 	      } catch (SQLException e) {
 	        e.printStackTrace();

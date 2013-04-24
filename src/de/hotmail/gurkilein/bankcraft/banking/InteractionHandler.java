@@ -63,7 +63,7 @@ public class InteractionHandler {
 		}
 		
 		if (amountAsString.equalsIgnoreCase("all")) {
-			return interact(type, getMaxAmountForAction(currencyMap.get(type), pocketOwner, accountOwner) , pocketOwner, accountOwner);
+			return interact(type, getMaxAmountForAction(currencyMap.get(type), pocketOwner) , pocketOwner, accountOwner);
 		}
 	
 		
@@ -72,20 +72,20 @@ public class InteractionHandler {
 	
 	
 	//Returns current balance of the related account
-	private double getMaxAmountForAction(int currencyType, Player pocketOwner,
-			String accountOwner) {
+	private double getMaxAmountForAction(int currencyType, Player pocketOwner) {
 
+		
 		if (currencyType == 1) {
 			return Bankcraft.econ.getBalance(pocketOwner.getName());
 		} else
 		if (currencyType == 2) {
-			return bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner);
+			return bankcraft.getMoneyDatabaseInterface().getBalance(pocketOwner.getName());
 		} else
 		if (currencyType == 3) {
 			return (int)ExperienceBukkitHandler.getTotalExperience(pocketOwner);
 		} else	
 		if (currencyType == 4) {
-			return (int)bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner);
+			return (int)bankcraft.getExperienceDatabaseInterface().getBalance(pocketOwner.getName());
 		}
 		return -1;
 	}
