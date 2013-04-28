@@ -20,7 +20,7 @@ public class MinecraftChatListener implements Listener{
     public void onPlayerChat(AsyncPlayerChatEvent event) {
 		
 		
-		if (!((Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 0)) {
+		if (!((bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == null) || (Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 0)) {
 			
 			if (event.getMessage().toLowerCase().contains(bankcraft.getConfigurationHandler().getString("chat.quit"))) {
 				bankcraft.getInteractionHandler().getChatSignMap().put(event.getPlayer(), 0);
