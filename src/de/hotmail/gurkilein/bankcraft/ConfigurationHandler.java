@@ -46,8 +46,9 @@ public class ConfigurationHandler {
 			message = message.replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+"");
 			message = message.replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+"");
 			
-			
+			if (player != null)
 			player.sendMessage(getString("chat.color")+getString("chat.prefix")+message);
+			
 		} else {
 			bankcraft.getLogger().severe("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
 			player.sendMessage("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
