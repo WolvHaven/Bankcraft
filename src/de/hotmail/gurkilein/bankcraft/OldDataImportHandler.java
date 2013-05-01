@@ -23,12 +23,17 @@ public class OldDataImportHandler {
 		
 		File accountsFolder = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts");
 		double amount;
+		String line;
 		
 		for (File playerFile: accountsFolder.listFiles()) {
 			if (playerFile.getName().endsWith("db")) {
 			try {
 			FileReader fr = new FileReader(playerFile);
 			BufferedReader br = new BufferedReader(fr);
+			line = br.readLine();
+			if (line.equals("0.00")) 
+			amount = 0;	
+			else
 			amount = Double.parseDouble(br.readLine());
 			br.close();
 			fr.close();
@@ -49,6 +54,7 @@ public class OldDataImportHandler {
 		
 		File xpAccountsFolder = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"XPAccounts");
 		int amount;
+		String line;
 		
 		for (File playerFile: xpAccountsFolder.listFiles()) {
 			
@@ -56,7 +62,11 @@ public class OldDataImportHandler {
 			try {
 			FileReader fr = new FileReader(playerFile);
 			BufferedReader br = new BufferedReader(fr);
-			amount = Integer.parseInt(br.readLine());
+			line = br.readLine();
+			if (line.equals("0.00")) 
+			amount = 0;	
+			else
+			amount = Integer.parseInt(line);
 			br.close();
 			fr.close();
 			
