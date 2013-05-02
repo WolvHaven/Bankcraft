@@ -27,9 +27,11 @@ general:
     
     
 interest:
-#Interest granted on money/experience
-    interestOnMoney: 0.0005
-    interestOnXp: 0.001
+#Interest granted on money/experience if the player is online/offline
+    interestOnMoneyIfOnline: 0.0005
+    interestOnMoneyIfOffline: 0.0001
+    interestOnXpIfOnline: 0.001
+    interestOnXpIfOffline: 0.0002
     
 #Time until interests are given
     timeBetweenInterestsInMinutes: 2

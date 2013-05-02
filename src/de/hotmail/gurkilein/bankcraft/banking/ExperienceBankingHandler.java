@@ -80,6 +80,9 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		for (String accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
 			
 			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this);
+			
+			
+			
 			int amount = (int)(interest*bankcraft.getExperienceDatabaseInterface().getBalance(accountName));
 			
 			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
