@@ -128,7 +128,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
-									if (typsign == 1 | typsign == 2 | typsign == 3 | typsign == 6 | typsign == 7 | typsign == 12 | typsign == 13) {
+									if (typsign == 1 || typsign == 2 || typsign == 3 || typsign == 4 || typsign == 6 || typsign == 7 || typsign == 8 || typsign == 9 || typsign == 12 || typsign == 13 || typsign == 14 || typsign == 15) {
 
 											Integer x = signblock.getX();
 											Integer y = signblock.getY();
