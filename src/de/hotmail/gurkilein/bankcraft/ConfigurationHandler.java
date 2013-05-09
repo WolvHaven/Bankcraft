@@ -66,18 +66,18 @@ public class ConfigurationHandler {
 			
 			//Online/Offline interests
 			if (bankcraft.getServer().getPlayer(accountName) != null)
-			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOffline"));
+			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOnline"));
 			else
-			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOnline"));	
+			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOffline"));	
 			
 		} else
 		if (bankingHandler instanceof ExperienceBankingHandler) {
 
 			//Online/Offline interests
 			if (bankcraft.getServer().getPlayer(accountName) != null)
-			interest = Double.parseDouble(getString("interest.interestOnXpIfOffline"));
+			interest = Double.parseDouble(getString("interest.interestOnXpIfOnline"));
 			else
-			interest = Double.parseDouble(getString("interest.interestOnXpIfOnline"));	
+			interest = Double.parseDouble(getString("interest.interestOnXpIfOffline"));	
 			
 		}
 		

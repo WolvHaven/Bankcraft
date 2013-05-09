@@ -159,6 +159,7 @@ public class InteractionHandler {
 			  
 			if (type == 16) {
 				//interestCounter
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.interestTimer", amount+"", interactingPlayer.getName());
 				return true;
 			}
 			
