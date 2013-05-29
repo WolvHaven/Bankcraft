@@ -2,6 +2,12 @@ package de.hotmail.gurkilein.bankcraft;
 
 
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.entity.Player;
 
@@ -46,6 +52,9 @@ public class ConfigurationHandler {
 			message = message.replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+"");
 			message = message.replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+"");
 			
+			message = message.replaceAll("%rankTableMoney", getRichestPlayers());
+			message = message.replaceAll("%rankTableExperience", getExperiencedPlayers());
+			
 			if (player != null)
 			player.sendMessage(getString("chat.color")+getString("chat.prefix")+message);
 			
@@ -54,6 +63,8 @@ public class ConfigurationHandler {
 			player.sendMessage("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
 		}
 	}
+
+
 
 	public double getInterestForPlayer(String accountName,
 			BankingHandler<?> bankingHandler) {
@@ -98,5 +109,59 @@ public class ConfigurationHandler {
 			}
 			return bankcraft.getConfig().getString(key);
 		}
+	}
+	
+	private String getRichestPlayers() {
+		String result = "";
+		HashMap <String,Double> accounts = new HashMap<String,Double>();
+		
+		for (String name: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
+			accounts.put(name, bankcraft.getMoneyDatabaseInterface().getBalance(name));
+		}
+		
+		@SuppressWarnings("unchecked")
+		List <Map.Entry<String,Double>> sortedAccounts = sortByComparator(accounts);
+		
+		for (int i = 0; i<Integer.parseInt(getString("chat.rankTableLength")); i++) {
+			result += sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue()+System.getProperty("line.separator");
+		}
+		
+		
+		return result;
+	}
+	
+
+	private String getExperiencedPlayers() {
+		String result = "";
+		HashMap <String,Integer> accounts = new HashMap<String,Integer>();
+		
+		for (String name: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
+			accounts.put(name, bankcraft.getExperienceDatabaseInterface().getBalance(name));
+		}
+		
+		@SuppressWarnings("unchecked")
+		List <Map.Entry<String,Integer>> sortedAccounts = sortByComparator(accounts);
+		
+		for (int i = 0; i<Integer.parseInt(getString("chat.rankTableLength")); i++) {
+			result += sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue()+System.getProperty("line.separator");
+		}
+		
+		
+		return result;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static List sortByComparator(Map unsortMap) {
+		 
+		List list = new LinkedList(unsortMap.entrySet());
+ 
+		// sort list based on comparator
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o1)).getValue())
+                                       .compareTo(((Map.Entry) (o2)).getValue());
+			}
+		});
+		return list;
 	}
 }

@@ -24,6 +24,7 @@ general:
 #Exchangerate for the exchange from money to experience and visa versa
     exchangerateFromMoneyToXp: 0.01
     exchangerateFromXpToMoney: 90
+   
     
     
 interest:
@@ -76,7 +77,9 @@ message:
     specifyAnInteraction: 'Please type in the Interaction you wish to use.'
     specifyAnAmount: 'Please type in the amount you wish to do.'
     youHaveQuit: 'You have quit the interaction.'
-
+    rankStatsMoney: 'Current richest players:\n%rankTableMoney'
+    rankStatsExperience: 'Current experienced players:\n%rankTableExperience'
+    
 signAndCommand:
     help: help
     balance: balance
@@ -91,6 +94,8 @@ signAndCommand:
     chatinteract: chatinteract
     transfer: transfer
     transferxp: transferxp
+    rankstats: rankstats
+    rankstatsxp: rankstatsxp
     signColor: 3
     admin:
         help: help
@@ -108,6 +113,8 @@ chat:
     color: 3
 #Word which stops the interaction with a interaction sign
     quit: quit
+#amount of players that are shown in the rank tables
+    rankTableLength: 5
 
         
         
