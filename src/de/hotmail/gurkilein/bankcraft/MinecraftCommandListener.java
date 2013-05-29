@@ -65,6 +65,10 @@ public class MinecraftCommandListener implements CommandExecutor{
 		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchange")+" AMOUNT Exchanges money to XP.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))
 		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchangexp")+" AMOUNT Exchanges XP to money.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.rankstats") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstats")+" Shows the richest players.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.rankstatsxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstatsxp")+" Shows the players with the most experience banked.");
 	}
 
 	public void sendAdminHelp(Player p) {
@@ -84,6 +88,9 @@ public class MinecraftCommandListener implements CommandExecutor{
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.clearxp")+" PLAYER Clears XP from a players Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.databaseimport")+" OLDDATA NEWDATA Moves data from one database type to another");
+		if (Bankcraft.perms.has(p, "bankcraft.command.reloadconfig") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.reloadconfig")+" Reloads the config of bankcraft.");
+		
 	}
 
 
@@ -205,10 +212,10 @@ public class MinecraftCommandListener implements CommandExecutor{
 					if (Util.isPositive(vars[2]) || vars[2].equalsIgnoreCase("all")) {
 						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transfer")) && (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 							double amount;
-							if (vars[1].equalsIgnoreCase("all")) {
+							if (vars[2].equalsIgnoreCase("all")) {
 								amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getName());
 							} else {
-								amount = Double.parseDouble(vars[1]);
+								amount = Double.parseDouble(vars[2]);
 							}
 						
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
@@ -221,10 +228,10 @@ public class MinecraftCommandListener implements CommandExecutor{
 						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transferxp")) && (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 
 							int amount;
-							if (vars[1].equalsIgnoreCase("all")) {
+							if (vars[2].equalsIgnoreCase("all")) {
 								amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getName());
 							} else {
-								amount = Integer.parseInt(vars[1]);
+								amount = Integer.parseInt(vars[2]);
 							}
 							
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
@@ -249,6 +256,12 @@ public class MinecraftCommandListener implements CommandExecutor{
 
 						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.help"))) {
 							sendAdminHelp(p);
+							return true;
+						}
+						
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.reloadconfig")) && (Bankcraft.perms.has(p, "bankcraft.command.reloadconfig") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
+							bankcraft.reloadConfig();
+							p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Config reloaded!");
 							return true;
 						}
 					}

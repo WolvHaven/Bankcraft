@@ -106,6 +106,7 @@ signAndCommand:
         grant: grant
         grantxp: grantxp
         databaseimport: databaseimport
+        reloadconfig: reloadconfig
 chat:
 #prefix for all Bankcraft messages
     prefix: '[Bankcraft]'
