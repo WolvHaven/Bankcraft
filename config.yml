@@ -24,9 +24,7 @@ general:
 #Exchangerate for the exchange from money to experience and visa versa
     exchangerateFromMoneyToXp: 0.01
     exchangerateFromXpToMoney: 90
-   
-    
-    
+
 interest:
 #Interest granted on money/experience if the player is online/offline
     interestOnMoneyIfOnline: 0.0005
@@ -36,6 +34,9 @@ interest:
     
 #Time until interests are given
     timeBetweenInterestsInMinutes: 2
+    
+#Should it be logged if interests are granted
+    broadcastToConsole: true
     
 #Should the player get a message if he got interests?
     broadcastMoney: true

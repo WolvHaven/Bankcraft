@@ -36,7 +36,11 @@ public class InterestGrantingTask extends TimerTask{
 			for (BankingHandler<?> bankingHandler: bankcraft.getBankingHandlers()) {
 				bankingHandler.grantInterests(null);
 			}
-			bankcraft.getLogger().info("Granted interest to all players.");
+			
+			if (Boolean.parseBoolean(bankcraft.getConfigurationHandler().getString("interest.broadcastToConsole"))) {
+				bankcraft.getLogger().info("Granted interest to all players.");
+			}
+			
 			
 			//Reset counter
 			currentTimeUntilInterestInMinutes = amountOfTimeUntilInterestInMinutes;
