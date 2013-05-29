@@ -34,6 +34,8 @@ public class InteractionHandler {
 		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.exchangexp"), 13);
 		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.interesttimer"), 16);
 		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.chatinteract"), 17);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstats"), 18);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstatsxp"), 19);
 		
 		//Fill typeMap
 		currencyMap.put(0, -1);
@@ -54,6 +56,8 @@ public class InteractionHandler {
 		currencyMap.put(15, 4);
 		currencyMap.put(16, -1);
 		currencyMap.put(17, -1);
+		currencyMap.put(18, -1);
+		currencyMap.put(19, -1);
 	}
 
 	public boolean interact(int type, String amountAsString, Player pocketOwner, String accountOwner) {
@@ -169,6 +173,19 @@ public class InteractionHandler {
 				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.specifyAnInteraction", "", interactingPlayer.getName());
 				return true;
 				}
+			
+			if (type == 18) {
+				//rankStatsMoney
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsMoney", "", interactingPlayer.getName());
+				return true;
+				}
+			
+			if (type == 19) {
+				//rankStatsExperience
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsExperience", "", interactingPlayer.getName());
+				return true;
+				}
+			
 		return false;
 	}
 

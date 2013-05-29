@@ -114,6 +114,14 @@ public class MinecraftCommandListener implements CommandExecutor{
 					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.interesttimer")) && (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getName());
 					}
+					
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstats")) && (Bankcraft.perms.has(p, "bankcraft.command.rankstats") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getName());
+					}
+					
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstatsxp")) && (Bankcraft.perms.has(p, "bankcraft.command.rankstatsxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getName());
+					}
 				}
 				if (vars.length == 2) {
 					if (Util.isPositive(vars[1]) || vars[1].equalsIgnoreCase("all")) {

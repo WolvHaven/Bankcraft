@@ -145,7 +145,7 @@ public class MinecraftBlockListener implements Listener{
 					coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getName());
 
 				} else {
-					if (event.getLine(1).equals(coHa.getString("signAndCommand.balance")) || event.getLine(1).equals(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer")) || event.getLine(1).equals(coHa.getString("signAndCommand.chatinteract"))) {
+					if (event.getLine(1).equals(coHa.getString("signAndCommand.balance")) || event.getLine(1).equals(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equals(coHa.getString("signAndCommand.interesttimer")) || event.getLine(1).equals(coHa.getString("signAndCommand.chatinteract")) || event.getLine(1).equals(coHa.getString("signAndCommand.rankstatsxp")) || event.getLine(1).equals(coHa.getString("signAndCommand.rankstats"))) {
 						event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 						int signX = event.getBlock().getX();
 						int signY = event.getBlock().getY();
@@ -172,10 +172,21 @@ public class MinecraftBlockListener implements Listener{
 							//interestTimerSign
 							event.setLine(2, ""+bankcraft.getInterestGrantingTask().getRemainingTime());
 							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 16, "0");
-						} else {
+						} else
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.chatinteract"))) {
 							//chatsign
 							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 17, "0");
+						} else
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.rankstats"))) {
+							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 18, "0");
+						} else 
+						if (event.getLine(1).equals(coHa.getString("signAndCommand.rankstatsxp"))) {
+							bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 19, "0");
 						}
+						
+						
+						
+						
 						coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
 					} else {
 						coHa.printMessage(p, "message.errorWhileCreatingSign", "0", p.getName());
