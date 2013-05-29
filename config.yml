@@ -21,6 +21,9 @@ general:
     maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
     
+#Amount of time a player has to wait between two command or sign interactions (in 1/1000th of a second)
+    timeBetweenTwoInteractions: 1000
+
 #Exchangerate for the exchange from money to experience and visa versa
     exchangerateFromMoneyToXp: 0.01
     exchangerateFromXpToMoney: 90
@@ -80,6 +83,7 @@ message:
     youHaveQuit: 'You have quit the interaction.'
     rankStatsMoney: 'Current richest players:\n%rankTableMoney'
     rankStatsExperience: 'Current experienced players:\n%rankTableExperience'
+    tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
     
 signAndCommand:
     help: help

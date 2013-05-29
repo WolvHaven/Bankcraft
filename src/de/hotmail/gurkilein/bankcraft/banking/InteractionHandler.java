@@ -19,6 +19,8 @@ public class InteractionHandler {
 	//-1 = no account related, 1 = pocket money, 2 = account money, 3= pocket xp, 4= account xp
 	private HashMap<Integer, Integer> currencyMap = new HashMap<Integer, Integer>();
 
+	private HashMap<Player, Long> lastInteractMap = new HashMap<Player,Long>();
+
 	public InteractionHandler(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
 		
@@ -60,18 +62,26 @@ public class InteractionHandler {
 		currencyMap.put(19, -1);
 	}
 
-	public boolean interact(int type, String amountAsString, Player pocketOwner, String accountOwner) {
+	public boolean interact(int type, String amountAsString, Player interactingPlayer, String targetPlayer) {
+		
+		//Check for interaction interval
+		if (lastInteractMap.containsKey(interactingPlayer) && System.currentTimeMillis()-lastInteractMap.get(interactingPlayer) >= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.timeBetweenTwoInteractions"))) {
+			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", targetPlayer);
+			return false;
+		}
+		lastInteractMap.put(interactingPlayer, System.currentTimeMillis());
+		
 		
 		if (amountAsString == null || amountAsString.equalsIgnoreCase("")) {
-			return interact(type, -1 , pocketOwner, accountOwner);
+			return interact(type, -1 , interactingPlayer, targetPlayer);
 		}
 		
 		if (amountAsString.equalsIgnoreCase("all")) {
-			return interact(type, getMaxAmountForAction(currencyMap.get(type), pocketOwner) , pocketOwner, accountOwner);
+			return interact(type, getMaxAmountForAction(currencyMap.get(type), interactingPlayer) , interactingPlayer, targetPlayer);
 		}
 	
 		
-		return interact(type, Double.parseDouble(amountAsString) , pocketOwner, accountOwner);
+		return interact(type, Double.parseDouble(amountAsString) , interactingPlayer, targetPlayer);
 	}
 	
 	
@@ -99,7 +109,9 @@ public class InteractionHandler {
 	
 	//Main method
 	private boolean interact(int type, double amount, Player interactingPlayer, String targetPlayer) {
-
+		
+		
+		
 			//BALANCE signs
 			if (type == 0) {
 				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getName());
