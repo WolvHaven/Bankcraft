@@ -75,21 +75,21 @@ public class MinecraftCommandListener implements CommandExecutor{
 		p.sendMessage("---Bankcraft-AdminHelp---");
 		p.sendMessage("/bankadmin help Shows the help page.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.set") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.set")+" PLAYER AMOUNT Sets a players money.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.set")+" PLAYER AMOUNT Sets a players money.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.setxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.setxp")+" PLAYER AMOUNT Sets a players XP.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.setxp")+" PLAYER AMOUNT Sets a players XP.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.grant") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.grant")+" PLAYER AMOUNT Grants a Player money.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.grant")+" PLAYER AMOUNT Grants a Player money.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.grantxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.grantxp")+" PLAYER AMOUNT Grants a player XP.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.grantxp")+" PLAYER AMOUNT Grants a player XP.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.clear") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.clear")+" PLAYER Clears money from a players Account.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.clear")+" PLAYER Clears money from a players Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.clearxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.clearxp")+" PLAYER Clears XP from a players Account.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.clearxp")+" PLAYER Clears XP from a players Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.databaseimport")+" OLDDATA NEWDATA Moves data from one database type to another");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.databaseimport")+" OLDDATA NEWDATA Moves data from one database type to another");
 		if (Bankcraft.perms.has(p, "bankcraft.command.reloadconfig") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
-		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.reloadconfig")+" Reloads the config of bankcraft.");
+		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.reloadconfig")+" Reloads the config of bankcraft.");
 		
 	}
 
@@ -170,7 +170,12 @@ public class MinecraftCommandListener implements CommandExecutor{
 								}
 							}
 						
-
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (Bankcraft.perms.has(p, "bankcraft.command.balance.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+							return bankcraft.getInteractionHandler().interact(vars[0], "", p, vars[1]);
+						}
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (Bankcraft.perms.has(p, "bankcraft.command.balancexp.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+							return bankcraft.getInteractionHandler().interact(vars[0], "", p, vars[1]);
+						}
 						
 						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) && (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))) {
 							return bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getName());
@@ -219,7 +224,6 @@ public class MinecraftCommandListener implements CommandExecutor{
 							}
 						
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
-							coHa.printMessage(p, "message.transferedSuccessfully", amount+"", vars[1]);
 
 							return true;
 						}
@@ -235,7 +239,6 @@ public class MinecraftCommandListener implements CommandExecutor{
 							}
 							
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
-							coHa.printMessage(p, "message.transferedSuccessfullyXp", amount+"", vars[1]);
 
 							return true;
 						}

@@ -2,6 +2,7 @@ package de.hotmail.gurkilein.bankcraft;
 
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,35 +29,52 @@ public class ConfigurationHandler {
 	
 	public void printMessage(Player player, String messageKey, String amount, String player2) {
 		if (bankcraft.getConfig().contains(messageKey)) {
-			String message = bankcraft.getConfig().getString(messageKey);
+			List<String> message = new ArrayList<String>();
+			message.add(bankcraft.getConfig().getString(messageKey));
 
 			if (player2 != null && !player2.equals("")) {
-				message = message.replaceAll("%player2", player2);
+				message.set(0, message.get(0).replaceAll("%player2", player2));
 			}
 			
 			DecimalFormat f = new DecimalFormat("#0.00");
 			
 			if (amount != null && !amount.equals("")) {
-				message = message.replaceAll("%amount", f.format(Double.parseDouble(amount)));
+				message.set(0, message.get(0).replaceAll("%amount", f.format(Double.parseDouble(amount))));
 			}
 
-			message = message.replaceAll("%pocketXp", ""+player.getTotalExperience());
-			message = message.replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player.getName()));
+			message.set(0, message.get(0).replaceAll("%pocketXp", ""+player.getTotalExperience()));
+			message.set(0, message.get(0).replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player.getName())));
 			
 			
-			message = message.replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2));
-			message = message.replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2)));
+			message.set(0, message.get(0).replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2)));
+			message.set(0, message.get(0).replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2))));
 			
-			message = message.replaceAll("%player", player.getName());
+			message.set(0, message.get(0).replaceAll("%player", player.getName()));
 			
-			message = message.replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+"");
-			message = message.replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+"");
+			message.set(0, message.get(0).replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+""));
+			message.set(0, message.get(0).replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+""));
 			
-			message = message.replaceAll("%rankTableMoney", getRichestPlayers());
-			message = message.replaceAll("%rankTableExperience", getExperiencedPlayers());
 			
-			if (player != null)
-			player.sendMessage(getString("chat.color")+getString("chat.prefix")+message);
+			if (message.get(0).contains("%rankTableMoney")) {
+				message.set(0, message.get(0).replaceAll("%rankTableMoney", ""));
+				for (String line: getRichestPlayers()) {
+					message.add(line);
+				}
+			}
+			if (message.get(0).contains("%rankTableExperience")) {
+				message.set(0, message.get(0).replaceAll("%rankTableExperience", ""));
+				for (String line: getExperiencedPlayers()) {
+					message.add(line);
+				}
+			}
+			
+			if (player != null) {
+				player.sendMessage(getString("chat.color")
+						+ getString("chat.prefix") + message.get(0));
+				for (int i = 1; i < message.size(); i++) {
+					player.sendMessage(getString("chat.color")+message.get(i));
+				}
+			}
 			
 		} else {
 			bankcraft.getLogger().severe("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
@@ -111,8 +129,8 @@ public class ConfigurationHandler {
 		}
 	}
 	
-	private String getRichestPlayers() {
-		String result = "";
+	private List<String> getRichestPlayers() {
+		List<String> result = new ArrayList<String>();
 		HashMap <String,Double> accounts = new HashMap<String,Double>();
 		
 		for (String name: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
@@ -122,8 +140,8 @@ public class ConfigurationHandler {
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<String,Double>> sortedAccounts = sortByComparator(accounts);
 		
-		for (int i = 0; i<Integer.parseInt(getString("chat.rankTableLength")); i++) {
-			result += sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue()+System.getProperty("line.separator");
+		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i>=0 ; i--) {
+			result.add(sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue());
 		}
 		
 		
@@ -131,8 +149,8 @@ public class ConfigurationHandler {
 	}
 	
 
-	private String getExperiencedPlayers() {
-		String result = "";
+	private List<String> getExperiencedPlayers() {
+		List<String> result = new ArrayList<String>();
 		HashMap <String,Integer> accounts = new HashMap<String,Integer>();
 		
 		for (String name: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
@@ -142,8 +160,8 @@ public class ConfigurationHandler {
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<String,Integer>> sortedAccounts = sortByComparator(accounts);
 		
-		for (int i = 0; i<Integer.parseInt(getString("chat.rankTableLength")); i++) {
-			result += sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue()+System.getProperty("line.separator");
+		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i >=0; i--) {
+			result.add(sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue());
 		}
 		
 		

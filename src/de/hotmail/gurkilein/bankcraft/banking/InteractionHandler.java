@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
+import de.hotmail.gurkilein.bankcraft.Util;
 
 public class InteractionHandler {
 	
@@ -65,14 +66,14 @@ public class InteractionHandler {
 	public boolean interact(int type, String amountAsString, Player interactingPlayer, String targetPlayer) {
 		
 		//Check for interaction interval
-		if (lastInteractMap.containsKey(interactingPlayer) && System.currentTimeMillis()-lastInteractMap.get(interactingPlayer) >= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.timeBetweenTwoInteractions"))) {
+		if (lastInteractMap.containsKey(interactingPlayer) && System.currentTimeMillis()-lastInteractMap.get(interactingPlayer) <= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.timeBetweenTwoInteractions"))) {
 			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", targetPlayer);
 			return false;
 		}
 		lastInteractMap.put(interactingPlayer, System.currentTimeMillis());
 		
 		
-		if (amountAsString == null || amountAsString.equalsIgnoreCase("")) {
+		if (amountAsString == null || amountAsString.equalsIgnoreCase("") || (!amountAsString.equalsIgnoreCase("all") && !Util.isDouble(amountAsString))) {
 			return interact(type, -1 , interactingPlayer, targetPlayer);
 		}
 		
@@ -110,23 +111,22 @@ public class InteractionHandler {
 	//Main method
 	private boolean interact(int type, double amount, Player interactingPlayer, String targetPlayer) {
 		
+//		System.out.println(type+" "+amount+" "+interactingPlayer.getName()+" "+targetPlayer);
 		
 		
 			//BALANCE signs
-			if (type == 0) {
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getName());
+			if (type == 0 || type == 10) {
+				if (targetPlayer != "")
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", targetPlayer);	
+				else
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getName());
 				return true;
 			}
-			if (type == 5) {
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", interactingPlayer.getName());
-				return true;
-			}
-			if (type == 10) {
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", targetPlayer);
-				return true;
-			}
-			if (type == 11) {
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", targetPlayer);
+			if (type == 5 || type == 11) {
+				if (targetPlayer != "")
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", targetPlayer);
+				else
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", interactingPlayer.getName());
 				return true;
 			}
 			

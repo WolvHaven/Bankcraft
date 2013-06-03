@@ -146,8 +146,10 @@ public class MinecraftPlayerListener implements Listener{
 									// Scrolling-signs
 									amountAsString = bankcraft.getSignHandler().updateSign(event.getClickedBlock(), 0);
 								}
-								
-								bankcraft.getInteractionHandler().interact(type, amountAsString, p, ((Sign) event.getClickedBlock().getState()).getLine(2));
+								if (((Sign) event.getClickedBlock().getState()).getLine(2).equals(""))
+									bankcraft.getInteractionHandler().interact(type, amountAsString, p, p.getName());
+								else
+									bankcraft.getInteractionHandler().interact(type, amountAsString, p, ((Sign) event.getClickedBlock().getState()).getLine(2));
 							}
 						
 					} else {

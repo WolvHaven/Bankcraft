@@ -81,8 +81,8 @@ message:
     specifyAnInteraction: 'Please type in the Interaction you wish to use.'
     specifyAnAmount: 'Please type in the amount you wish to do.'
     youHaveQuit: 'You have quit the interaction.'
-    rankStatsMoney: 'Current richest players:\n%rankTableMoney'
-    rankStatsExperience: 'Current experienced players:\n%rankTableExperience'
+    rankStatsMoney: 'Current richest players:%rankTableMoney'
+    rankStatsExperience: 'Current experienced players:%rankTableExperience'
     tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
     
 signAndCommand:
