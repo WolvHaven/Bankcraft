@@ -17,7 +17,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			String accountOwner, Double amount, Player observer) {
 		
 		if (Bankcraft.econ.getBalance(pocketOwner.getName()) >= amount && bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.MAX_VALUE-amount) {
-			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
 				Bankcraft.econ.withdrawPlayer(pocketOwner.getName(), amount);
 				bankcraft.getMoneyDatabaseInterface().addToAccount(accountOwner, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfully", amount+"", accountOwner);
@@ -35,8 +35,8 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	public boolean transferFromAccountToPocket(String accountOwner,
 			Player pocketOwner, Double amount, Player observer) {
 		
-		if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner) >= amount) {
-			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+		if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
+			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().removeFromAccount(accountOwner, amount);
 				Bankcraft.econ.depositPlayer(pocketOwner.getName(), amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfully", amount+"", accountOwner);
@@ -57,8 +57,8 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", gettingPlayer);
 			return false;
 		}
-		if (bankcraft.getMoneyDatabaseInterface().getBalance(givingPlayer) >= amount) {
-			if (bankcraft.getMoneyDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+		if (bankcraft.getMoneyDatabaseInterface().getBalance(givingPlayer)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(givingPlayer, this) >= amount) {
+			if (bankcraft.getMoneyDatabaseInterface().getBalance(gettingPlayer)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().removeFromAccount(givingPlayer, amount);
 				bankcraft.getMoneyDatabaseInterface().addToAccount(gettingPlayer, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.transferedSuccessfully", amount+"", gettingPlayer);
@@ -78,10 +78,10 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 		String messageKey;
 		for (String accountName: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
 			
-			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this);
+			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this, bankcraft.getMoneyDatabaseInterface().getBalance(accountName)<0);
 			double amount = interest*bankcraft.getMoneyDatabaseInterface().getBalance(accountName);
 			
-			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountName)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountName)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().addToAccount(accountName, amount);
 				messageKey = "message.grantedInterestOnMoney";
 			} else {
@@ -103,7 +103,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			return false;
 		}
 		
-			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().addToAccount(accountOwner, amount);
 				return true;
 			} else {
@@ -120,7 +120,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			return false;
 		}
 	
-	if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner) >= amount) {
+	if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
 		
 		    bankcraft.getMoneyDatabaseInterface().removeFromAccount(accountOwner, amount);
 		    return true;

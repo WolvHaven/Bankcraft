@@ -85,36 +85,34 @@ public class ConfigurationHandler {
 
 
 	public double getInterestForPlayer(String accountName,
-			BankingHandler<?> bankingHandler) {
+			BankingHandler<?> bankingHandler, boolean inDebt) {
 		//Default interest
-		double interest = 0;
+		String interestString = "interest.interestOn";
 		
 		//Type specific interest
 		if (bankingHandler instanceof MoneyBankingHandler) {
-			
-			
-			//Online/Offline interests
-			if (bankcraft.getServer().getPlayer(accountName) != null)
-			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOnline"));
-			else
-			interest = Double.parseDouble(getString("interest.interestOnMoneyIfOffline"));	
-			
+			interestString += "Money";
 		} else
 		if (bankingHandler instanceof ExperienceBankingHandler) {
-
-			//Online/Offline interests
-			if (bankcraft.getServer().getPlayer(accountName) != null)
-			interest = Double.parseDouble(getString("interest.interestOnXpIfOnline"));
-			else
-			interest = Double.parseDouble(getString("interest.interestOnXpIfOffline"));	
-			
+			interestString += "Xp";
 		}
+		
+		//Depts
+		if (inDebt) {
+			interestString += "debts";
+		}
+
+		//Online/Offline interests
+		if (bankcraft.getServer().getPlayer(accountName) != null)
+			interestString += "IfOnline";
+		else
+			interestString += "IfOffline";
 		
 		//Player specific interest
 		//TODO
 		
 		
-		return interest;
+		return Double.parseDouble(getString(interestString));
 	}
 	
 	public String getString(String key) {
@@ -181,5 +179,26 @@ public class ConfigurationHandler {
 			}
 		});
 		return list;
+	}
+
+
+	public double getLoanLimitForPlayer(String accountOwner, BankingHandler<?> bankingHandler) {
+		//Default loans
+		String interestString = "general.maxLoanLimit";
+		
+		//Type specific loans
+		if (bankingHandler instanceof MoneyBankingHandler) {
+			interestString += "Money";
+		} else
+		if (bankingHandler instanceof ExperienceBankingHandler) {
+			interestString += "Xp";
+		}
+		
+		
+		//Player specific loans
+		//TODO
+		
+		
+		return Double.parseDouble(getString(interestString));
 	}
 }

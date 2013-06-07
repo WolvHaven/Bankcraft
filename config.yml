@@ -17,10 +17,18 @@ database:
     
     
 general: 
-#Maximum ammount of money on players accounts
+#Maximum amount of money/xp on players accounts
     maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
     
+#Maximum amount of money/xp that player can borrow from the bank
+    maxLoanLimitMoney: 1000
+    maxLoanLimitXp: 100
+    
+#Group that the player gets put in if he has borrowed money from the group
+    loanGroup: loantaker
+
+
 #Amount of time a player has to wait between two command or sign interactions (in 1/1000th of a second)
     timeBetweenTwoInteractions: 1000
 
@@ -34,6 +42,12 @@ interest:
     interestOnMoneyIfOffline: 0.0001
     interestOnXpIfOnline: 0.001
     interestOnXpIfOffline: 0.0002
+    
+#Interest charged on money/experience if the player is online/offline and is in debt
+    interestOnMoneydebtsIfOnline: 0.0005
+    interestOnMoneydebtsIfOffline: 0.0001
+    interestOnXpdebtsIfOnline: 0.001
+    interestOnXpdebtsIfOffline: 0.0002
     
 #Time until interests are given
     timeBetweenInterestsInMinutes: 2

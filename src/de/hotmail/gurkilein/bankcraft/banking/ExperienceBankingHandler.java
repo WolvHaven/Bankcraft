@@ -33,7 +33,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean transferFromAccountToPocket(String accountOwner,
 			   Player pocketOwner, Integer amount, Player observer) {
-			  if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner) >= amount) {
+			  if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
 			   if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
 			    ExperienceBukkitHandler.addExperienceToPocket(pocketOwner, amount);
@@ -58,7 +58,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			return false;
 		}
 		
-		if (bankcraft.getExperienceDatabaseInterface().getBalance(givingPlayer) >= amount) {
+		if (bankcraft.getExperienceDatabaseInterface().getBalance(givingPlayer)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(givingPlayer, this) >= amount) {
 			if (bankcraft.getExperienceDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				bankcraft.getExperienceDatabaseInterface().removeFromAccount(givingPlayer, amount);
 				bankcraft.getExperienceDatabaseInterface().addToAccount(gettingPlayer, amount);
@@ -79,7 +79,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		String messageKey;
 		for (String accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
 			
-			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this);
+			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this, bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<0);
 			
 			
 			
@@ -124,7 +124,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 				return false;
 			}
 		
-		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner) >= amount) {
+		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
 			
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
 			    return true;
