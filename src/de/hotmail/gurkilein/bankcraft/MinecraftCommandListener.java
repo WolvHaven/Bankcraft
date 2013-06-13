@@ -226,7 +226,6 @@ public class MinecraftCommandListener implements CommandExecutor{
 							((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
 
 							return true;
-						}
 						} else {
 							
 						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transferxp")) && (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
@@ -241,6 +240,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
 
 							return true;
+						}
 						}
 						}
 
