@@ -1,6 +1,8 @@
 package de.hotmail.gurkilein.bankcraft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -179,13 +181,20 @@ public class SignHandler {
 	public Sign[] getSigns(World world, int type) {
 		
 		Location[] locations = bankcraft.getSignDatabaseInterface().getLocations(type, world);
-		Sign[] signs = new Sign[locations.length];
+		List <Sign> signsList = new ArrayList<Sign>();
+		Sign sign;
 		
 		for (int i = 0; i<locations.length; i++) {
-			signs[i] = ((Sign)locations[i].getBlock().getState());
+			try {
+			sign = ((Sign)locations[i].getBlock().getState());
+			signsList.add(sign);
+			} catch (ClassCastException e) {
+				Bankcraft.log.warning("Found broken Sign... Removing... ("+locations[i].getBlockX()+":"+locations[i].getBlockY()+":"+locations[i].getBlockZ()+")");
+				bankcraft.getSignDatabaseInterface().removeSign(locations[i].getBlockX(), locations[i].getBlockY(), locations[i].getBlockZ(), locations[i].getWorld());
+			}
 		}
 		
-		return signs;
+		return signsList.toArray(new Sign[0]);
 	}
 
 
