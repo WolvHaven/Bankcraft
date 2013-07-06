@@ -27,18 +27,18 @@ public class InteractionHandler {
 		
 		
 		//Fill currencyMap
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.balance"), 0);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.deposit"), 1);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.withdraw"), 2);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.balancexp"), 5);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.depositxp"), 6);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.withdrawxp"), 7);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.exchange"), 12);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.exchangexp"), 13);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.interesttimer"), 16);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.chatinteract"), 17);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstats"), 18);
-		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstatsxp"), 19);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.balance").toLowerCase(), 0);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.deposit").toLowerCase(), 1);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.withdraw").toLowerCase(), 2);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.balancexp").toLowerCase(), 5);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.depositxp").toLowerCase(), 6);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.withdrawxp").toLowerCase(), 7);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.exchange").toLowerCase(), 12);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.exchangexp").toLowerCase(), 13);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.interesttimer").toLowerCase(), 16);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.chatinteract").toLowerCase(), 17);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstats").toLowerCase(), 18);
+		typeMap.put(bankcraft.getConfigurationHandler().getString("signAndCommand.rankstatsxp").toLowerCase(), 19);
 		
 		//Fill typeMap
 		currencyMap.put(0, -1);
@@ -208,7 +208,7 @@ public class InteractionHandler {
 	
 	
 	public boolean interact(String type, String amountAsString, Player pocketOwner, String accountOwner) {
-		return interact(typeMap.get(type), amountAsString, pocketOwner, accountOwner);
+		return interact(typeMap.get(type.toLowerCase()), amountAsString, pocketOwner, accountOwner);
 	}
 	
 	public HashMap<Player, Integer> getChatSignMap() {
