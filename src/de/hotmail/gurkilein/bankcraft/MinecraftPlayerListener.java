@@ -32,7 +32,7 @@ public class MinecraftPlayerListener implements Listener{
 							if (Bankcraft.perms.has(p, "bankcraft.admin")) {
 								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Bankcraftsign...");
 								Sign sign = (Sign) event.getClickedBlock().getState();
-								if (((sign.getLine(1).contains(coHa.getString("signAndCommand.deposit")) | sign.getLine(1).contains(coHa.getString("signAndCommand.exchange")) | sign.getLine(1).contains(coHa.getString("signAndCommand.exchangexp")) | sign.getLine(1).contains(coHa.getString("signAndCommand.withdraw")) | sign.getLine(1).contains(coHa.getString("signAndCommand.withdrawxp")) | sign.getLine(1).contains(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
+								if (((sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
 									//ERSTELLEN DER BANK
 									sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 									double betrag = 0;
@@ -41,7 +41,7 @@ public class MinecraftPlayerListener implements Listener{
 									int signY = sign.getBlock().getY();
 									int signZ = sign.getBlock().getZ();
 									
-									if (typreihe.equals(coHa.getString("signAndCommand.deposit"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.deposit"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -50,7 +50,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										type = 1;
 									}
-									if (typreihe.equals(coHa.getString("signAndCommand.withdraw"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdraw"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -60,7 +60,7 @@ public class MinecraftPlayerListener implements Listener{
 										type = 2;
 									}
 
-									if (typreihe.equals(coHa.getString("signAndCommand.depositxp"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -69,7 +69,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										type = 6;
 									}
-									if (typreihe.equals(coHa.getString("signAndCommand.withdrawxp"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -78,7 +78,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										type = 7;
 									}
-									if (typreihe.equals(coHa.getString("signAndCommand.exchange"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchange"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -87,7 +87,7 @@ public class MinecraftPlayerListener implements Listener{
 										}
 										type = 12;
 									}
-									if (typreihe.equals(coHa.getString("signAndCommand.exchangexp"))) {
+									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp"))) {
 										if (sign.getLine(2).equalsIgnoreCase("all")) {
 											sign.setLine(2, "All");
 											betrag = -1;
@@ -101,7 +101,7 @@ public class MinecraftPlayerListener implements Listener{
 									coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
 
 								} else {
-									if (sign.getLine(1).equals(coHa.getString("signAndCommand.balance")) | (sign.getLine(1).equals(coHa.getString("signAndCommand.balancexp")))) {
+									if (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance")) | (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")))) {
 										sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
 										int signX = sign.getBlock().getX();
 										int signY = sign.getBlock().getY();
@@ -131,7 +131,7 @@ public class MinecraftPlayerListener implements Listener{
 							return;
 						}
 						if (Bankcraft.perms.has(p, "bankcraft.use") | (Bankcraft.perms.has(p, "bankcraft.use.money") && (type == 0 | type == 1 | type == 2 | type == 3 | type == 4)) | (Bankcraft.perms.has(p, "bankcraft.use.exp") && (type == 5 | type == 6 | type == 7 | type == 8 | type == 9))) {
-							if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+							if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true"))) {
 								
 								//Update scrolling signs
 								if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
@@ -139,7 +139,7 @@ public class MinecraftPlayerListener implements Listener{
 								}
 								
 							}
-							if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+							if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false"))) {
 								
 								String amountAsString = ((Sign) event.getClickedBlock().getState()).getLine(2);
 								if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {

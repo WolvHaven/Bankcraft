@@ -17,6 +17,10 @@ database:
     
     
 general: 
+
+#Swap left and right click interactions (false/true)
+    swapClicks: false
+
 #Maximum amount of money/xp on players accounts
     maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
