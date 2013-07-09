@@ -88,7 +88,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 				messageKey = "message.couldNotGrantInterestOnMoney";
 			}
 			Player player;
-			if (bankcraft.getConfigurationHandler().getString("interest.broadcastMoney").equals("true") && (player =bankcraft.getServer().getPlayer(accountName)) != null) {
+			if ((player =bankcraft.getServer().getPlayer(accountName)) != null && (bankcraft.getConfigurationHandler().getString("interest.broadcastMoney").equals("true") || Bankcraft.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
 				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getName());
 			}
 		}
