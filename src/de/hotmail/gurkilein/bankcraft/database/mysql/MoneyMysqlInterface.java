@@ -136,7 +136,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		}
 		
 		Double currentBalance = getBalance(player);
-		if (currentBalance >= Double.MIN_VALUE+amount) {
+		if (currentBalance >= -Double.MAX_VALUE+amount) {
 			setBalance(player, currentBalance-amount);
 			return true;
 		}

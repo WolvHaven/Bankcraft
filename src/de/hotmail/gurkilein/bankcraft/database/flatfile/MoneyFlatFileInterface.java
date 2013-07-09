@@ -116,7 +116,7 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 		}
 		
 		Double currentBalance = getBalance(player);
-		if (currentBalance >= Double.MIN_VALUE+amount) {
+		if (currentBalance-amount >= -Double.MAX_VALUE) {
 			setBalance(player, currentBalance-amount);
 			return true;
 		}
