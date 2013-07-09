@@ -183,6 +183,8 @@ public class ConfigurationHandler {
 
 
 	public double getLoanLimitForPlayer(String accountOwner, BankingHandler<?> bankingHandler) {
+		Double loanLimit = 0D;
+		
 		//Default loans
 		String interestString = "general.maxLoanLimit";
 		
@@ -194,11 +196,18 @@ public class ConfigurationHandler {
 			interestString += "Xp";
 		}
 		
+		loanLimit = Double.parseDouble(getString(interestString));
 		
 		//Player specific loans
-		//TODO
+		Player player = bankcraft.getServer().getPlayer(accountOwner);
+		if (player != null) { //If Online
+			
+			//TODO
+			
+			
+		}
 		
 		
-		return Double.parseDouble(getString(interestString));
+		return loanLimit;
 	}
 }
