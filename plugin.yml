@@ -1,6 +1,6 @@
 name: Bankcraft
 main: de.hotmail.gurkilein.bankcraft.Bankcraft
-version: 2.1
+version: 2.2
 depend: [Vault]
 commands:
     bank:
