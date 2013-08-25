@@ -46,7 +46,7 @@ public class MinecraftChatListener implements Listener{
 		}else
 			//Waiting for player to input a value.
 			if ((Integer)bankcraft.getInteractionHandler().getChatSignMap().get(event.getPlayer()) == 2) {
-				if (event.getMessage().equalsIgnoreCase("all") ||  Util.isInteger(event.getMessage())) {
+				if (event.getMessage().equalsIgnoreCase("all") ||  Util.isPositive(event.getMessage())) {
 					
 					//Start interaction
 					 if (!bankcraft.getInteractionHandler().interact(chosenInteraction.get(event.getPlayer()),event.getMessage(), event.getPlayer(), event.getPlayer().getName())) {
