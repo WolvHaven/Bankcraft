@@ -67,7 +67,7 @@ public class InteractionHandler {
 		
 		//Check for interaction interval
 		if (lastInteractMap.containsKey(interactingPlayer) && System.currentTimeMillis()-lastInteractMap.get(interactingPlayer) <= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.timeBetweenTwoInteractions"))) {
-			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", targetPlayer);
+			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", interactingPlayer.getName());
 			return false;
 		}
 		lastInteractMap.put(interactingPlayer, System.currentTimeMillis());
