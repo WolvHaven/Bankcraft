@@ -66,12 +66,14 @@ public final class Bankcraft extends JavaPlugin{
         
         //Setup Database
         if (configurationHandler.getString("database.typeOfDatabase").equalsIgnoreCase("mysql")) {
+        	log.info("Using MYSQL as Datasource...");
         	databaseManager = new DatabaseManagerMysql(this);
         	moneyDatabaseInterface = new MoneyMysqlInterface(this);
         	experienceDatabaseInterface = new ExperienceMysqlInterface(this);
         	signDatabaseInterface = new SignMysqlInterface(this);
         } else {
         	//Go for FlatFile
+        	log.info("Using FlatFile as Datasource...");
         	databaseManager = new DatabaseManagerFlatFile(this);
         	moneyDatabaseInterface = new MoneyFlatFileInterface(this);
         	experienceDatabaseInterface = new ExperienceFlatFileInterface(this);
@@ -114,7 +116,7 @@ public final class Bankcraft extends JavaPlugin{
     	//Start InterestTimerTask
         toggleTimerTask();
     	
-    	log.info("Bankcraft has been successfully loaded! ;D");
+    	log.info("Bankcraft has been successfully loaded!");
     }
  
 	private void toggleTimerTask() {
