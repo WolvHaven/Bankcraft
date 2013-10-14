@@ -1,6 +1,7 @@
 package de.hotmail.gurkilein.bankcraft;
 
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +23,10 @@ public class ConfigurationHandler {
 
 	public ConfigurationHandler(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
-		
-		bankcraft.saveDefaultConfig();
+		if (!(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"config.yml").exists())) {
+			Bankcraft.log.info("No config file found! Creating new one...");
+			bankcraft.saveDefaultConfig();
+		}
 	}
 
 	
