@@ -80,12 +80,18 @@ public final class Bankcraft extends JavaPlugin{
         	signDatabaseInterface = new SignFlatFileInterface(this);
         }
         
-        //Importing data from the old bankcraft plugin
+    	OldDataImportHandler odih = new OldDataImportHandler(this);
+    	
+        //Importing data from bankcraft 1.0
         if (configurationHandler.getString("database.importOldData").equalsIgnoreCase("true")) {
         	log.info("Importing old data... ");
-        	
-        	OldDataImportHandler odih = new OldDataImportHandler(this);
         	odih.importOldData();
+        }
+        
+        //Importing data from bankcraft 2.2
+        if (configurationHandler.getString("database.eliminateCaseSensitives").equalsIgnoreCase("true")) {
+        	log.info("Removing case sensitive entries...");
+        	odih.migratev2_3();
         }
         
         

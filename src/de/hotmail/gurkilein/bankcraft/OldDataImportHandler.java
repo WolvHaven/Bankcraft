@@ -3,6 +3,7 @@ package de.hotmail.gurkilein.bankcraft;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 
 
 public class OldDataImportHandler {
@@ -13,10 +14,56 @@ public class OldDataImportHandler {
 		this.bankcraft = bankcraft;
 	}
 
+	//Migration for v2.2 or older
+	public boolean migratev2_3() {
+		bankcraft.getLogger().info("Migrating data...");
+		{
+		String [] accounts = bankcraft.getMoneyDatabaseInterface().getAccounts();
+		HashMap <String, Double> accMap = new HashMap <String, Double> ();
+		
+		bankcraft.getLogger().info("Migrating money data...");
+		//Merge accounts
+		for (String account : accounts) {
+			if (accMap.containsKey(account.toLowerCase()))
+				accMap.put(account.toLowerCase(), (accMap.get(account.toLowerCase()) + bankcraft.getMoneyDatabaseInterface().getBalance(account)));
+			else
+				accMap.put(account.toLowerCase(), bankcraft.getMoneyDatabaseInterface().getBalance(account));
+		}
+		
+		//Save changes
+		for (String account : accMap.keySet()) {
+			bankcraft.getMoneyDatabaseInterface().setBalance(account, accMap.get(account));
+		}
+		}
+		
+		{
+		String [] accounts = bankcraft.getExperienceDatabaseInterface().getAccounts();
+		HashMap <String, Integer> accMap = new HashMap <String, Integer> ();
+		bankcraft.getLogger().info("Migrating experience data...");
+		//Merge accounts
+		for (String account : accounts) {
+			if (accMap.containsKey(account.toLowerCase()))
+				accMap.put(account.toLowerCase(), (accMap.get(account.toLowerCase()) + bankcraft.getExperienceDatabaseInterface().getBalance(account)));
+			else
+				accMap.put(account.toLowerCase(), bankcraft.getExperienceDatabaseInterface().getBalance(account));
+		}
+		
+		//Save changes
+		for (String account : accMap.keySet()) {
+			bankcraft.getExperienceDatabaseInterface().setBalance(account, accMap.get(account));
+		}
+		}
+		
+		
+		bankcraft.getLogger().info("Finished migrating of old data! Remember to set eliminateCaseSensitives to false in the config.yml!!!");
+		return true;
+	}
+	
+	
+	//Migration for v1.X
 	public boolean importOldData() {
 		//TODO
 		bankcraft.getLogger().info("Searching for flatfile data...");
-		
 		{
 		//Import Money Data
 		bankcraft.getLogger().info("Importing money data...");

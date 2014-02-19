@@ -15,7 +15,10 @@ database:
 #Import data from the old Bankcraft
     importOldData: false
     
-    
+#Eliminate case sensitive entries in the database (use this if you updated from version 2.2 or older!)
+    eliminateCaseSensitives : false
+
+
 general: 
 
 #Swap left and right click interactions (false/true)
