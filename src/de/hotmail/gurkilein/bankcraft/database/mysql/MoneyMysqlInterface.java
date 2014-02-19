@@ -28,7 +28,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		 
 		        String sql = "SELECT `player_name` FROM `bc_accounts` WHERE `player_name` = ?";
 		        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-		        preparedUpdateStatement.setString(1, player);
+		        preparedUpdateStatement.setString(1, player.toLowerCase());
 		        
 		        
 		        ResultSet result = preparedUpdateStatement.executeQuery();
@@ -50,7 +50,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	                     "VALUES(?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
-	        preparedStatement.setString(1, player);
+	        preparedStatement.setString(1, player.toLowerCase());
 	        preparedStatement.setString(2, "0");
 	        preparedStatement.setString(3, "0");
 	        
@@ -64,8 +64,8 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 
 	@Override
 	public Double getBalance(String player) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 	      try {
@@ -73,7 +73,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
 	        
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-	        preparedUpdateStatement.setString(1, player);
+	        preparedUpdateStatement.setString(1, player.toLowerCase());
 	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        while (result.next()) {
@@ -87,8 +87,8 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 
 	@Override
 	public boolean setBalance(String player, Double amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
         try {
@@ -97,7 +97,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");
-			preparedUpdateStatement.setString(2, player);
+			preparedUpdateStatement.setString(2, player.toLowerCase());
 			
 			preparedUpdateStatement.executeUpdate();
 			return true;
@@ -109,17 +109,17 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 
 	@Override
 	public boolean addToAccount(String player, Double amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		if (amount < 0) {
-			return removeFromAccount(player, -amount);
+			return removeFromAccount(player.toLowerCase(), -amount);
 		}
 		
-		Double currentBalance = getBalance(player);
+		Double currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance <= Double.MAX_VALUE-amount) {
-			setBalance(player, currentBalance+amount);
+			setBalance(player.toLowerCase(), currentBalance+amount);
 			return true;
 		}
 		return false;
@@ -127,17 +127,17 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 
 	@Override
 	public boolean removeFromAccount(String player, Double amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		if (amount < 0) {
-			return addToAccount(player, -amount);
+			return addToAccount(player.toLowerCase(), -amount);
 		}
 		
-		Double currentBalance = getBalance(player);
+		Double currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance >= -Double.MAX_VALUE+amount) {
-			setBalance(player, currentBalance-amount);
+			setBalance(player.toLowerCase(), currentBalance-amount);
 			return true;
 		}
 		return false;

@@ -19,13 +19,13 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 	
 	@Override
 	public boolean hasAccount(String player) {
-		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data")).exists();
+		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data")).exists();
 	}
 
 	@Override
 	public boolean createAccount(String player) {
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			accountFile.createNewFile();
 			
 			FileWriter fw = new FileWriter(accountFile, false);
@@ -36,19 +36,19 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not create Account "+player+"!");
+			bankcraft.getLogger().severe("Could not create Account "+player.toLowerCase()+"!");
 		}
 		return false;
 	}
 
 	@Override
 	public Double getBalance(String player) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -58,19 +58,19 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 			return balance;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
+			bankcraft.getLogger().severe("Could not get Balance of "+player.toLowerCase()+"!");
 		}
 		return null;
 	}
 
 	@Override
 	public boolean setBalance(String player, Double amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -89,7 +89,7 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not set Balance of "+player+"!");
+			bankcraft.getLogger().severe("Could not set Balance of "+player.toLowerCase()+"!");
 		}
 		return false;
 	}
@@ -97,12 +97,12 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 	@Override
 	public boolean addToAccount(String player, Double amount) {
 		if (amount < 0) {
-			return removeFromAccount(player, -amount);
+			return removeFromAccount(player.toLowerCase(), -amount);
 		}
 		
-		Double currentBalance = getBalance(player);
+		Double currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance <= Double.MAX_VALUE-amount) {
-			setBalance(player, currentBalance+amount);
+			setBalance(player.toLowerCase(), currentBalance+amount);
 			return true;
 		}
 		return false;
@@ -112,12 +112,12 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double>{
 	public boolean removeFromAccount(String player, Double amount) {
 
 		if (amount < 0) {
-			return addToAccount(player, -amount);
+			return addToAccount(player.toLowerCase(), -amount);
 		}
 		
-		Double currentBalance = getBalance(player);
+		Double currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance-amount >= -Double.MAX_VALUE) {
-			setBalance(player, currentBalance-amount);
+			setBalance(player.toLowerCase(), currentBalance-amount);
 			return true;
 		}
 		return false;

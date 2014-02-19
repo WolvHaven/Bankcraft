@@ -24,19 +24,18 @@ public class MinecraftBlockListener implements Listener{
 	
 	private static final BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlockDestroy(BlockBreakEvent event) throws Exception {
 		Player p = event.getPlayer();
 		Block testblock = event.getBlock();
-		Material type = testblock.getType();
 		//Check blocks around destroyed block for signs
 		for (BlockFace face : faces) {
-			type = testblock.getRelative(face).getType();
-			Block nachbarblock = testblock.getRelative(face);
-
+			Block neighbor = testblock.getRelative(face);
+			
 			//if sign found
-			if (type == Material.WALL_SIGN) {
-				if ((nachbarblock.getData() == 4 & face.equals(BlockFace.WEST)) | (nachbarblock.getData() == 5 & face.equals(BlockFace.EAST)) | (nachbarblock.getData() == 2 & face.equals(BlockFace.NORTH)) | (nachbarblock.getData() == 3 & face.equals(BlockFace.SOUTH))) {
+			if (neighbor.getType() == Material.WALL_SIGN) {
+				if ((neighbor.getData() == 4 & face.equals(BlockFace.WEST)) | (neighbor.getData() == 5 & face.equals(BlockFace.EAST)) | (neighbor.getData() == 2 & face.equals(BlockFace.NORTH)) | (neighbor.getData() == 3 & face.equals(BlockFace.SOUTH))) {
 					//check the found sign for the players name.
 					Sign sign = (Sign) testblock.getRelative(face).getState();
 					if (sign.getLine(0).contains("[Bank]")) {

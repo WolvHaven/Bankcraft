@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
 
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
@@ -133,22 +134,26 @@ public class MinecraftCommandListener implements CommandExecutor{
 				if (vars.length == 2) {
 					if (Util.isPositive(vars[1]) || vars[1].equalsIgnoreCase("all")) {
 						if (vars[0].equalsIgnoreCase("add") && (Bankcraft.perms.has(p, "bankcraft.admin"))) {
-							Block signblock = p.getTargetBlock(null, 50);
-							if (signblock.getType() == Material.WALL_SIGN) {
-								Sign sign = (Sign) signblock.getState();
+							BlockIterator bi = new BlockIterator(p,20);
+							Block sb = null;
+							while (bi.hasNext() &&  (sb = bi.next()).getType().equals(Material.AIR))
+							{}
+							
+							if (sb.getType() == Material.WALL_SIGN) {
+								Sign sign = (Sign) sb.getState();
 								if (sign.getLine(0).contains("[Bank]")) {
 									Integer typsign = -1;
 									try {
-										typsign = bankcraft.getSignDatabaseInterface().getType(signblock.getX(), signblock.getY(), signblock.getZ(), signblock.getWorld());
+										typsign = bankcraft.getSignDatabaseInterface().getType(sb.getX(), sb.getY(), sb.getZ(), sb.getWorld());
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
 									if (typsign == 1 || typsign == 2 || typsign == 3 || typsign == 4 || typsign == 6 || typsign == 7 || typsign == 8 || typsign == 9 || typsign == 12 || typsign == 13 || typsign == 14 || typsign == 15) {
 
-											Integer x = signblock.getX();
-											Integer y = signblock.getY();
-											Integer z = signblock.getZ();
-											World w = signblock.getWorld();
+											Integer x = sb.getX();
+											Integer y = sb.getY();
+											Integer z = sb.getZ();
+											World w = sb.getWorld();
 											
 											Integer newType;
 											Integer currentType = bankcraft.getSignDatabaseInterface().getType(x, y, z, w);
@@ -161,7 +166,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 												
 											bankcraft.getSignDatabaseInterface().addAmount(x, y, z, w, vars[1]);
 											coHa.printMessage(p, "message.amountAddedSuccessfullyToSign", vars[1], p.getName());
-											bankcraft.getSignHandler().updateSign(signblock,0);
+											bankcraft.getSignHandler().updateSign(sb,0);
 											return true;
 											}
 

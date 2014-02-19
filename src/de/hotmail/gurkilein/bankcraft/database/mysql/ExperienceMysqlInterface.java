@@ -28,7 +28,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 		 
 		        String sql = "SELECT `player_name` FROM `bc_accounts` WHERE `player_name` = ?";;
 		        PreparedStatement preparedStatement = conn.prepareStatement(sql);
-		        preparedStatement.setString(1, player);
+		        preparedStatement.setString(1, player.toLowerCase());
 		        
 		        ResultSet result = preparedStatement.executeQuery();
 		 
@@ -49,7 +49,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 	                     "VALUES(?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
-	        preparedStatement.setString(1, player);
+	        preparedStatement.setString(1, player.toLowerCase());
 	        preparedStatement.setString(2, "0");
 	        preparedStatement.setString(3, "0");
 	        
@@ -63,15 +63,15 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 
 	@Override
 	public Integer getBalance(String player) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 	      try {
 	 
 	        String sql = "SELECT `balance_xp` FROM `bc_accounts` WHERE `player_name` = ?";
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-	        preparedUpdateStatement.setString(1, player);
+	        preparedUpdateStatement.setString(1, player.toLowerCase());
 	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        
@@ -86,8 +86,8 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 
 	@Override
 	public boolean setBalance(String player, Integer amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
         try {
@@ -96,7 +96,7 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");
-			preparedUpdateStatement.setString(2, player);
+			preparedUpdateStatement.setString(2, player.toLowerCase());
 			preparedUpdateStatement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -107,17 +107,17 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 
 	@Override
 	public boolean addToAccount(String player, Integer amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		if (amount < 0) {
-			return removeFromAccount(player, -amount);
+			return removeFromAccount(player.toLowerCase(), -amount);
 		}
 		
-		Integer currentBalance = getBalance(player);
+		Integer currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance <= Integer.MAX_VALUE-amount) {
-			setBalance(player, currentBalance+amount);
+			setBalance(player.toLowerCase(), currentBalance+amount);
 			return true;
 		}
 		return false;
@@ -125,17 +125,17 @@ public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integ
 
 	@Override
 	public boolean removeFromAccount(String player, Integer amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		if (amount < 0) {
-			return addToAccount(player, -amount);
+			return addToAccount(player.toLowerCase(), -amount);
 		}
 		
-		Integer currentBalance = getBalance(player);
+		Integer currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance >= Integer.MIN_VALUE+amount) {
-			setBalance(player, currentBalance-amount);
+			setBalance(player.toLowerCase(), currentBalance-amount);
 			return true;
 		}
 		return false;

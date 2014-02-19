@@ -22,13 +22,13 @@ public class ExperienceFlatFileInterface implements
 	
 	@Override
 	public boolean hasAccount(String player) {
-		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data")).exists();
+		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data")).exists();
 	}
 
 	@Override
 	public boolean createAccount(String player) {
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			accountFile.createNewFile();
 			
 			FileWriter fw = new FileWriter(accountFile, false);
@@ -47,12 +47,12 @@ public class ExperienceFlatFileInterface implements
 	@Override
 	public Integer getBalance(String player) {
 		
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -62,19 +62,19 @@ public class ExperienceFlatFileInterface implements
 			return balance;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
+			bankcraft.getLogger().severe("Could not get Balance of "+player.toLowerCase()+"!");
 		}
 		return null;
 	}
 
 	@Override
 	public boolean setBalance(String player, Integer amount) {
-		if (!hasAccount(player)) {
-			createAccount(player);
+		if (!hasAccount(player.toLowerCase())) {
+			createAccount(player.toLowerCase());
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -93,7 +93,7 @@ public class ExperienceFlatFileInterface implements
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not set Balance of "+player+"!");
+			bankcraft.getLogger().severe("Could not set Balance of "+player.toLowerCase()+"!");
 		}
 		return false;
 	}
@@ -102,12 +102,12 @@ public class ExperienceFlatFileInterface implements
 	public boolean addToAccount(String player, Integer amount) {
 		
 		if (amount < 0) {
-			return removeFromAccount(player, -amount);
+			return removeFromAccount(player.toLowerCase(), -amount);
 		}
 		
-		Integer currentBalance = getBalance(player);
+		Integer currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance <= Integer.MAX_VALUE-amount) {
-			setBalance(player, currentBalance+amount);
+			setBalance(player.toLowerCase(), currentBalance+amount);
 			return true;
 		}
 		return false;
@@ -117,12 +117,12 @@ public class ExperienceFlatFileInterface implements
 	public boolean removeFromAccount(String player, Integer amount) {
 		
 		if (amount < 0) {
-			return addToAccount(player, -amount);
+			return addToAccount(player.toLowerCase(), -amount);
 		}
 		
-		Integer currentBalance = getBalance(player);
+		Integer currentBalance = getBalance(player.toLowerCase());
 		if (currentBalance >= Integer.MIN_VALUE+amount) {
-			setBalance(player, currentBalance-amount);
+			setBalance(player.toLowerCase(), currentBalance-amount);
 			return true;
 		}
 		return false;
