@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 public class MinecraftPlayerListener implements Listener{
 
@@ -17,6 +18,11 @@ public class MinecraftPlayerListener implements Listener{
 	public MinecraftPlayerListener(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
 		this.coHa = bankcraft.getConfigurationHandler();
+	}
+	
+	@EventHandler
+	public void onLogin(PlayerLoginEvent event) {
+		bankcraft.getDebitorHandler().updateDebitorStatus(event.getPlayer());
 	}
 
 	@EventHandler

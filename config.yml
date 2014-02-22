@@ -31,9 +31,12 @@ general:
 #Maximum amount of money/xp that player can borrow from the bank
     maxLoanLimitMoney: 1000
     maxLoanLimitXp: 100
-    
-#Group that the player gets put in if he has borrowed money from the group
-    loanGroup: loantaker
+
+#Group that the player gets put in if he has borrowed money
+    loanGroup: debitor    
+
+#Should a player that is in debt be reminded on login? (true = yes/ false = no)
+    remindDebitorOnLogin: true
 
 
 #Amount of time a player has to wait between two command or sign interactions (in 1/1000th of a second)
@@ -104,6 +107,7 @@ message:
     youHaveQuit: 'You have quit the interaction.'
     rankStatsMoney: 'Current richest players:%rankTableMoney'
     rankStatsExperience: 'Current experienced players:%rankTableExperience'
+    debitor: 'You are currently in debt! Please make sure to pay your bills!'
     tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
     
 signAndCommand:

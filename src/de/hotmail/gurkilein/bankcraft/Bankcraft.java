@@ -11,6 +11,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
+import de.hotmail.gurkilein.bankcraft.banking.DebitorHandler;
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.InteractionHandler;
 import de.hotmail.gurkilein.bankcraft.banking.MoneyBankingHandler;
@@ -37,6 +38,7 @@ public final class Bankcraft extends JavaPlugin{
     private SignDatabaseInterface signDatabaseInterface;
     private ConfigurationHandler configurationHandler;
     private SignHandler signHandler;
+    private DebitorHandler debitorHandler;
     private DatabaseManagerInterface databaseManager;
 	private BankingHandler<?>[] bankingHandlers;
 	private InterestGrantingTask interestGrantingTask;
@@ -94,7 +96,8 @@ public final class Bankcraft extends JavaPlugin{
         	odih.migratev2_3();
         }
         
-        
+        //Setup DebitorHandler
+        debitorHandler = new DebitorHandler(this);
         
         //Setup BankingHandlers
         bankingHandlers = new BankingHandler[2];
@@ -186,6 +189,10 @@ public final class Bankcraft extends JavaPlugin{
 
 	public SignHandler getSignHandler() {
 		return signHandler;
+	}
+	
+	public DebitorHandler getDebitorHandler() {
+		return debitorHandler;
 	}
 	
 	public InterestGrantingTask getInterestGrantingTask() {

@@ -15,6 +15,8 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean transferFromPocketToAccount(Player pocketOwner,
 			String accountOwner, Integer amount, Player observer) {
+		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
+		
 		if (ExperienceBukkitHandler.getTotalExperience(pocketOwner) >= amount) {
 			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				ExperienceBukkitHandler.removeExperienceFromPocket(pocketOwner, amount);
@@ -33,11 +35,14 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean transferFromAccountToPocket(String accountOwner,
 			   Player pocketOwner, Integer amount, Player observer) {
-			  if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
-			   if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
+		
+		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
+			if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
 			    ExperienceBukkitHandler.addExperienceToPocket(pocketOwner, amount);
 			    bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfullyXp", amount+"", accountOwner);
+			    if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 			    return true;
 			   } else {
 			    bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInPocket", amount+"", pocketOwner.getName());
@@ -52,6 +57,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean transferFromAccountToAccount(String givingPlayer,
 			String gettingPlayer, Integer amount, Player observer) {
+		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
 		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(gettingPlayer)) {
 			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", gettingPlayer);
@@ -63,6 +69,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 				bankcraft.getExperienceDatabaseInterface().removeFromAccount(givingPlayer, amount);
 				bankcraft.getExperienceDatabaseInterface().addToAccount(gettingPlayer, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.transferedSuccessfullyXp", amount+"", gettingPlayer);
+				if (bankcraft.getServer().getPlayer(givingPlayer) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(givingPlayer));
 				return true;
 			} else {
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", gettingPlayer);
@@ -102,6 +109,8 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean depositToAccount(String accountOwner, Integer amount,
 			Player observer) {
+		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
+		
 		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
 			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
 			return false;
@@ -119,6 +128,8 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean withdrawFromAccount(String accountOwner, Integer amount,
 			Player observer) {
+		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
+		
 		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
 				return false;
@@ -127,6 +138,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
 			
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
+			    if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 			    return true;
 		} else {
 			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
