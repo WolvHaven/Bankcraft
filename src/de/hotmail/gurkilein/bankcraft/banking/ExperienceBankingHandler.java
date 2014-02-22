@@ -22,6 +22,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 				ExperienceBukkitHandler.removeExperienceFromPocket(pocketOwner, amount);
 				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfullyXp", amount+"", accountOwner);
+				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 				return true;
 			} else {
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
@@ -118,6 +119,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		
 			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
+				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 				return true;
 			} else {
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);

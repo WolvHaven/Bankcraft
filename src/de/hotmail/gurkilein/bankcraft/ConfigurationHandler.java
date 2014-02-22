@@ -55,10 +55,16 @@ public class ConfigurationHandler {
 			message.set(0, message.get(0).replaceAll("%pocketXp", ""+player.getTotalExperience()));
 			message.set(0, message.get(0).replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player.getName())));
 			
+			if (bankcraft.getExperienceDatabaseInterface().hasAccount(player2)) 
+				message.set(0, message.get(0).replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2)));
+			else
+				message.set(0, message.get(0).replaceAll("%balanceXp", "0"));
 			
-			message.set(0, message.get(0).replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2)));
-			message.set(0, message.get(0).replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2))));
-			
+			if (bankcraft.getMoneyDatabaseInterface().hasAccount(player2)) 
+				message.set(0, message.get(0).replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2))));
+			else
+				message.set(0, message.get(0).replaceAll("%balance", "0.00"));
+				
 			message.set(0, message.get(0).replaceAll("%player", player.getName()));
 			
 			message.set(0, message.get(0).replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+""));
@@ -138,6 +144,7 @@ public class ConfigurationHandler {
 	}
 	
 	private List<String> getRichestPlayers() {
+		DecimalFormat f = new DecimalFormat("#0.00");
 		List<String> result = new ArrayList<String>();
 		HashMap <String,Double> accounts = new HashMap<String,Double>();
 		
@@ -149,7 +156,7 @@ public class ConfigurationHandler {
 		List <Map.Entry<String,Double>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i>=0 ; i--) {
-			result.add(sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue());
+			result.add(sortedAccounts.get(i).getKey()+" "+f.format(sortedAccounts.get(i).getValue()));
 		}
 		
 		

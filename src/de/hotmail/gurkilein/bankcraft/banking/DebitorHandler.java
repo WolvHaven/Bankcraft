@@ -17,28 +17,32 @@ public class DebitorHandler {
 		return (bankcraft.getMoneyDatabaseInterface().getBalance(player) < 0
 			|| bankcraft.getExperienceDatabaseInterface().getBalance(player) < 0);
 	}
+	
+	public boolean isCurrentlyDebitor(Player p) {
+		return Bankcraft.perms.playerInGroup(p, bankcraft.getConfigurationHandler().getString("general.loanGroup"));
+	}
 
 	private boolean editPermissions(Player p, boolean isNowDebitor) {
 		String loanGroup = bankcraft.getConfigurationHandler().getString("general.loanGroup");
-		boolean isCurrentlyDebitor = Bankcraft.perms.playerInGroup(p, loanGroup);
+		boolean isCurrentlyDebitor = isCurrentlyDebitor (p);
 		
 		if (isNowDebitor == isCurrentlyDebitor) 
 			return false;
 		
 		if (isNowDebitor) {
 			Bankcraft.perms.playerAddGroup(p, loanGroup);
+			System.out.println("C:"+p.getName()+"D:"+isNowDebitor);
 		} else {
 			Bankcraft.perms.playerRemoveGroup(p, loanGroup);
+			System.out.println("C:"+p.getName()+"D:"+isNowDebitor);
 		}
 		return true;
 	}
 	
 	public void updateDebitorStatus(Player p) {
+		System.out.println("U:"+p.getName()+"S:"+shouldBeDebitor(p.getName().toLowerCase()));
 		//Check if player is in debt and update permission group accordingly
 		if (shouldBeDebitor(p.getName().toLowerCase())) {
-			if (Boolean.getBoolean(bankcraft.getConfigurationHandler().getString("general.remindDebitorOnLogin"))) {
-				bankcraft.getConfigurationHandler().printMessage(p, "message.debitor", "0", p.getName());
-			}
 			editPermissions(p,true);
 		} else {
 			editPermissions(p,false);

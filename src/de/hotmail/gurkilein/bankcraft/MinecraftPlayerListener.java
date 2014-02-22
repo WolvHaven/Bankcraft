@@ -23,6 +23,11 @@ public class MinecraftPlayerListener implements Listener{
 	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
 		bankcraft.getDebitorHandler().updateDebitorStatus(event.getPlayer());
+		if (bankcraft.getDebitorHandler().isCurrentlyDebitor(event.getPlayer())) {
+			if (Boolean.getBoolean(bankcraft.getConfigurationHandler().getString("general.remindDebitorOnLogin"))) {
+				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.debitor", "0", event.getPlayer().getName());
+			}
+		}
 	}
 
 	@EventHandler
