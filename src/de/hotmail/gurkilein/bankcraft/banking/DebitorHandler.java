@@ -31,16 +31,13 @@ public class DebitorHandler {
 		
 		if (isNowDebitor) {
 			Bankcraft.perms.playerAddGroup(p, loanGroup);
-			System.out.println("C:"+p.getName()+"D:"+isNowDebitor);
 		} else {
 			Bankcraft.perms.playerRemoveGroup(p, loanGroup);
-			System.out.println("C:"+p.getName()+"D:"+isNowDebitor);
 		}
 		return true;
 	}
 	
 	public void updateDebitorStatus(Player p) {
-		System.out.println("U:"+p.getName()+"S:"+shouldBeDebitor(p.getName().toLowerCase()));
 		//Check if player is in debt and update permission group accordingly
 		if (shouldBeDebitor(p.getName().toLowerCase())) {
 			editPermissions(p,true);
