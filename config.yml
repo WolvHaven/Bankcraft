@@ -32,7 +32,8 @@ general:
     maxLoanLimitMoney: 1000
     maxLoanLimitXp: 100
 
-#Group that the player gets put in if he has borrowed money
+#Group that the player gets put in if he has borrowed money (if useLoanGroup is true) deactivate this by setting useLoanGroup to false
+    useLoanGroup: false
     loanGroup: debitor    
 
 #Should a player that is in debt be reminded on login? (true = yes/ false = no)

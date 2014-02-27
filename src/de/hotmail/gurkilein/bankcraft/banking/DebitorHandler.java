@@ -38,6 +38,7 @@ public class DebitorHandler {
 	}
 	
 	public void updateDebitorStatus(Player p) {
+		if (!Boolean.getBoolean(bankcraft.getConfigurationHandler().getString("general.useLoanGroup"))) return;
 		//Check if player is in debt and update permission group accordingly
 		if (shouldBeDebitor(p.getName().toLowerCase())) {
 			editPermissions(p,true);

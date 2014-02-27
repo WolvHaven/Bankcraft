@@ -3,7 +3,12 @@ package de.hotmail.gurkilein.bankcraft;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import de.hotmail.gurkilein.bankcraft.database.mysql.DatabaseManagerMysql;
 
 
 public class OldDataImportHandler {
@@ -13,48 +18,136 @@ public class OldDataImportHandler {
 	public OldDataImportHandler(Bankcraft bankcraft) {
 		this.bankcraft = bankcraft;
 	}
+	
+	
+	private Double migrateSpecificMoney_mysql (String player) {
+		Connection conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+		try {
+			 
+	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
+	        
+	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+	        preparedUpdateStatement.setString(1, player);
+	        ResultSet result = preparedUpdateStatement.executeQuery();
+	        
+	        //No delete due to line sharing
+	        while (result.next()) {
+	        	return Double.parseDouble(result.getString("balance"));
+	        }
+	      } catch (SQLException e) {
+	        e.printStackTrace();
+	      }
+		return null;
+	}
+	
+	private Integer migrateSpecificExp_mysql (String player) {
+		Connection conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+		try {
+			 
+	        String sql = "SELECT `balance_xp` FROM `bc_accounts` WHERE `player_name` = ?";
+	        
+	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
+	        preparedUpdateStatement.setString(1, player);
+	        ResultSet result = preparedUpdateStatement.executeQuery();
+	        
+	 
+	        String sql2 = "DELETE FROM `bc_accounts` WHERE `player_name` = ?";
+	        
+	        PreparedStatement preparedDeleteStatement = conn.prepareStatement(sql2);
+	        preparedDeleteStatement.setString(1, player);
+	        preparedDeleteStatement.executeQuery();
+	        
+	        while (result.next()) {
+	        	return Integer.parseInt(result.getString("balance_xp"));
+	        }
+	      } catch (SQLException e) {
+	        e.printStackTrace();
+	      }
+		return null;
+	}
+	
+	
+	private Double migrateSpecificMoney_flatfile (String player) {
+		try {
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			
+			FileReader fr = new FileReader(accountFile);
+			BufferedReader br = new BufferedReader(fr);
+			Double balance = Double.parseDouble(br.readLine().split(":")[1]);
+			br.close();
+			fr.close();
+			//No delete due to file sharing
+			return balance;
+			
+		} catch (Exception e) {
+			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
+		}
+		return null;
+	}
+	
+	private Integer migrateSpecificExp_flatfile (String player) {
+		try {
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
+			
+			FileReader fr = new FileReader(accountFile);
+			BufferedReader br = new BufferedReader(fr);
+			Integer balance = Integer.parseInt(br.readLine().split(":")[0]);
+			br.close();
+			fr.close();
+			accountFile.delete();
+			return balance;
+			
+		} catch (Exception e) {
+			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
+		}
+		return null;
+	}
 
-	//Migration for v2.2 or older
 	public boolean migratev2_3() {
-		bankcraft.getLogger().info("Migrating data...");
-		{
-		String [] accounts = bankcraft.getMoneyDatabaseInterface().getAccounts();
-		HashMap <String, Double> accMap = new HashMap <String, Double> ();
-		
-		bankcraft.getLogger().info("Migrating money data...");
-		//Merge accounts
-		for (String account : accounts) {
-			if (accMap.containsKey(account.toLowerCase()))
-				accMap.put(account.toLowerCase(), (accMap.get(account.toLowerCase()) + bankcraft.getMoneyDatabaseInterface().getBalance(account)));
-			else
-				accMap.put(account.toLowerCase(), bankcraft.getMoneyDatabaseInterface().getBalance(account));
-		}
-		
-		//Save changes
-		for (String account : accMap.keySet()) {
-			bankcraft.getMoneyDatabaseInterface().setBalance(account, accMap.get(account));
-		}
-		}
+		String database = bankcraft.getConfigurationHandler().getString("database.typeOfDatabase");
+		bankcraft.getLogger().info("Migrating data from pre 2.3...");
+		bankcraft.getLogger().info("Searching for old "+database+" entries...");
 		
 		{
-		String [] accounts = bankcraft.getExperienceDatabaseInterface().getAccounts();
-		HashMap <String, Integer> accMap = new HashMap <String, Integer> ();
-		bankcraft.getLogger().info("Migrating experience data...");
-		//Merge accounts
-		for (String account : accounts) {
-			if (accMap.containsKey(account.toLowerCase()))
-				accMap.put(account.toLowerCase(), (accMap.get(account.toLowerCase()) + bankcraft.getExperienceDatabaseInterface().getBalance(account)));
-			else
-				accMap.put(account.toLowerCase(), bankcraft.getExperienceDatabaseInterface().getBalance(account));
+			bankcraft.getLogger().info("Migrating money data...");
+			String [] accounts = bankcraft.getMoneyDatabaseInterface().getAccounts();
+			
+			for (String account : accounts) {
+				if (!account.equals(account.toLowerCase())) {
+					try {
+						bankcraft.getLogger().info("Found '"+account+"' migrating...");
+						Double amount;
+						if (database.toLowerCase().equals("mysql"))
+							amount = migrateSpecificMoney_mysql(account);
+						else
+							amount = migrateSpecificMoney_flatfile(account);
+						bankcraft.getMoneyDatabaseInterface().addToAccount(account.toLowerCase(), amount);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					}
+			}
 		}
 		
-		//Save changes
-		for (String account : accMap.keySet()) {
-			bankcraft.getExperienceDatabaseInterface().setBalance(account, accMap.get(account));
+		{
+			bankcraft.getLogger().info("Migrating experience data...");
+			String [] accounts = bankcraft.getMoneyDatabaseInterface().getAccounts();
+			
+			for (String account : accounts) {
+				if (!account.equals(account.toLowerCase())) {
+					try {
+						Integer amount;
+						if (database.toLowerCase().equals("mysql"))
+							amount = migrateSpecificExp_mysql(account);
+						else
+							amount = migrateSpecificExp_flatfile(account);
+						bankcraft.getExperienceDatabaseInterface().addToAccount(account.toLowerCase(), amount);
+						} catch (Exception e) {
+						e.printStackTrace();
+					}
+					}
+			}
 		}
-		}
-		
-		
 		bankcraft.getLogger().info("Finished migrating of old data! Remember to set eliminateCaseSensitives to false in the config.yml!!!");
 		return true;
 	}
@@ -62,7 +155,6 @@ public class OldDataImportHandler {
 	
 	//Migration for v1.X
 	public boolean importOldData() {
-		//TODO
 		bankcraft.getLogger().info("Searching for flatfile data...");
 		{
 		//Import Money Data

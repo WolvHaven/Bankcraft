@@ -242,7 +242,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 								amount = Integer.parseInt(vars[2]);
 							}
 							
-							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
+							((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToAccount(p.getName(), vars[1], amount,p);
 
 							return true;
 						}
