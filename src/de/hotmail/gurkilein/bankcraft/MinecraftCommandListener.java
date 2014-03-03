@@ -44,32 +44,34 @@ public class MinecraftCommandListener implements CommandExecutor{
 	public void sendHelp(Player p) {
 		p.sendMessage("---Bankcraft-Help---");
 		p.sendMessage("/bank "+coHa.getString("signAndCommand.help")+" Shows the help page.");
+		if (Bankcraft.perms.has(p, "bankcraft.command.version") || Bankcraft.perms.has(p, "bankcraft.command"))
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.version")+" Shoes the current version of Bankcraft.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.balance") || Bankcraft.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.balance")+" PLAYER Shows your banked money.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.balancexp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.balancexp")+" PLAYER Shows your banked XP.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.balancexp")+" PLAYER Shows your banked XP.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.deposit")+" AMOUNT Deposits money to your Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.deposit")+" AMOUNT Deposits money to your Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.withdraw") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.withdraw")+" AMOUNT Withdraws money from your Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.withdraw")+" AMOUNT Withdraws money from your Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.depositxp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.depositxp")+" AMOUNT Deposits XP to your Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.depositxp")+" AMOUNT Deposits XP to your Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.withdrawxp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.withdrawxp")+" AMOUNT Withdraws XP from your Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.withdrawxp")+" AMOUNT Withdraws XP from your Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.transfer")+" PLAYER AMOUNT Transfers money to another Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.transfer")+" PLAYER AMOUNT Transfers money to another Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.transferxp")+" PLAYER AMOUNT Transfers XP to another Account.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.transferxp")+" PLAYER AMOUNT Transfers XP to another Account.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.interesttimer")+" Shows the remaining time until the next wave of interests.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.interesttimer")+" Shows the remaining time until the next wave of interests.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.exchange") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchange")+" AMOUNT Exchanges money to XP.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.exchange")+" AMOUNT Exchanges money to XP.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.exchangexp")+" AMOUNT Exchanges XP to money.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.exchangexp")+" AMOUNT Exchanges XP to money.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.rankstats") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstats")+" Shows the richest players.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstats")+" Shows the richest players.");
 		if (Bankcraft.perms.has(p, "bankcraft.command.rankstatsxp") || Bankcraft.perms.has(p, "bankcraft.command"))
-		p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstatsxp")+" Shows the players with the most experience banked.");
+			p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstatsxp")+" Shows the players with the most experience banked.");
 	}
 
 	public void sendAdminHelp(Player p) {
@@ -109,6 +111,11 @@ public class MinecraftCommandListener implements CommandExecutor{
 				if (vars.length == 1) {
 					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.help"))) {
 						sendHelp(p);
+						return true;
+					}
+					
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.version"))&& (Bankcraft.perms.has(p, "bankcraft.command.version") || Bankcraft.perms.has(p, "bankcraft.command") || p.getName().equalsIgnoreCase("Gurke_1993"))) {
+						p.sendMessage("This server uses Bankcraft "+bankcraft.getDescription().getVersion());
 						return true;
 					}
 
