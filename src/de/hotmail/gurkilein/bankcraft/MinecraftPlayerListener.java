@@ -34,8 +34,7 @@ public class MinecraftPlayerListener implements Listener{
 	public void onklick(PlayerInteractEvent event) throws Exception {
 		Player p = event.getPlayer();
 		if (event.getClickedBlock() != null) {
-			String block = event.getClickedBlock().getType().toString();
-			if (block == "WALL_SIGN") {
+			if (event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) {
 				if (((Sign) event.getClickedBlock().getState()).getLine(0).contains("[Bank]")) {
 					if (!p.isSneaking()) {
 						Integer type = bankcraft.getSignDatabaseInterface().getType(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());
@@ -151,7 +150,6 @@ public class MinecraftPlayerListener implements Listener{
 								
 							}
 							if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !bankcraft.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false"))) {
-								
 								String amountAsString = ((Sign) event.getClickedBlock().getState()).getLine(2);
 								if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
 									// Scrolling-signs

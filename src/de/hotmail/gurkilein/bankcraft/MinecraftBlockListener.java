@@ -22,7 +22,7 @@ public class MinecraftBlockListener implements Listener{
 		this.coHa = bankcraft.getConfigurationHandler();
 	}
 	
-	private static final BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+	private static final BlockFace[] faces = new BlockFace[]{BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
@@ -34,8 +34,8 @@ public class MinecraftBlockListener implements Listener{
 			Block neighbor = testblock.getRelative(face);
 			
 			//if sign found
-			if (neighbor.getType() == Material.WALL_SIGN) {
-				if ((neighbor.getData() == 4 & face.equals(BlockFace.WEST)) | (neighbor.getData() == 5 & face.equals(BlockFace.EAST)) | (neighbor.getData() == 2 & face.equals(BlockFace.NORTH)) | (neighbor.getData() == 3 & face.equals(BlockFace.SOUTH))) {
+			if (neighbor.getType().equals(Material.WALL_SIGN) || neighbor.getType().equals(Material.SIGN_POST)) {
+				if ((neighbor.getType().equals(Material.SIGN_POST) && face.equals(BlockFace.UP)) || (neighbor.getData() == 4 & face.equals(BlockFace.WEST)) | (neighbor.getData() == 5 & face.equals(BlockFace.EAST)) | (neighbor.getData() == 2 & face.equals(BlockFace.NORTH)) | (neighbor.getData() == 3 & face.equals(BlockFace.SOUTH))) {
 					//check the found sign for the players name.
 					Sign sign = (Sign) testblock.getRelative(face).getState();
 					if (sign.getLine(0).contains("[Bank]")) {
@@ -51,8 +51,7 @@ public class MinecraftBlockListener implements Listener{
 				}
 			}
 		}
-		String block = event.getBlock().getType().toString();
-		if ("WALL_SIGN".equals(block)) {
+		if (event.getBlock().getType().equals(Material.WALL_SIGN) || event.getBlock().getType().equals(Material.SIGN_POST)) {
 			Sign sign = ((Sign) event.getBlock().getState());
 			if (sign.getLine(0).contains("[Bank]")) {
 				if (p.getGameMode().equals(GameMode.CREATIVE) && !p.isSneaking()) {
