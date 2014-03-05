@@ -46,6 +46,11 @@ general:
 #Exchangerate for the exchange from money to experience and visa versa
     exchangerateFromMoneyToXp: 0.01
     exchangerateFromXpToMoney: 90
+    
+#Enable automated exit of ChatInteract-Signs when leaving an area (can cause lag on big servers)
+    enableAutoExitSigns: true
+    secondsBetweenPlayerPositionChecks: 5
+    maximumRange: 20
 
 interest:
 #Interest granted on money/experience if the player is online/offline

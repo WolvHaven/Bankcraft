@@ -1,5 +1,7 @@
 package de.hotmail.gurkilein.bankcraft;
 
+import org.bukkit.Location;
+
 
 public class Util {
 	
@@ -63,5 +65,12 @@ public class Util {
 	
 	public static boolean isPositive(String input) {
 		return (isDouble(input) && Double.parseDouble(input) >= 0);
+	}
+
+	public static boolean isInRange(Location searchObject, Location center, int radius) {
+		int deltaX = Math.abs(searchObject.getBlockX()-center.getBlockX());
+		int deltaY = Math.abs(searchObject.getBlockY()-center.getBlockY());
+		int deltaZ = Math.abs(searchObject.getBlockZ()-center.getBlockZ());
+		return (Math.sqrt((deltaX*deltaX)+(deltaY*deltaY)+(deltaZ*deltaZ))) <= radius;
 	}
 }

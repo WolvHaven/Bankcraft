@@ -200,6 +200,11 @@ public class InteractionHandler {
 			
 		return false;
 	}
+	
+	public void stopChatInteract(Player p) {
+		chatSignMap.put(p, 0);
+		bankcraft.getConfigurationHandler().printMessage(p, "message.youHaveQuit", "", p.getName());
+		}
 
 	
 	

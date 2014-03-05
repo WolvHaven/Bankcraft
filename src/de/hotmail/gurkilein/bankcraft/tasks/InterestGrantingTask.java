@@ -1,9 +1,10 @@
-package de.hotmail.gurkilein.bankcraft;
+package de.hotmail.gurkilein.bankcraft.tasks;
 
 import java.util.TimerTask;
 
 import org.bukkit.block.Sign;
 
+import de.hotmail.gurkilein.bankcraft.Bankcraft;
 import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
 
 public class InterestGrantingTask extends TimerTask{

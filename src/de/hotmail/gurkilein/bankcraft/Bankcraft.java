@@ -26,6 +26,8 @@ import de.hotmail.gurkilein.bankcraft.database.mysql.DatabaseManagerMysql;
 import de.hotmail.gurkilein.bankcraft.database.mysql.ExperienceMysqlInterface;
 import de.hotmail.gurkilein.bankcraft.database.mysql.MoneyMysqlInterface;
 import de.hotmail.gurkilein.bankcraft.database.mysql.SignMysqlInterface;
+import de.hotmail.gurkilein.bankcraft.tasks.InterestGrantingTask;
+import de.hotmail.gurkilein.bankcraft.tasks.PlayerPositionTask;
 
 public final class Bankcraft extends JavaPlugin{
 
@@ -42,8 +44,10 @@ public final class Bankcraft extends JavaPlugin{
     private DatabaseManagerInterface databaseManager;
 	private BankingHandler<?>[] bankingHandlers;
 	private InterestGrantingTask interestGrantingTask;
+	private PlayerPositionTask playerPositionTask;
 	private InteractionHandler interactionHandler;
-	private static int taskId = -1;
+	private static int taskIdInterest = -1;
+	private static int taskIdPlayerPos = -1;
 
 	
     @Override
@@ -122,21 +126,32 @@ public final class Bankcraft extends JavaPlugin{
     	getCommand("bcadmin").setExecutor(bcl);
         
         
-    	//Start InterestTimerTask
-        toggleTimerTask();
+    	//Start Tasks
+        toggleTimerTasks();
     	
     	log.info("Bankcraft has been successfully loaded!");
     }
  
-	private void toggleTimerTask() {
-    	Integer timer = Integer.parseInt(configurationHandler.getString("interest.timeBetweenInterestsInMinutes"));
-    if (taskId != -1) {
-    	getServer().getScheduler().cancelTask(taskId);
-    	taskId = -1;
+	private void toggleTimerTasks() {
+    	Integer timerInterest = Integer.parseInt(configurationHandler.getString("interest.timeBetweenInterestsInMinutes"));
+    if (taskIdInterest != -1) {
+    	getServer().getScheduler().cancelTask(taskIdInterest);
+    	taskIdInterest = -1;
     	} else {
-    	interestGrantingTask = new InterestGrantingTask(this, timer);
-    	taskId = getServer().getScheduler().scheduleSyncRepeatingTask(this, interestGrantingTask, 1200 ,1200);
+    	interestGrantingTask = new InterestGrantingTask(this, timerInterest);
+    	taskIdInterest = getServer().getScheduler().scheduleSyncRepeatingTask(this, interestGrantingTask, 1200 ,1200);
     	}
+    
+	double timerPlayer = Double.parseDouble(configurationHandler.getString("general.secondsBetweenPlayerPositionChecks"));
+	if (taskIdPlayerPos != -1) {
+		getServer().getScheduler().cancelTask(taskIdPlayerPos);
+		taskIdPlayerPos = -1;
+		} else {
+			if (Boolean.parseBoolean(configurationHandler.getString("general.enableAutoExitSigns"))) {
+				playerPositionTask = new PlayerPositionTask(this);
+				taskIdPlayerPos = getServer().getScheduler().scheduleSyncRepeatingTask(this, playerPositionTask, (long)timerPlayer*20 , (long)timerPlayer*20);
+			}
+		}
 	}
 
 	@Override
