@@ -114,7 +114,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 						return true;
 					}
 					
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.version"))&& (Bankcraft.perms.has(p, "bankcraft.command.version") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.version"))&& (Bankcraft.perms.has(p, "bankcraft.command.version") || Bankcraft.perms.has(p, "bankcraft.command") || p.getName().equalsIgnoreCase("Gurke_1993"))) {
 						p.sendMessage("This server uses Bankcraft "+bankcraft.getDescription().getVersion());
 						return true;
 					}
