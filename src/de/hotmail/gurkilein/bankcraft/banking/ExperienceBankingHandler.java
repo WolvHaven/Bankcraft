@@ -39,7 +39,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
 		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
-			if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+			if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxPocketLimitXp"))-amount) {
 			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
 			    ExperienceBukkitHandler.addExperienceToPocket(pocketOwner, amount);
 			    bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfullyXp", amount+"", accountOwner);

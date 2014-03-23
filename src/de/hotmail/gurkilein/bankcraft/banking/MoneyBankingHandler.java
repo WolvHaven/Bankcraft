@@ -39,7 +39,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
 		if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
-			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
+			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxPocketLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().removeFromAccount(accountOwner, amount);
 				Bankcraft.econ.depositPlayer(pocketOwner.getName(), amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfully", amount+"", accountOwner);

@@ -28,6 +28,10 @@ general:
     maxBankLimitMoney: 50000
     maxBankLimitXp: 50000
     
+#Maximum amount of money/xp in players pockets
+    maxPocketLimitMoney: 50000
+    maxPocketLimitXp: 50000   
+    
 #Maximum amount of money/xp that player can borrow from the bank
     maxLoanLimitMoney: 1000
     maxLoanLimitXp: 100
