@@ -1,6 +1,7 @@
 package de.hotmail.gurkilein.bankcraft.banking;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -63,11 +64,11 @@ public class InteractionHandler {
 		currencyMap.put(19, -1);
 	}
 
-	public boolean interact(int type, String amountAsString, Player interactingPlayer, String targetPlayer) {
+	public boolean interact(int type, String amountAsString, Player interactingPlayer, UUID targetPlayer) {
 		
 		//Check for interaction interval
 		if (lastInteractMap.containsKey(interactingPlayer) && System.currentTimeMillis()-lastInteractMap.get(interactingPlayer) <= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.timeBetweenTwoInteractions"))) {
-			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", interactingPlayer.getName());
+			bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.tooFastInteraction", "", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 			return false;
 		}
 		lastInteractMap.put(interactingPlayer, System.currentTimeMillis());
@@ -94,13 +95,13 @@ public class InteractionHandler {
 			return Bankcraft.econ.getBalance(pocketOwner.getName());
 		} else
 		if (currencyType == 2) {
-			return bankcraft.getMoneyDatabaseInterface().getBalance(pocketOwner.getName());
+			return bankcraft.getMoneyDatabaseInterface().getBalance(pocketOwner.getUniqueId());
 		} else
 		if (currencyType == 3) {
 			return (int)ExperienceBukkitHandler.getTotalExperience(pocketOwner);
 		} else	
 		if (currencyType == 4) {
-			return (int)bankcraft.getExperienceDatabaseInterface().getBalance(pocketOwner.getName());
+			return (int)bankcraft.getExperienceDatabaseInterface().getBalance(pocketOwner.getUniqueId());
 		}
 		return -1;
 	}
@@ -109,52 +110,52 @@ public class InteractionHandler {
 	
 	
 	//Main method
-	private boolean interact(int type, double amount, Player interactingPlayer, String targetPlayer) {
+	private boolean interact(int type, double amount, Player interactingPlayer, UUID targetPlayer) {
 		
 //		System.out.println(type+" "+amount+" "+interactingPlayer.getName()+" "+targetPlayer);
 		
 		
 			//BALANCE signs
 			if (type == 0 || type == 10) {
-				if (targetPlayer != "")
+				if (targetPlayer != null)
 					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", targetPlayer);	
 				else
-					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getName());
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balance", "", interactingPlayer.getUniqueId(),interactingPlayer.getName());
 				return true;
 			}
 			if (type == 5 || type == 11) {
-				if (targetPlayer != "")
+				if (targetPlayer != null)
 					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", targetPlayer);
 				else
-					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", interactingPlayer.getName());
+					bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.balancexp", "", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 				return true;
 			}
 			
 			if (type == 1 | type == 3) {
 				//Deposit Money
-				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getName(), amount,interactingPlayer);
+				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getUniqueId(), amount,interactingPlayer);
 			}
 			if (type == 6 | type == 8) {
 				//Deposit XP
-				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getName(), (int)amount,interactingPlayer);
+				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromPocketToAccount(interactingPlayer, interactingPlayer.getUniqueId(), (int)amount,interactingPlayer);
 			}
 
 			if (type == 2 | type == 4) {
 				//Withdraw Money
-				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToPocket(interactingPlayer.getName(), interactingPlayer, amount,interactingPlayer);
+				return ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToPocket(interactingPlayer.getUniqueId(), interactingPlayer, amount,interactingPlayer);
 			}
 			if (type == 7 | type == 9) {
 				//Withdraw XP
-				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(interactingPlayer.getName(), interactingPlayer, (int)amount,interactingPlayer);
+				return ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToPocket(interactingPlayer.getUniqueId(), interactingPlayer, (int)amount,interactingPlayer);
 			}
 			if (type == 12 | type == 14) {
 				//exchange Money
-				if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(interactingPlayer.getName(), (double)(int)amount, interactingPlayer)) {
-					 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getName(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),interactingPlayer)) {
-						 bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedMoneySuccessfully", amount+"", interactingPlayer.getName());
+				if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).withdrawFromAccount(interactingPlayer.getUniqueId(), (double)(int)amount, interactingPlayer)) {
+					 if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getUniqueId(), (int)((int)amount*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromMoneyToXp"))),interactingPlayer)) {
+						 bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedMoneySuccessfully", amount+"", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 						 return true;
 					 } else {
-						 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getName(), (double)(int)amount, interactingPlayer);
+						 ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getUniqueId(), (double)(int)amount, interactingPlayer);
 						 return false;
 					 }
 					
@@ -162,12 +163,12 @@ public class InteractionHandler {
 			}
 			if (type == 13 | type == 15) {
 				//exchange xp
-				if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(interactingPlayer.getName(), (int)amount, interactingPlayer)) {
-					if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getName(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),interactingPlayer)) {
-						bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedXpSuccessfully", amount+"", interactingPlayer.getName());
+				if (((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).withdrawFromAccount(interactingPlayer.getUniqueId(), (int)amount, interactingPlayer)) {
+					if (((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).depositToAccount(interactingPlayer.getUniqueId(), (((int)amount)*Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.exchangerateFromXpToMoney"))),interactingPlayer)) {
+						bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.exchangedXpSuccessfully", amount+"", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 						return true;
 					} else {
-						((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getName(), (int)amount, interactingPlayer);
+						((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).depositToAccount(interactingPlayer.getUniqueId(), (int)amount, interactingPlayer);
 						return false;
 					}
 				}
@@ -175,26 +176,26 @@ public class InteractionHandler {
 			  
 			if (type == 16) {
 				//interestCounter
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.interestTimer", amount+"", interactingPlayer.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.interestTimer", amount+"", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 				return true;
 			}
 			
 			if (type == 17) {
 				//Starts interaction with chatSigns (everything else is handled in the MinecraftChatListener)
 				chatSignMap.put(interactingPlayer, 1);
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.specifyAnInteraction", "", interactingPlayer.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.specifyAnInteraction", "", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 				return true;
 				}
 			
 			if (type == 18) {
 				//rankStatsMoney
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsMoney", "", interactingPlayer.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsMoney", "", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 				return true;
 				}
 			
 			if (type == 19) {
 				//rankStatsExperience
-				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsExperience", "", interactingPlayer.getName());
+				bankcraft.getConfigurationHandler().printMessage(interactingPlayer, "message.rankStatsExperience", "", interactingPlayer.getUniqueId(), interactingPlayer.getName());
 				return true;
 				}
 			
@@ -204,7 +205,7 @@ public class InteractionHandler {
 	public void stopChatInteract(Player p) {
 		if (!chatSignMap.containsKey(p) || chatSignMap.get(p).equals(0)) return;
 		chatSignMap.put(p, 0);
-		bankcraft.getConfigurationHandler().printMessage(p, "message.youHaveQuit", "", p.getName());
+		bankcraft.getConfigurationHandler().printMessage(p, "message.youHaveQuit", "", p.getUniqueId(), p.getName());
 		}
 
 	
@@ -213,7 +214,7 @@ public class InteractionHandler {
 	
 	
 	
-	public boolean interact(String type, String amountAsString, Player pocketOwner, String accountOwner) {
+	public boolean interact(String type, String amountAsString, Player pocketOwner, UUID accountOwner) {
 		return interact(typeMap.get(type.toLowerCase()), amountAsString, pocketOwner, accountOwner);
 	}
 	

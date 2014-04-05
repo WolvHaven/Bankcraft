@@ -40,12 +40,12 @@ public class MinecraftBlockListener implements Listener{
 					Sign sign = (Sign) testblock.getRelative(face).getState();
 					if (sign.getLine(0).contains("[Bank]")) {
 						if (!Bankcraft.perms.has(p, "bankcraft.admin")) {
-							coHa.printMessage(p, "message.notAllowed", "0", p.getName());
+							coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
 							event.setCancelled(true);
 							return;
 						} else {
 							bankcraft.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
-							coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getName());
+							coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getUniqueId(), p.getName());
 						}
 					}
 				}
@@ -60,10 +60,10 @@ public class MinecraftBlockListener implements Listener{
 				}
 				if (Bankcraft.perms.has(p, "bankcraft.admin")) {
 					bankcraft.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
-					coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getName());
+					coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getUniqueId(), p.getName());
 				} else {
 					event.setCancelled(true);
-					coHa.printMessage(p, "message.notAllowed", "0", p.getName());
+					coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
 				}
 			}
 		}
@@ -140,7 +140,7 @@ public class MinecraftBlockListener implements Listener{
 						typ = 13;
 					}
 					bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), typ, amount + "");
-					coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getName());
+					coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getUniqueId(), p.getName());
 
 				} else {
 					if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance")) || event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) || event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.interesttimer")) || event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.chatinteract")) || event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.rankstatsxp")) || event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.rankstats"))) {
@@ -185,9 +185,9 @@ public class MinecraftBlockListener implements Listener{
 						
 						
 						
-						coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
+						coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
 					} else {
-						coHa.printMessage(p, "message.errorWhileCreatingSign", "0", p.getName());
+						coHa.printMessage(p, "message.errorWhileCreatingSign", "0", p.getUniqueId(), p.getName());
 						event.setLine(0, "");
 						event.setLine(1, "");
 						event.setLine(2, "");
@@ -195,7 +195,7 @@ public class MinecraftBlockListener implements Listener{
 					}
 				}
 			} else {
-				coHa.printMessage(p, "message.notAllowed", "0", p.getName());
+				coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
 				event.setLine(0, "");
 				event.setLine(1, "");
 				event.setLine(2, "");

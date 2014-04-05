@@ -218,6 +218,10 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 			br.close();
 			fr.close();
 			
+			if (loadingLocationList.isEmpty()) {
+				return new Location[0];
+			}
+			
 			return loadingLocationList.toArray(new Location[0]);
 			} catch (Exception e) {
 				bankcraft.getLogger().severe("Could not get Locations of Signs in Database!");

@@ -25,7 +25,7 @@ public class MinecraftPlayerListener implements Listener{
 		bankcraft.getDebitorHandler().updateDebitorStatus(event.getPlayer());
 		if (bankcraft.getDebitorHandler().isCurrentlyDebitor(event.getPlayer())) {
 			if (Boolean.getBoolean(bankcraft.getConfigurationHandler().getString("general.remindDebitorOnLogin"))) {
-				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.debitor", "0", event.getPlayer().getName());
+				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.debitor", "0", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 			}
 		}
 	}
@@ -108,7 +108,7 @@ public class MinecraftPlayerListener implements Listener{
 									}
 									bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), type, betrag+"");
 									
-									coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
+									coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
 
 								} else {
 									if (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance")) | (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")))) {
@@ -129,7 +129,7 @@ public class MinecraftPlayerListener implements Listener{
 												bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 10, "0");
 											}
 										}
-										coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getName());
+										coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
 									} else {
 										p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Could not reinitialize the sign! Removing it now!");
 										event.getClickedBlock().setType(Material.AIR);
@@ -156,13 +156,13 @@ public class MinecraftPlayerListener implements Listener{
 									amountAsString = bankcraft.getSignHandler().updateSign(event.getClickedBlock(), 0);
 								}
 								if (((Sign) event.getClickedBlock().getState()).getLine(2).equals(""))
-									bankcraft.getInteractionHandler().interact(type, amountAsString, p, p.getName());
+									bankcraft.getInteractionHandler().interact(type, amountAsString, p, p.getUniqueId());
 								else
-									bankcraft.getInteractionHandler().interact(type, amountAsString, p, ((Sign) event.getClickedBlock().getState()).getLine(2));
+									bankcraft.getInteractionHandler().interact(type, amountAsString, p, bankcraft.getUUIDHandler().getUUID(((Sign) event.getClickedBlock().getState()).getLine(2)));
 							}
 						
 					} else {
-						coHa.printMessage(p, "message.notAllowed", "0", p.getName());
+						coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
 					}
 					}
 				}

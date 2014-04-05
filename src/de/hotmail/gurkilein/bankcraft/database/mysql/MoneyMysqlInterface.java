@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
 import de.hotmail.gurkilein.bankcraft.database.AccountDatabaseInterface;
@@ -23,12 +24,12 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	}
 
 	@Override
-	public boolean hasAccount(String player) {
+	public boolean hasAccount(UUID player) {
 		      try {
 		 
 		        String sql = "SELECT `player_name` FROM `bc_accounts` WHERE `player_name` = ?";
 		        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-		        preparedUpdateStatement.setString(1, player.toLowerCase());
+		        preparedUpdateStatement.setString(1, player.toString());
 		        
 		        
 		        ResultSet result = preparedUpdateStatement.executeQuery();
@@ -43,14 +44,14 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	}
 
 	@Override
-	public boolean createAccount(String player) {
+	public boolean createAccount(UUID player) {
 		try {
 			 
 	        String sql = "INSERT INTO `bc_accounts`(`player_name`, `balance`, `balance_xp`) " +
 	                     "VALUES(?, ?, ?)";
 	        PreparedStatement preparedStatement = conn.prepareStatement(sql);
 	        
-	        preparedStatement.setString(1, player.toLowerCase());
+	        preparedStatement.setString(1, player.toString());
 	        preparedStatement.setString(2, "0");
 	        preparedStatement.setString(3, "0");
 	        
@@ -63,9 +64,9 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	}
 
 	@Override
-	public Double getBalance(String player) {
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+	public Double getBalance(UUID player) {
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
 	      try {
@@ -73,7 +74,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	        String sql = "SELECT `balance` FROM `bc_accounts` WHERE `player_name` = ?";
 	        
 	        PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-	        preparedUpdateStatement.setString(1, player.toLowerCase());
+	        preparedUpdateStatement.setString(1, player.toString());
 	        ResultSet result = preparedUpdateStatement.executeQuery();
 	 
 	        while (result.next()) {
@@ -86,9 +87,9 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	}
 
 	@Override
-	public boolean setBalance(String player, Double amount) {
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+	public boolean setBalance(UUID player, Double amount) {
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
         try {
@@ -97,7 +98,7 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 			        "WHERE `player_name` = ?";
 			PreparedStatement preparedUpdateStatement = conn.prepareStatement(updateSql);
 			preparedUpdateStatement.setString(1, amount+"");
-			preparedUpdateStatement.setString(2, player.toLowerCase());
+			preparedUpdateStatement.setString(2, player.toString());
 			
 			preparedUpdateStatement.executeUpdate();
 			return true;
@@ -106,45 +107,45 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 		}
         return false;
 	}
-
+	
 	@Override
-	public boolean addToAccount(String player, Double amount) {
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+	public boolean addToAccount(UUID player, Double amount) {
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
 		if (amount < 0) {
-			return removeFromAccount(player.toLowerCase(), -amount);
+			return removeFromAccount(player, -amount);
 		}
 		
-		Double currentBalance = getBalance(player.toLowerCase());
+		Double currentBalance = getBalance(player);
 		if (currentBalance <= Double.MAX_VALUE-amount) {
-			setBalance(player.toLowerCase(), currentBalance+amount);
+			setBalance(player, currentBalance+amount);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean removeFromAccount(String player, Double amount) {
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+	public boolean removeFromAccount(UUID player, Double amount) {
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
 		if (amount < 0) {
-			return addToAccount(player.toLowerCase(), -amount);
+			return addToAccount(player, -amount);
 		}
 		
-		Double currentBalance = getBalance(player.toLowerCase());
+		Double currentBalance = getBalance(player);
 		if (currentBalance >= -Double.MAX_VALUE+amount) {
-			setBalance(player.toLowerCase(), currentBalance-amount);
+			setBalance(player, currentBalance-amount);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public String[] getAccounts() {
+	public UUID[] getAccounts() {
 		
 	      Statement query;
 	      try {
@@ -153,11 +154,11 @@ public class MoneyMysqlInterface implements AccountDatabaseInterface <Double>{
 	        String sql = "SELECT `player_name` FROM `bc_accounts`";
 	        ResultSet result = query.executeQuery(sql);
 	 
-	        List <String> loadingList= new ArrayList <String>();
+	        List <UUID> loadingList= new ArrayList <UUID>();
 	        while (result.next()) {
-	        	loadingList.add(result.getString("player_name"));
+	        	loadingList.add(UUID.fromString(result.getString("player_name")));
 	        }
-	        return loadingList.toArray(new String [0]);
+	        return loadingList.toArray(new UUID [0]);
 	        
 	      } catch (SQLException e) {
 	        e.printStackTrace();

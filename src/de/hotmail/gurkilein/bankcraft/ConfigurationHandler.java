@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -36,14 +37,17 @@ public class ConfigurationHandler {
 		}
 	}
 
+	public void printMessage(Player player, String messageKey, String amount, UUID player2) {
+		printMessage(player, messageKey, amount, player2, bankcraft.getUUIDHandler().getName(player2));
+	}
 	
-	public void printMessage(Player player, String messageKey, String amount, String player2) {
+	public void printMessage(Player player, String messageKey, String amount, UUID player2, String player2Name) {
 		if (bankcraft.getConfig().contains(messageKey)) {
 			List<String> message = new ArrayList<String>();
 			message.add(bankcraft.getConfig().getString(messageKey));
-
+			
 			if (player2 != null && !player2.equals("")) {
-				message.set(0, message.get(0).replaceAll("%player2", player2));
+				message.set(0, message.get(0).replaceAll("%player2", player2Name));
 			}
 			
 			DecimalFormat f = new DecimalFormat("#0.00");
@@ -100,7 +104,7 @@ public class ConfigurationHandler {
 
 
 
-	public double getInterestForPlayer(String accountName,
+	public double getInterestForPlayer(UUID accountName,
 			BankingHandler<?> bankingHandler, boolean inDebt) {
 		//Default interest
 		String interestString = "interest.interestOn";
@@ -146,17 +150,17 @@ public class ConfigurationHandler {
 	private List<String> getRichestPlayers() {
 		DecimalFormat f = new DecimalFormat("#0.00");
 		List<String> result = new ArrayList<String>();
-		HashMap <String,Double> accounts = new HashMap<String,Double>();
+		HashMap <UUID,Double> accounts = new HashMap<UUID,Double>();
 		
-		for (String name: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
-			accounts.put(name, bankcraft.getMoneyDatabaseInterface().getBalance(name));
+		for (UUID uuid: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
+			accounts.put(uuid, bankcraft.getMoneyDatabaseInterface().getBalance(uuid));
 		}
 		
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<String,Double>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i>=0 ; i--) {
-			result.add(sortedAccounts.get(i).getKey()+" "+f.format(sortedAccounts.get(i).getValue()));
+			result.add(bankcraft.getUUIDHandler().getName(UUID.fromString(sortedAccounts.get(i).getKey()))+" "+f.format(sortedAccounts.get(i).getValue()));
 		}
 		
 		
@@ -165,18 +169,19 @@ public class ConfigurationHandler {
 	
 
 	private List<String> getExperiencedPlayers() {
+
 		List<String> result = new ArrayList<String>();
-		HashMap <String,Integer> accounts = new HashMap<String,Integer>();
+		HashMap <UUID,Integer> accounts = new HashMap<UUID,Integer>();
 		
-		for (String name: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
-			accounts.put(name, bankcraft.getExperienceDatabaseInterface().getBalance(name));
+		for (UUID uuid: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
+			accounts.put(uuid, bankcraft.getExperienceDatabaseInterface().getBalance(uuid));
 		}
 		
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<String,Integer>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i >=0; i--) {
-			result.add(sortedAccounts.get(i).getKey()+" "+sortedAccounts.get(i).getValue());
+			result.add(bankcraft.getUUIDHandler().getName(UUID.fromString(sortedAccounts.get(i).getKey()))+" "+sortedAccounts.get(i).getValue());
 		}
 		
 		
@@ -199,7 +204,7 @@ public class ConfigurationHandler {
 	}
 
 
-	public double getLoanLimitForPlayer(String accountOwner, BankingHandler<?> bankingHandler) {
+	public double getLoanLimitForPlayer(UUID accountOwner, BankingHandler<?> bankingHandler) {
 		Double loanLimit = 0D;
 		
 		//Default loans
@@ -227,4 +232,5 @@ public class ConfigurationHandler {
 		
 		return loanLimit;
 	}
+
 }

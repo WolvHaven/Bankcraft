@@ -1,17 +1,19 @@
 package de.hotmail.gurkilein.bankcraft.database;
 
+import java.util.UUID;
+
 
 
 public interface AccountDatabaseInterface<X> {
 
 	
 	//Accountmethods
-	public boolean hasAccount(String player);
-	public boolean createAccount(String player);
-	public X getBalance(String player);
-	public boolean setBalance(String player, X amount);
-	public boolean addToAccount(String player, X amount);
-	public boolean removeFromAccount(String player, X amount);
-	public String[] getAccounts();
+	public boolean hasAccount(UUID player);
+	public boolean createAccount(UUID player);
+	public X getBalance(UUID player);
+	public boolean setBalance(UUID player, X amount);
+	public boolean addToAccount(UUID player, X amount);
+	public boolean removeFromAccount(UUID player, X amount);
+	public UUID[] getAccounts();
 
 }

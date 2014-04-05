@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.hotmail.gurkilein.bankcraft.UUID.UUIDHandler;
 import de.hotmail.gurkilein.bankcraft.banking.BankingHandler;
 import de.hotmail.gurkilein.bankcraft.banking.DebitorHandler;
 import de.hotmail.gurkilein.bankcraft.banking.ExperienceBankingHandler;
@@ -46,6 +47,7 @@ public final class Bankcraft extends JavaPlugin{
 	private InterestGrantingTask interestGrantingTask;
 	private PlayerPositionTask playerPositionTask;
 	private InteractionHandler interactionHandler;
+	private UUIDHandler uuidHandler;
 	private static int taskIdInterest = -1;
 	private static int taskIdPlayerPos = -1;
 
@@ -86,19 +88,7 @@ public final class Bankcraft extends JavaPlugin{
         	signDatabaseInterface = new SignFlatFileInterface(this);
         }
         
-    	OldDataImportHandler odih = new OldDataImportHandler(this);
-    	
-        //Importing data from bankcraft 1.0
-        if (configurationHandler.getString("database.importOldData").equalsIgnoreCase("true")) {
-        	log.info("Importing old data... ");
-        	odih.importOldData();
-        }
-        
-        //Importing data from bankcraft 2.2
-        if (configurationHandler.getString("database.eliminateCaseSensitives").equalsIgnoreCase("true")) {
-        	log.info("Removing case sensitive entries...");
-        	odih.migratev2_3();
-        }
+
         
         //Setup DebitorHandler
         debitorHandler = new DebitorHandler(this);
@@ -108,6 +98,18 @@ public final class Bankcraft extends JavaPlugin{
         bankingHandlers[0] = new MoneyBankingHandler(this);
         bankingHandlers[1] = new ExperienceBankingHandler(this);
         
+        
+
+        //Setup UUIDHandler
+        uuidHandler = new UUIDHandler(this);
+        
+    	OldDataImportHandler odih = new OldDataImportHandler(this);
+    	
+        //Fix UUID
+        if (configurationHandler.getString("database.updateToUUID").equalsIgnoreCase("true")) {
+        	log.info("Changing database to use UUID...");
+        	odih.migratev2_4();
+        }
         
         //Setup SignHandler
         signHandler = new SignHandler(this);
@@ -220,6 +222,10 @@ public final class Bankcraft extends JavaPlugin{
 	
 	public InteractionHandler getInteractionHandler() {
 		return interactionHandler;
+	}
+	
+	public UUIDHandler getUUIDHandler() {
+		return uuidHandler;
 	}
 	
 }

@@ -24,7 +24,7 @@ public class MinecraftChatListener implements Listener{
 			
 			if (event.getMessage().toLowerCase().contains(bankcraft.getConfigurationHandler().getString("chat.quit"))) {
 				bankcraft.getInteractionHandler().getChatSignMap().put(event.getPlayer(), 0);
-				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.youHaveQuit", "", event.getPlayer().getName());
+				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.youHaveQuit", "", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 				event.setCancelled(true);
 				return;
 			}
@@ -34,13 +34,13 @@ public class MinecraftChatListener implements Listener{
 			if (bankcraft.getInteractionHandler().getTypeMap().containsKey(event.getMessage())) {
 				chosenInteraction.put(event.getPlayer(), event.getMessage());
 				bankcraft.getInteractionHandler().getChatSignMap().put(event.getPlayer(), 2);
-				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.specifyAnAmount", "", event.getPlayer().getName());
+				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.specifyAnAmount", "", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 				event.setCancelled(true);
 			}
 			else
 			{
 				//We will add an error message here, if it is not a correct interaction.
-				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.nonExistingInteraction", "", event.getPlayer().getName());
+				bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.nonExistingInteraction", "", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 				event.setCancelled(true);
 			}
 		}else
@@ -49,8 +49,8 @@ public class MinecraftChatListener implements Listener{
 				if (event.getMessage().equalsIgnoreCase("all") ||  Util.isPositive(event.getMessage())) {
 					
 					//Start interaction
-					 if (!bankcraft.getInteractionHandler().interact(chosenInteraction.get(event.getPlayer()),event.getMessage(), event.getPlayer(), event.getPlayer().getName())) {
-							bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.specifyAnAmount", "", event.getPlayer().getName());
+					 if (!bankcraft.getInteractionHandler().interact(chosenInteraction.get(event.getPlayer()),event.getMessage(), event.getPlayer(), event.getPlayer().getUniqueId())) {
+							bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.specifyAnAmount", "", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 					 } else {
 							//Reset interact
 							bankcraft.getInteractionHandler().getChatSignMap().put(event.getPlayer(), 0);
@@ -60,7 +60,7 @@ public class MinecraftChatListener implements Listener{
 					event.setCancelled(true);
 				} else {
 					//Send error message
-					bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.wrongAmountSyntax", "", event.getPlayer().getName());
+					bankcraft.getConfigurationHandler().printMessage(event.getPlayer(), "message.wrongAmountSyntax", "", event.getPlayer().getUniqueId(), event.getPlayer().getName());
 					event.setCancelled(true);
 				}
 			}

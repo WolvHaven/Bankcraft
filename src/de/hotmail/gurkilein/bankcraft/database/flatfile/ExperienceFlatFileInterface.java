@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.UUID;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
 import de.hotmail.gurkilein.bankcraft.database.AccountDatabaseInterface;
@@ -21,14 +22,14 @@ public class ExperienceFlatFileInterface implements
 	}
 	
 	@Override
-	public boolean hasAccount(String player) {
-		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data")).exists();
+	public boolean hasAccount(UUID player) {
+		return (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data")).exists();
 	}
 
 	@Override
-	public boolean createAccount(String player) {
+	public boolean createAccount(UUID player) {
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
 			accountFile.createNewFile();
 			
 			FileWriter fw = new FileWriter(accountFile, false);
@@ -45,14 +46,14 @@ public class ExperienceFlatFileInterface implements
 	}
 
 	@Override
-	public Integer getBalance(String player) {
+	public Integer getBalance(UUID player) {
 		
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -62,19 +63,19 @@ public class ExperienceFlatFileInterface implements
 			return balance;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Balance of "+player.toLowerCase()+"!");
+			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
 		}
 		return null;
 	}
 
 	@Override
-	public boolean setBalance(String player, Integer amount) {
-		if (!hasAccount(player.toLowerCase())) {
-			createAccount(player.toLowerCase());
+	public boolean setBalance(UUID player, Integer amount) {
+		if (!hasAccount(player)) {
+			createAccount(player);
 		}
 		
 		try {
-			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player.toLowerCase()+".data");
+			File accountFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+player+".data");
 			
 			FileReader fr = new FileReader(accountFile);
 			BufferedReader br = new BufferedReader(fr);
@@ -93,48 +94,53 @@ public class ExperienceFlatFileInterface implements
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not set Balance of "+player.toLowerCase()+"!");
+			bankcraft.getLogger().severe("Could not set Balance of "+player+"!");
 		}
 		return false;
 	}
 
 	@Override
-	public boolean addToAccount(String player, Integer amount) {
+	public boolean addToAccount(UUID player, Integer amount) {
 		
 		if (amount < 0) {
-			return removeFromAccount(player.toLowerCase(), -amount);
+			return removeFromAccount(player, -amount);
 		}
 		
-		Integer currentBalance = getBalance(player.toLowerCase());
+		Integer currentBalance = getBalance(player);
 		if (currentBalance <= Integer.MAX_VALUE-amount) {
-			setBalance(player.toLowerCase(), currentBalance+amount);
+			setBalance(player, currentBalance+amount);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean removeFromAccount(String player, Integer amount) {
+	public boolean removeFromAccount(UUID player, Integer amount) {
 		
 		if (amount < 0) {
-			return addToAccount(player.toLowerCase(), -amount);
+			return addToAccount(player, -amount);
 		}
 		
-		Integer currentBalance = getBalance(player.toLowerCase());
+		Integer currentBalance = getBalance(player);
 		if (currentBalance >= Integer.MIN_VALUE+amount) {
-			setBalance(player.toLowerCase(), currentBalance-amount);
+			setBalance(player, currentBalance-amount);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public String[] getAccounts() {
-		String [] fileNames =  (new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts")).list();
+	public UUID[] getAccounts() {
+		String [] fileNames =  ((new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts")).list());
+		
 		for (int i = 0; i< fileNames.length; i++) {
 			fileNames[i] = fileNames[i].split("\\.")[0];
 		}
-		return fileNames;
+		UUID[] uuids = new UUID[fileNames.length];
+		for (int i = 0; i<fileNames.length; i++) {
+			uuids[i] = UUID.fromString(fileNames[i]);
+		}
+		return uuids;
 	}
 
 }

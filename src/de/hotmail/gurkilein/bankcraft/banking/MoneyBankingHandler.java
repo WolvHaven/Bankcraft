@@ -1,5 +1,7 @@
 package de.hotmail.gurkilein.bankcraft.banking;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
@@ -14,7 +16,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 
 	@Override
 	public boolean transferFromPocketToAccount(Player pocketOwner,
-			String accountOwner, Double amount, Player observer) {
+			UUID accountOwner, Double amount, Player observer) {
 		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
 		
 		if (Bankcraft.econ.getBalance(pocketOwner.getName()) >= amount && bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.MAX_VALUE-amount) {
@@ -28,13 +30,13 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumMoneyInAccount", amount+"", accountOwner);
 			}
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughMoneyInPoket", amount+"", pocketOwner.getName());
+			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughMoneyInPoket", amount+"", pocketOwner.getUniqueId(), pocketOwner.getName());
 		}
 		return false;
 	}
 
 	@Override
-	public boolean transferFromAccountToPocket(String accountOwner,
+	public boolean transferFromAccountToPocket(UUID accountOwner,
 			Player pocketOwner, Double amount, Player observer) {
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
@@ -46,7 +48,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 				return true;
 			} else {
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumMoneyInPocket", amount+"", pocketOwner.getName());
+				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumMoneyInPocket", amount+"", pocketOwner.getUniqueId(), pocketOwner.getName());
 			}
 		} else {
 			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughMoneyInAccount", amount+"", accountOwner);
@@ -55,8 +57,8 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean transferFromAccountToAccount(String givingPlayer,
-			String gettingPlayer, Double amount, Player observer) {
+	public boolean transferFromAccountToAccount(UUID givingPlayer,
+			UUID gettingPlayer, Double amount, Player observer) {
 		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
 		if (!bankcraft.getMoneyDatabaseInterface().hasAccount(gettingPlayer)) {
@@ -83,7 +85,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	@Override
 	public boolean grantInterests(Player observer) {
 		String messageKey;
-		for (String accountName: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
+		for (UUID accountName: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
 			
 			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this, bankcraft.getMoneyDatabaseInterface().getBalance(accountName)<0);
 			double amount = interest*bankcraft.getMoneyDatabaseInterface().getBalance(accountName);
@@ -96,14 +98,14 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 			}
 			Player player;
 			if ((player =bankcraft.getServer().getPlayer(accountName)) != null && (bankcraft.getConfigurationHandler().getString("interest.broadcastMoney").equals("true") || Bankcraft.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
-				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getName());
+				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getUniqueId(), player.getName());
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public boolean depositToAccount(String accountOwner, Double amount,
+	public boolean depositToAccount(UUID accountOwner, Double amount,
 			Player observer) {
 		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
 		
@@ -123,7 +125,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean withdrawFromAccount(String accountOwner, Double amount,
+	public boolean withdrawFromAccount(UUID accountOwner, Double amount,
 			Player observer) {
 		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
 		

@@ -1,5 +1,7 @@
 package de.hotmail.gurkilein.bankcraft.banking;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
@@ -14,7 +16,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	
 	@Override
 	public boolean transferFromPocketToAccount(Player pocketOwner,
-			String accountOwner, Integer amount, Player observer) {
+			UUID accountOwner, Integer amount, Player observer) {
 		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
 		
 		if (ExperienceBukkitHandler.getTotalExperience(pocketOwner) >= amount) {
@@ -28,13 +30,13 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
 			}
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInPoket", amount+"", pocketOwner.getName());
+			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInPoket", amount+"", pocketOwner.getUniqueId(), pocketOwner.getName());
 		}
 		return false;
 	}
 
 	@Override
-	public boolean transferFromAccountToPocket(String accountOwner,
+	public boolean transferFromAccountToPocket(UUID accountOwner,
 			   Player pocketOwner, Integer amount, Player observer) {
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
@@ -46,7 +48,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			    if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 			    return true;
 			   } else {
-			    bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInPocket", amount+"", pocketOwner.getName());
+			    bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInPocket", amount+"", pocketOwner.getUniqueId(),  pocketOwner.getName());
 			   }
 
 		} else {
@@ -56,8 +58,8 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean transferFromAccountToAccount(String givingPlayer,
-			String gettingPlayer, Integer amount, Player observer) {
+	public boolean transferFromAccountToAccount(UUID givingPlayer,
+			UUID gettingPlayer, Integer amount, Player observer) {
 		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
 		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(gettingPlayer)) {
@@ -85,7 +87,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public boolean grantInterests(Player observer) {
 		String messageKey;
-		for (String accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
+		for (UUID accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
 			
 			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this, bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<0);
 			
@@ -101,14 +103,14 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			}
 			Player player;
 			if ((player =bankcraft.getServer().getPlayer(accountName)) != null && (bankcraft.getConfigurationHandler().getString("interest.broadcastXp").equals("true") || Bankcraft.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
-				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getName());
+				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getUniqueId(), player.getName());
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public boolean depositToAccount(String accountOwner, Integer amount,
+	public boolean depositToAccount(UUID accountOwner, Integer amount,
 			Player observer) {
 		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
 		
@@ -128,7 +130,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean withdrawFromAccount(String accountOwner, Integer amount,
+	public boolean withdrawFromAccount(UUID accountOwner, Integer amount,
 			Player observer) {
 		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
 		

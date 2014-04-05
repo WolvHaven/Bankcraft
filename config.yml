@@ -12,11 +12,8 @@ database:
         user: 'Gurke1993'
         password: 'cheesecake'
         
-#Import data from the old Bankcraft
-    importOldData: false
-    
-#Eliminate case sensitive entries in the database (use this if you updated from version 2.2 or older!)
-    eliminateCaseSensitives : false
+#Migrate database from Names to UUIDs
+    updateToUUID: false
 
 
 general: 
@@ -121,6 +118,7 @@ message:
     tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
     
 signAndCommand:
+    version: version
     help: help
     balance: balance
     balancexp: balancexp

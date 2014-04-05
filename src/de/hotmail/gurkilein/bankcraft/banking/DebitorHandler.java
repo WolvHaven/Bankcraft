@@ -1,5 +1,7 @@
 package de.hotmail.gurkilein.bankcraft.banking;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 
 import de.hotmail.gurkilein.bankcraft.Bankcraft;
@@ -13,7 +15,7 @@ public class DebitorHandler {
 		this.bankcraft = bc;
 	}
 	
-	private boolean shouldBeDebitor(String player) {
+	private boolean shouldBeDebitor(UUID player) {
 		return (bankcraft.getMoneyDatabaseInterface().getBalance(player) < 0
 			|| bankcraft.getExperienceDatabaseInterface().getBalance(player) < 0);
 	}
@@ -40,7 +42,7 @@ public class DebitorHandler {
 	public void updateDebitorStatus(Player p) {
 		if (!Boolean.getBoolean(bankcraft.getConfigurationHandler().getString("general.useLoanGroup"))) return;
 		//Check if player is in debt and update permission group accordingly
-		if (shouldBeDebitor(p.getName().toLowerCase())) {
+		if (shouldBeDebitor(p.getUniqueId())) {
 			editPermissions(p,true);
 		} else {
 			editPermissions(p,false);
