@@ -2,6 +2,9 @@
 
 
 database:
+#Maximum amount of threads that Bankcraft can use to perform banking operations (default:4)
+    maximumThreads: 4
+
 #Database in which bankcraft stores information (allowed: flatfile/mysql)
     typeOfDatabase: flatFile
     
@@ -116,6 +119,7 @@ message:
     rankStatsExperience: 'Current experienced players:%rankTableExperience'
     debitor: 'You are currently in debt! Please make sure to pay your bills!'
     tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
+    performingLookup: 'Performing lookup of this player in Minecraft Database! This can take a moment...'
     
 signAndCommand:
     version: version

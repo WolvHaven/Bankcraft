@@ -31,8 +31,8 @@ public class MinecraftPlayerListener implements Listener{
 	}
 
 	@EventHandler
-	public void onklick(PlayerInteractEvent event) throws Exception {
-		Player p = event.getPlayer();
+	public void onklick(final PlayerInteractEvent event) throws Exception {
+		final Player p = event.getPlayer();
 		if (event.getClickedBlock() != null) {
 			if (event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) {
 				if (((Sign) event.getClickedBlock().getState()).getLine(0).contains("[Bank]")) {
@@ -155,10 +155,21 @@ public class MinecraftPlayerListener implements Listener{
 									// Scrolling-signs
 									amountAsString = bankcraft.getSignHandler().updateSign(event.getClickedBlock(), 0);
 								}
-								if (((Sign) event.getClickedBlock().getState()).getLine(2).equals(""))
-									bankcraft.getInteractionHandler().interact(type, amountAsString, p, p.getUniqueId());
+								
+								final int fType = type;
+								final String fAmountAsString = amountAsString;
+								if (((Sign) event.getClickedBlock().getState()).getLine(2).equals("") || !(type == 0 | type == 5 | type == 10 | type == 11))
+									Bankcraft.execService.submit(new Runnable() {
+										  public void run() {
+											  bankcraft.getInteractionHandler().interact(fType, fAmountAsString, p, p.getUniqueId());
+											}
+										});
 								else
-									bankcraft.getInteractionHandler().interact(type, amountAsString, p, bankcraft.getUUIDHandler().getUUID(((Sign) event.getClickedBlock().getState()).getLine(2)));
+										Bankcraft.execService.submit(new Runnable() {
+											  public void run() {
+												  bankcraft.getInteractionHandler().interact(fType, fAmountAsString, p, bankcraft.getUUIDHandler().getUUID(((Sign) event.getClickedBlock().getState()).getLine(2),p));
+												}
+											});
 							}
 						
 					} else {

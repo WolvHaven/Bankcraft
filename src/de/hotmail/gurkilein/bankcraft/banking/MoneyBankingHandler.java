@@ -15,13 +15,13 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean transferFromPocketToAccount(Player pocketOwner,
+	public synchronized boolean transferFromPocketToAccount(Player pocketOwner,
 			UUID accountOwner, Double amount, Player observer) {
 		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
 		
-		if (Bankcraft.econ.getBalance(pocketOwner.getName()) >= amount && bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.MAX_VALUE-amount) {
+		if (Bankcraft.econ.getBalance(pocketOwner) >= amount && bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.MAX_VALUE-amount) {
 			if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxBankLimitMoney"))-amount) {
-				Bankcraft.econ.withdrawPlayer(pocketOwner.getName(), amount);
+				Bankcraft.econ.withdrawPlayer(pocketOwner, amount);
 				bankcraft.getMoneyDatabaseInterface().addToAccount(accountOwner, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfully", amount+"", accountOwner);
 				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
@@ -36,14 +36,14 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean transferFromAccountToPocket(UUID accountOwner,
+	public synchronized boolean transferFromAccountToPocket(UUID accountOwner,
 			Player pocketOwner, Double amount, Player observer) {
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
 		if (bankcraft.getMoneyDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
-			if (Bankcraft.econ.getBalance(pocketOwner.getName())<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxPocketLimitMoney"))-amount) {
+			if (Bankcraft.econ.getBalance(pocketOwner)<= Double.parseDouble(bankcraft.getConfigurationHandler().getString("general.maxPocketLimitMoney"))-amount) {
 				bankcraft.getMoneyDatabaseInterface().removeFromAccount(accountOwner, amount);
-				Bankcraft.econ.depositPlayer(pocketOwner.getName(), amount);
+				Bankcraft.econ.depositPlayer(pocketOwner, amount);
 				bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfully", amount+"", accountOwner);
 				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
 				return true;
@@ -57,7 +57,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean transferFromAccountToAccount(UUID givingPlayer,
+	public synchronized boolean transferFromAccountToAccount(UUID givingPlayer,
 			UUID gettingPlayer, Double amount, Player observer) {
 		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
@@ -83,7 +83,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean grantInterests(Player observer) {
+	public synchronized boolean grantInterests(Player observer) {
 		String messageKey;
 		for (UUID accountName: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
 			
@@ -105,7 +105,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean depositToAccount(UUID accountOwner, Double amount,
+	public synchronized boolean depositToAccount(UUID accountOwner, Double amount,
 			Player observer) {
 		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
 		
@@ -125,7 +125,7 @@ public class MoneyBankingHandler implements BankingHandler<Double>{
 	}
 
 	@Override
-	public boolean withdrawFromAccount(UUID accountOwner, Double amount,
+	public synchronized boolean withdrawFromAccount(UUID accountOwner, Double amount,
 			Player observer) {
 		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
 		

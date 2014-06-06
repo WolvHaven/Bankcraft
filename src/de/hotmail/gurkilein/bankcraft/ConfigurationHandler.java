@@ -57,7 +57,7 @@ public class ConfigurationHandler {
 			}
 
 			message.set(0, message.get(0).replaceAll("%pocketXp", ""+player.getTotalExperience()));
-			message.set(0, message.get(0).replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player.getName())));
+			message.set(0, message.get(0).replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player)));
 			
 			if (bankcraft.getExperienceDatabaseInterface().hasAccount(player2)) 
 				message.set(0, message.get(0).replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2)));

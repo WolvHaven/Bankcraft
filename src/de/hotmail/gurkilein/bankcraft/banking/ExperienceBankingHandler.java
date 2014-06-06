@@ -15,7 +15,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 	
 	@Override
-	public boolean transferFromPocketToAccount(Player pocketOwner,
+	public synchronized boolean transferFromPocketToAccount(Player pocketOwner,
 			UUID accountOwner, Integer amount, Player observer) {
 		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
 		
@@ -36,7 +36,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean transferFromAccountToPocket(UUID accountOwner,
+	public synchronized boolean transferFromAccountToPocket(UUID accountOwner,
 			   Player pocketOwner, Integer amount, Player observer) {
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
@@ -58,7 +58,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean transferFromAccountToAccount(UUID givingPlayer,
+	public synchronized boolean transferFromAccountToAccount(UUID givingPlayer,
 			UUID gettingPlayer, Integer amount, Player observer) {
 		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
@@ -85,7 +85,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean grantInterests(Player observer) {
+	public synchronized boolean grantInterests(Player observer) {
 		String messageKey;
 		for (UUID accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
 			
@@ -110,7 +110,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean depositToAccount(UUID accountOwner, Integer amount,
+	public synchronized boolean depositToAccount(UUID accountOwner, Integer amount,
 			Player observer) {
 		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
 		
@@ -130,7 +130,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	}
 
 	@Override
-	public boolean withdrawFromAccount(UUID accountOwner, Integer amount,
+	public synchronized boolean withdrawFromAccount(UUID accountOwner, Integer amount,
 			Player observer) {
 		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
 		

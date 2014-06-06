@@ -63,6 +63,7 @@ public class InteractionHandler {
 		currencyMap.put(18, -1);
 		currencyMap.put(19, -1);
 	}
+	
 
 	public boolean interact(int type, String amountAsString, Player interactingPlayer, UUID targetPlayer) {
 		
@@ -92,7 +93,7 @@ public class InteractionHandler {
 
 		
 		if (currencyType == 1) {
-			return Bankcraft.econ.getBalance(pocketOwner.getName());
+			return Bankcraft.econ.getBalance(pocketOwner);
 		} else
 		if (currencyType == 2) {
 			return bankcraft.getMoneyDatabaseInterface().getBalance(pocketOwner.getUniqueId());
@@ -207,12 +208,6 @@ public class InteractionHandler {
 		chatSignMap.put(p, 0);
 		bankcraft.getConfigurationHandler().printMessage(p, "message.youHaveQuit", "", p.getUniqueId(), p.getName());
 		}
-
-	
-	
-	
-	
-	
 	
 	public boolean interact(String type, String amountAsString, Player pocketOwner, UUID accountOwner) {
 		return interact(typeMap.get(type.toLowerCase()), amountAsString, pocketOwner, accountOwner);

@@ -1,6 +1,8 @@
 package de.hotmail.gurkilein.bankcraft;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -35,6 +37,7 @@ public final class Bankcraft extends JavaPlugin{
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;
+    public static ExecutorService execService = null;
     
     private AccountDatabaseInterface<Double> moneyDatabaseInterface;
     private AccountDatabaseInterface<Integer> experienceDatabaseInterface;
@@ -71,6 +74,9 @@ public final class Bankcraft extends JavaPlugin{
         
         //Load Configuration
         configurationHandler = new ConfigurationHandler(this);
+
+        //Initiate Threadpool
+        execService = Executors.newFixedThreadPool(Integer.parseInt(configurationHandler.getString("database.maximumThreads")));
         
         //Setup Database
         if (configurationHandler.getString("database.typeOfDatabase").equalsIgnoreCase("mysql")) {
@@ -87,8 +93,6 @@ public final class Bankcraft extends JavaPlugin{
         	experienceDatabaseInterface = new ExperienceFlatFileInterface(this);
         	signDatabaseInterface = new SignFlatFileInterface(this);
         }
-        
-
         
         //Setup DebitorHandler
         debitorHandler = new DebitorHandler(this);
