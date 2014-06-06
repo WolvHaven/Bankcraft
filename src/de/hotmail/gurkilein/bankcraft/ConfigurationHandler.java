@@ -157,10 +157,10 @@ public class ConfigurationHandler {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List <Map.Entry<String,Double>> sortedAccounts = sortByComparator(accounts);
+		List <Map.Entry<UUID,Double>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i>=0 ; i--) {
-			result.add(bankcraft.getUUIDHandler().getName(UUID.fromString(sortedAccounts.get(i).getKey()))+" "+f.format(sortedAccounts.get(i).getValue()));
+			result.add(bankcraft.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+f.format(sortedAccounts.get(i).getValue()));
 		}
 		
 		
@@ -178,10 +178,10 @@ public class ConfigurationHandler {
 		}
 		
 		@SuppressWarnings("unchecked")
-		List <Map.Entry<String,Integer>> sortedAccounts = sortByComparator(accounts);
+		List <Map.Entry<UUID,Integer>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i >=0; i--) {
-			result.add(bankcraft.getUUIDHandler().getName(UUID.fromString(sortedAccounts.get(i).getKey()))+" "+sortedAccounts.get(i).getValue());
+			result.add(bankcraft.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+sortedAccounts.get(i).getValue());
 		}
 		
 		
