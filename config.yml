@@ -2,10 +2,10 @@
 
 
 database:
-#Maximum amount of threads that Bankcraft can use to perform banking operations (default:4)
+#Maximum amount of threads that Centralbank can use to perform banking operations (default:4)
     maximumThreads: 4
 
-#Database in which bankcraft stores information (allowed: flatfile/mysql)
+#Database in which Centralbank stores information (allowed: flatfile/mysql)
     typeOfDatabase: flatFile
     
     mysql:
@@ -118,7 +118,7 @@ message:
     rankStatsMoney: 'Current richest players:%rankTableMoney'
     rankStatsExperience: 'Current experienced players:%rankTableExperience'
     debitor: 'You are currently in debt! Please make sure to pay your bills!'
-    tooFastInteraction: 'You cant interact with Bankcraft this often. Please wait for a moment...'
+    tooFastInteraction: 'You cant interact with Centralbank this often. Please wait for a moment...'
     performingLookup: 'Performing lookup of this player in Minecraft Database! This can take a moment...'
     
 signAndCommand:
@@ -150,8 +150,8 @@ signAndCommand:
         databaseimport: databaseimport
         reloadconfig: reloadconfig
 chat:
-#prefix for all Bankcraft messages
-    prefix: '[Bankcraft]'
+#prefix for all Centralbank messages
+    prefix: '[Centralbank]'
 #Color of these
     color: 3
 #Word which stops the interaction with a interaction sign

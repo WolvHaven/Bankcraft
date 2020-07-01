@@ -43,7 +43,7 @@ public class MinecraftBlockListener implements Listener {
                 //check the found sign for the players name.
                 Sign sign = (Sign) testblock.getRelative(face).getState();
                 if (sign.getLine(0).contains("[Bank]")) {
-                    if (!CentralBank.perms.has(p, "bankcraft.admin")) {
+                    if (!CentralBank.perms.has(p, "Centralbank.admin")) {
                         coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(),
                                 p.getName());
                         event.setCancelled(true);
@@ -65,7 +65,7 @@ public class MinecraftBlockListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-                if (CentralBank.perms.has(p, "bankcraft.admin")) {
+                if (CentralBank.perms.has(p, "Centralbank.admin")) {
                     centralBank.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
                     coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getUniqueId(), p.getName());
                 } else {
@@ -81,7 +81,7 @@ public class MinecraftBlockListener implements Listener {
         Player p = event.getPlayer();
         String firstRow = event.getLine(0);
         if (firstRow.equalsIgnoreCase("[Bank]")) {
-            if (CentralBank.perms.has(p, "bankcraft.admin")) {
+            if (CentralBank.perms.has(p, "Centralbank.admin")) {
                 if (((event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(event.getLine(2))) || event.getLine(2).equalsIgnoreCase("all")) == true) {
                     //ERSTELLEN DER BANK(setting up a sign)
                     event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");

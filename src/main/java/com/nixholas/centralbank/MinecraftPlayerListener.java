@@ -38,8 +38,8 @@ public class MinecraftPlayerListener implements Listener {
                     if (!p.isSneaking()) {
                         Integer type = centralBank.getSignDatabaseInterface().getType(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());
                         if (type == -1) {
-                            if (CentralBank.perms.has(p, "bankcraft.admin")) {
-                                p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Bankcraftsign...");
+                            if (CentralBank.perms.has(p, "Centralbank.admin")) {
+                                p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Centralbanksign...");
                                 Sign sign = (Sign) event.getClickedBlock().getState();
                                 if (((sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
                                     //ERSTELLEN DER BANK
@@ -139,7 +139,7 @@ public class MinecraftPlayerListener implements Listener {
                             }
                             return;
                         }
-                        if (CentralBank.perms.has(p, "bankcraft.use") | (CentralBank.perms.has(p, "bankcraft.use.money") && (type == 0 | type == 1 | type == 2 | type == 3 | type == 4)) | (CentralBank.perms.has(p, "bankcraft.use.exp") && (type == 5 | type == 6 | type == 7 | type == 8 | type == 9))) {
+                        if (CentralBank.perms.has(p, "Centralbank.use") | (CentralBank.perms.has(p, "Centralbank.use.money") && (type == 0 | type == 1 | type == 2 | type == 3 | type == 4)) | (CentralBank.perms.has(p, "Centralbank.use.exp") && (type == 5 | type == 6 | type == 7 | type == 8 | type == 9))) {
                             if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true"))) {
 
                                 //Update scrolling signs

@@ -51,10 +51,10 @@ public final class CentralBank extends JavaPlugin {
     @Override
     public void onEnable() {
         log = getLogger();
-        log.info("Loading Bankcraft " + getDescription().getVersion() + "... ");
+        log.info("Loading Centralbank " + getDescription().getVersion() + "... ");
 
-        //Create Bankcraft folder
-        (new File("plugins" + System.getProperty("file.separator") + "Bankcraft")).mkdir();
+        //Create Centralbank folder
+        (new File("plugins" + System.getProperty("file.separator") + "Centralbank")).mkdir();
 
 
         //Setup Vault for economy and permissions
@@ -127,7 +127,7 @@ public final class CentralBank extends JavaPlugin {
         //Start Tasks
         toggleTimerTasks();
 
-        log.info("Bankcraft has been successfully loaded!");
+        log.info("Centralbank has been successfully loaded!");
     }
 
     private void toggleTimerTasks() {
@@ -154,7 +154,7 @@ public final class CentralBank extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        log.info("Bankcraft has been disabled");
+        log.info("Centralbank has been disabled");
     }
 
 

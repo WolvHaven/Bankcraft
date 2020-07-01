@@ -90,13 +90,13 @@ public class OldDataImportHandler {
 
 
     private void fixFlat() {
-        File[] files = (new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "Accounts")).listFiles();
+        File[] files = (new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts")).listFiles();
         String newName = "";
         for (File file : files) {
             try {
                 newName = centralBank.getUUIDHandler().getUUIDwE(file.getName().split("\\.")[0]).toString();
                 System.out.println("Renamed " + file.getName() + " to " + newName);
-                file.renameTo(new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + newName + ".data"));
+                file.renameTo(new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + newName + ".data"));
 
             } catch (Exception e) {
                 try {

@@ -103,7 +103,7 @@ public class ExperienceBankingHandler implements BankingHandler<Integer> {
                 messageKey = "message.couldNotGrantInterestOnXp";
             }
             Player player;
-            if ((player = centralBank.getServer().getPlayer(accountName)) != null && (centralBank.getConfigurationHandler().getString("interest.broadcastXp").equals("true") || CentralBank.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
+            if ((player = centralBank.getServer().getPlayer(accountName)) != null && (centralBank.getConfigurationHandler().getString("interest.broadcastXp").equals("true") || CentralBank.perms.has(player, "Centralbank.interest.broadcastmoney"))) {
                 centralBank.getConfigurationHandler().printMessage(player, messageKey, amount + "", player.getUniqueId(), player.getName());
             }
         }

@@ -12,14 +12,14 @@ import java.util.List;
 public class SignFlatFileInterface implements SignDatabaseInterface {
 
     private final CentralBank centralBank;
-    private final File signFile = new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "SignDatabase" + System.getProperty("file.separator") + "signs.data");
+    private final File signFile = new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "SignDatabase" + System.getProperty("file.separator") + "signs.data");
 
     public SignFlatFileInterface(CentralBank centralBank) {
 
         this.centralBank = centralBank;
 
         try {
-            (new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "SignDatabase")).mkdir();
+            (new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "SignDatabase")).mkdir();
             signFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();

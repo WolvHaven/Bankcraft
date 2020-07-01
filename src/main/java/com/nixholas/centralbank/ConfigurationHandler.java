@@ -16,12 +16,12 @@ public class ConfigurationHandler {
 
     public ConfigurationHandler(CentralBank centralBank) {
         this.centralBank = centralBank;
-        if (!(new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "config.yml").exists())) {
+        if (!(new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "config.yml").exists())) {
             CentralBank.log.info("No config file found! Creating new one...");
             centralBank.saveDefaultConfig();
         }
         try {
-            centralBank.getConfig().load(new File("plugins" + System.getProperty("file.separator") + "Bankcraft" + System.getProperty("file.separator") + "config.yml"));
+            centralBank.getConfig().load(new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "config.yml"));
         } catch (Exception e) {
             CentralBank.log.info("Could not load config file!");
             e.printStackTrace();
@@ -88,8 +88,8 @@ public class ConfigurationHandler {
             }
 
         } else {
-            centralBank.getLogger().severe("Could not locate '" + messageKey + "' in the config.yml inside of the Bankcraft folder!");
-            player.sendMessage("Could not locate '" + messageKey + "' in the config.yml inside of the Bankcraft folder!");
+            centralBank.getLogger().severe("Could not locate '" + messageKey + "' in the config.yml inside of the Centralbank folder!");
+            player.sendMessage("Could not locate '" + messageKey + "' in the config.yml inside of the Centralbank folder!");
         }
     }
 
@@ -126,7 +126,7 @@ public class ConfigurationHandler {
 
     public String getString(String key) {
         if (!centralBank.getConfig().contains(key)) {
-            centralBank.getLogger().severe("Could not locate '" + key + "' in the config.yml inside of the Bankcraft folder! (Try generating a new one by deleting the current)");
+            centralBank.getLogger().severe("Could not locate '" + key + "' in the config.yml inside of the Centralbank folder! (Try generating a new one by deleting the current)");
             return "errorCouldNotLocateInConfigYml:" + key;
         } else {
             if (key.toLowerCase().contains("color")) {
