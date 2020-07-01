@@ -14,8 +14,8 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class MinecraftBlockListener implements Listener {
 
-    private CentralBank centralBank;
-    private ConfigurationHandler coHa;
+    private final CentralBank centralBank;
+    private final ConfigurationHandler coHa;
 
     public MinecraftBlockListener(CentralBank centralBank) {
         this.centralBank = centralBank;

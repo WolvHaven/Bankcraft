@@ -3,25 +3,25 @@ package com.nixholas.centralbank.database.flatfile;
 import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.DatabaseManagerInterface;
 
-public class DatabaseManagerFlatFile implements DatabaseManagerInterface{
+public class DatabaseManagerFlatFile implements DatabaseManagerInterface {
 
-	@SuppressWarnings("unused")
-	private CentralBank centralBank;
+    @SuppressWarnings("unused")
+    private final CentralBank centralBank;
 
-	public DatabaseManagerFlatFile(CentralBank centralBank) {
-		this.centralBank = centralBank;
-		
-		setupDatabase();
-	}
+    public DatabaseManagerFlatFile(CentralBank centralBank) {
+        this.centralBank = centralBank;
 
-	@Override
-	public boolean setupDatabase() {
-		return true;
-	}
+        setupDatabase();
+    }
 
-	@Override
-	public boolean closeDatabase() {
-		return true;
-	}
+    @Override
+    public boolean setupDatabase() {
+        return true;
+    }
+
+    @Override
+    public boolean closeDatabase() {
+        return true;
+    }
 
 }

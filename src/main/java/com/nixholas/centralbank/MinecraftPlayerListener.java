@@ -10,175 +10,175 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-public class MinecraftPlayerListener implements Listener{
-	private CentralBank centralBank;
-	private ConfigurationHandler coHa;
+public class MinecraftPlayerListener implements Listener {
+    private final CentralBank centralBank;
+    private final ConfigurationHandler coHa;
 
-	public MinecraftPlayerListener(CentralBank centralBank) {
-		this.centralBank = centralBank;
-		this.coHa = centralBank.getConfigurationHandler();
-	}
-	
-	@EventHandler
-	public void onLogin(PlayerLoginEvent event) {
-		centralBank.getDebitorHandler().updateDebitorStatus(event.getPlayer());
-		if (centralBank.getDebitorHandler().isCurrentlyDebitor(event.getPlayer())) {
-			if (Boolean.getBoolean(centralBank.getConfigurationHandler().getString("general.remindDebitorOnLogin"))) {
-				centralBank.getConfigurationHandler().printMessage(event.getPlayer(), "message.debitor", "0", event.getPlayer().getUniqueId(), event.getPlayer().getName());
-			}
-		}
-	}
+    public MinecraftPlayerListener(CentralBank centralBank) {
+        this.centralBank = centralBank;
+        this.coHa = centralBank.getConfigurationHandler();
+    }
 
-	@EventHandler
-	public void onklick(final PlayerInteractEvent event) throws Exception {
-		final Player p = event.getPlayer();
-		if (event.getClickedBlock() != null) {
-			if (MaterialConstants.Signs.contains(event.getClickedBlock().getType())) {
-				if (((Sign) event.getClickedBlock().getState()).getLine(0).contains("[Bank]")) {
-					if (!p.isSneaking()) {
-						Integer type = centralBank.getSignDatabaseInterface().getType(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());
-						if (type == -1) {
-							if (CentralBank.perms.has(p, "bankcraft.admin")) {
-								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Bankcraftsign...");
-								Sign sign = (Sign) event.getClickedBlock().getState();
-								if (((sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
-									//ERSTELLEN DER BANK
-									sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
-									double betrag = 0;
-									String typreihe = sign.getLine(1);
-									int signX = sign.getBlock().getX();
-									int signY = sign.getBlock().getY();
-									int signZ = sign.getBlock().getZ();
-									
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.deposit"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 1;
-									}
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdraw"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 2;
-									}
+    @EventHandler
+    public void onLogin(PlayerLoginEvent event) {
+        centralBank.getDebitorHandler().updateDebitorStatus(event.getPlayer());
+        if (centralBank.getDebitorHandler().isCurrentlyDebitor(event.getPlayer())) {
+            if (Boolean.getBoolean(centralBank.getConfigurationHandler().getString("general.remindDebitorOnLogin"))) {
+                centralBank.getConfigurationHandler().printMessage(event.getPlayer(), "message.debitor", "0", event.getPlayer().getUniqueId(), event.getPlayer().getName());
+            }
+        }
+    }
 
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 6;
-									}
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 7;
-									}
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchange"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 12;
-									}
-									if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp"))) {
-										if (sign.getLine(2).equalsIgnoreCase("all")) {
-											sign.setLine(2, "All");
-											betrag = -1;
-										} else {
-											betrag = new Double(sign.getLine(2));
-										}
-										type = 13;
-									}
-									centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), type, betrag+"");
-									
-									coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
+    @EventHandler
+    public void onklick(final PlayerInteractEvent event) throws Exception {
+        final Player p = event.getPlayer();
+        if (event.getClickedBlock() != null) {
+            if (MaterialConstants.Signs.contains(event.getClickedBlock().getType())) {
+                if (((Sign) event.getClickedBlock().getState()).getLine(0).contains("[Bank]")) {
+                    if (!p.isSneaking()) {
+                        Integer type = centralBank.getSignDatabaseInterface().getType(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());
+                        if (type == -1) {
+                            if (CentralBank.perms.has(p, "bankcraft.admin")) {
+                                p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Reinitializing Bankcraftsign...");
+                                Sign sign = (Sign) event.getClickedBlock().getState();
+                                if (((sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(sign.getLine(2))) || sign.getLine(2).equalsIgnoreCase("all")) == true) {
+                                    //ERSTELLEN DER BANK
+                                    sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
+                                    double betrag = 0;
+                                    String typreihe = sign.getLine(1);
+                                    int signX = sign.getBlock().getX();
+                                    int signY = sign.getBlock().getY();
+                                    int signZ = sign.getBlock().getZ();
 
-								} else {
-									if (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance")) | (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")))) {
-										sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
-										int signX = sign.getBlock().getX();
-										int signY = sign.getBlock().getY();
-										int signZ = sign.getBlock().getZ();
-										if (sign.getLine(1).equals(coHa.getString("signAndCommand.balancexp"))) {
-											if (sign.getLine(2).isEmpty()) {
-												centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 5, "0");
-											} else {
-												centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 11, "0");
-											}
-										} else {
-											if (sign.getLine(2).isEmpty()) {
-												centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 0, "0");
-											} else {
-												centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 10, "0");
-											}
-										}
-										coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
-									} else {
-										p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Could not reinitialize the sign! Removing it now!");
-										event.getClickedBlock().setType(Material.AIR);
-									}
-								}
-							} else {
-								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Sign not in Database! Please contact an admin!");
-							}
-							return;
-						}
-						if (CentralBank.perms.has(p, "bankcraft.use") | (CentralBank.perms.has(p, "bankcraft.use.money") && (type == 0 | type == 1 | type == 2 | type == 3 | type == 4)) | (CentralBank.perms.has(p, "bankcraft.use.exp") && (type == 5 | type == 6 | type == 7 | type == 8 | type == 9))) {
-							if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true"))) {
-								
-								//Update scrolling signs
-								if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
-									centralBank.getSignHandler().updateSign(event.getClickedBlock(), 1);
-								}
-								
-							}
-							if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false"))) {
-								String amountAsString = ((Sign) event.getClickedBlock().getState()).getLine(2);
-								if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
-									// Scrolling-signs
-									amountAsString = centralBank.getSignHandler().updateSign(event.getClickedBlock(), 0);
-								}
-								
-								final int fType = type;
-								final String fAmountAsString = amountAsString;
-								if (((Sign) event.getClickedBlock().getState()).getLine(2).equals("") || !(type == 0 | type == 5 | type == 10 | type == 11))
-									CentralBank.execService.submit(new Runnable() {
-										  public void run() {
-											  centralBank.getInteractionHandler().interact(fType, fAmountAsString, p, p.getUniqueId());
-											}
-										});
-								else
-										CentralBank.execService.submit(new Runnable() {
-											  public void run() {
-												  centralBank.getInteractionHandler().interact(fType, fAmountAsString, p, centralBank.getUUIDHandler().getUUID(((Sign) event.getClickedBlock().getState()).getLine(2),p));
-												}
-											});
-							}
-						
-					} else {
-						coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
-					}
-					}
-				}
-				((Sign) event.getClickedBlock().getState()).update();
-			}
-		}
-	}
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.deposit"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 1;
+                                    }
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdraw"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 2;
+                                    }
+
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 6;
+                                    }
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 7;
+                                    }
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchange"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 12;
+                                    }
+                                    if (typreihe.equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp"))) {
+                                        if (sign.getLine(2).equalsIgnoreCase("all")) {
+                                            sign.setLine(2, "All");
+                                            betrag = -1;
+                                        } else {
+                                            betrag = new Double(sign.getLine(2));
+                                        }
+                                        type = 13;
+                                    }
+                                    centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), type, betrag + "");
+
+                                    coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
+
+                                } else {
+                                    if (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance")) | (sign.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")))) {
+                                        sign.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
+                                        int signX = sign.getBlock().getX();
+                                        int signY = sign.getBlock().getY();
+                                        int signZ = sign.getBlock().getZ();
+                                        if (sign.getLine(1).equals(coHa.getString("signAndCommand.balancexp"))) {
+                                            if (sign.getLine(2).isEmpty()) {
+                                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 5, "0");
+                                            } else {
+                                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 11, "0");
+                                            }
+                                        } else {
+                                            if (sign.getLine(2).isEmpty()) {
+                                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 0, "0");
+                                            } else {
+                                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, sign.getBlock().getWorld(), 10, "0");
+                                            }
+                                        }
+                                        coHa.printMessage(p, "message.createdSignSuccessfully", "0", p.getUniqueId(), p.getName());
+                                    } else {
+                                        p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Could not reinitialize the sign! Removing it now!");
+                                        event.getClickedBlock().setType(Material.AIR);
+                                    }
+                                }
+                            } else {
+                                p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Sign not in Database! Please contact an admin!");
+                            }
+                            return;
+                        }
+                        if (CentralBank.perms.has(p, "bankcraft.use") | (CentralBank.perms.has(p, "bankcraft.use.money") && (type == 0 | type == 1 | type == 2 | type == 3 | type == 4)) | (CentralBank.perms.has(p, "bankcraft.use.exp") && (type == 5 | type == 6 | type == 7 | type == 8 | type == 9))) {
+                            if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true"))) {
+
+                                //Update scrolling signs
+                                if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
+                                    centralBank.getSignHandler().updateSign(event.getClickedBlock(), 1);
+                                }
+
+                            }
+                            if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("true")) || (event.getAction() == Action.LEFT_CLICK_BLOCK && !centralBank.getConfigurationHandler().getString("general.swapClicks").equalsIgnoreCase("false"))) {
+                                String amountAsString = ((Sign) event.getClickedBlock().getState()).getLine(2);
+                                if (type == 3 | type == 4 | type == 8 | type == 9 | type == 14 | type == 15) {
+                                    // Scrolling-signs
+                                    amountAsString = centralBank.getSignHandler().updateSign(event.getClickedBlock(), 0);
+                                }
+
+                                final int fType = type;
+                                final String fAmountAsString = amountAsString;
+                                if (((Sign) event.getClickedBlock().getState()).getLine(2).equals("") || !(type == 0 | type == 5 | type == 10 | type == 11))
+                                    CentralBank.execService.submit(new Runnable() {
+                                        public void run() {
+                                            centralBank.getInteractionHandler().interact(fType, fAmountAsString, p, p.getUniqueId());
+                                        }
+                                    });
+                                else
+                                    CentralBank.execService.submit(new Runnable() {
+                                        public void run() {
+                                            centralBank.getInteractionHandler().interact(fType, fAmountAsString, p, centralBank.getUUIDHandler().getUUID(((Sign) event.getClickedBlock().getState()).getLine(2), p));
+                                        }
+                                    });
+                            }
+
+                        } else {
+                            coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(), p.getName());
+                        }
+                    }
+                }
+                event.getClickedBlock().getState().update();
+            }
+        }
+    }
 
 }

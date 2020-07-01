@@ -1,5 +1,5 @@
 name: Bankcraft
-main: com.nixholas.centralbank.Bankcraft
+main: com.nixholas.centralbank.CentralBank
 version: 1.15.2-R1-SNAPSHOT
 depend: [Vault]
 commands:
