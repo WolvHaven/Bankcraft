@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.nixholas.centralbank.database.mysql.DatabaseManagerMysql;
-import de.hotmail.gurkilein.bankcraft.database.mysql.*;
-
-
 
 public class OldDataImportHandler {
 
