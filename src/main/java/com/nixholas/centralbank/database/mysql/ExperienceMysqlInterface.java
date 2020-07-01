@@ -9,18 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.AccountDatabaseInterface;
 
 public class ExperienceMysqlInterface implements AccountDatabaseInterface <Integer>{
 
 	private Connection conn;
 	@SuppressWarnings("unused")
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public ExperienceMysqlInterface(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
-		this.conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+	public ExperienceMysqlInterface(CentralBank centralBank) {
+		this.centralBank = centralBank;
+		this.conn = ((DatabaseManagerMysql) centralBank.getDatabaseManagerInterface()).getConnection();
 	}
 
 	@Override

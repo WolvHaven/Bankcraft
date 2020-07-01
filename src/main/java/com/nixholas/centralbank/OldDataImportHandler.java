@@ -13,23 +13,23 @@ import com.nixholas.centralbank.database.mysql.DatabaseManagerMysql;
 
 public class OldDataImportHandler {
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public OldDataImportHandler(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public OldDataImportHandler(CentralBank centralBank) {
+		this.centralBank = centralBank;
 	}
 	
 
 	public void migratev2_4() {
-		String database = bankcraft.getConfigurationHandler().getString("database.typeOfDatabase");
-		bankcraft.getLogger().info("Searching for old "+database+" entries...");
+		String database = centralBank.getConfigurationHandler().getString("database.typeOfDatabase");
+		centralBank.getLogger().info("Searching for old "+database+" entries...");
 
 		if (database.equalsIgnoreCase("flatfile")) {
 			fixFlat();
 		} else {
 			fixMysql();
 		}
-		bankcraft.getLogger().info("Finished migrating of old data! Remember to set updateToUUID to false in the config.yml!!!");
+		centralBank.getLogger().info("Finished migrating of old data! Remember to set updateToUUID to false in the config.yml!!!");
 	}
 
 
@@ -43,13 +43,13 @@ public class OldDataImportHandler {
 
 
 	private void updateName(String account) {
-		Connection conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+		Connection conn = ((DatabaseManagerMysql) centralBank.getDatabaseManagerInterface()).getConnection();
 	try {
 
 		String sql = "UPDATE `bc_accounts` SET `player_name` = ? WHERE `player_name` = ?";
 
 		PreparedStatement preparedUpdateStatement = conn.prepareStatement(sql);
-		preparedUpdateStatement.setString(1, bankcraft.getUUIDHandler().getUUID(account).toString());
+		preparedUpdateStatement.setString(1, centralBank.getUUIDHandler().getUUID(account).toString());
 		preparedUpdateStatement.setString(2, account);
 		preparedUpdateStatement.executeQuery();
 
@@ -59,7 +59,7 @@ public class OldDataImportHandler {
 	}
 
 
-	private String[] getOldSqlEntries() {Connection conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+	private String[] getOldSqlEntries() {Connection conn = ((DatabaseManagerMysql) centralBank.getDatabaseManagerInterface()).getConnection();
 	try {
 
 		String sql = "SELECT `player_name` FROM `bc_accounts`";
@@ -71,7 +71,7 @@ public class OldDataImportHandler {
 
 		while (result.next()) {
 			try {
-				bankcraft.getUUIDHandler().getUUIDwE(result.getString("player_name")).toString();
+				centralBank.getUUIDHandler().getUUIDwE(result.getString("player_name")).toString();
 				resultList.add(result.getString("player_name"));
 			} catch (Exception e) {
 				try {
@@ -93,7 +93,7 @@ public class OldDataImportHandler {
 		String newName = "";
 		for (File file: files) {
 			try {
-				newName = bankcraft.getUUIDHandler().getUUIDwE(file.getName().split("\\.")[0]).toString();
+				newName = centralBank.getUUIDHandler().getUUIDwE(file.getName().split("\\.")[0]).toString();
 				System.out.println("Renamed "+file.getName()+" to "+newName);
 				file.renameTo(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts"+System.getProperty("file.separator")+newName+".data"));
 

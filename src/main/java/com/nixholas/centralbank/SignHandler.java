@@ -12,11 +12,11 @@ import org.bukkit.block.Sign;
 
 public class SignHandler {
 	
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	private Map<Block, Integer> signPosition = new HashMap<Block, Integer>();
 	
-	public SignHandler(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public SignHandler(CentralBank centralBank) {
+		this.centralBank = centralBank;
 	}
 
 	
@@ -24,7 +24,7 @@ public class SignHandler {
 
 
 	public String updateSign(Block clickedBlock, int steps) {
-		String[] scrollingSignArray = bankcraft.getSignDatabaseInterface().getAmounts(clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ(), clickedBlock.getWorld());
+		String[] scrollingSignArray = centralBank.getSignDatabaseInterface().getAmounts(clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ(), clickedBlock.getWorld());
 		Sign sign = (Sign) clickedBlock.getState();
 		if (signPosition.containsKey(clickedBlock)) {
 			if (signPosition.get(clickedBlock) < (scrollingSignArray.length - steps)) {
@@ -52,7 +52,7 @@ public class SignHandler {
 	
 	public Sign[] getSigns(World world, int type) {
 		
-		Location[] locations = bankcraft.getSignDatabaseInterface().getLocations(type, world);
+		Location[] locations = centralBank.getSignDatabaseInterface().getLocations(type, world);
 		List <Sign> signsList = new ArrayList<Sign>();
 		Sign sign;
 		
@@ -61,8 +61,8 @@ public class SignHandler {
 			sign = ((Sign)locations[i].getBlock().getState());
 			signsList.add(sign);
 			} catch (ClassCastException e) {
-				Bankcraft.log.warning("Found broken Sign... Removing... ("+locations[i].getBlockX()+":"+locations[i].getBlockY()+":"+locations[i].getBlockZ()+")");
-				bankcraft.getSignDatabaseInterface().removeSign(locations[i].getBlockX(), locations[i].getBlockY(), locations[i].getBlockZ(), locations[i].getWorld());
+				CentralBank.log.warning("Found broken Sign... Removing... ("+locations[i].getBlockX()+":"+locations[i].getBlockY()+":"+locations[i].getBlockZ()+")");
+				centralBank.getSignDatabaseInterface().removeSign(locations[i].getBlockX(), locations[i].getBlockY(), locations[i].getBlockZ(), locations[i].getWorld());
 			}
 		}
 		

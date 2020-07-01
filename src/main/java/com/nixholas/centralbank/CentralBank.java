@@ -32,8 +32,7 @@ import com.nixholas.centralbank.banking.ExperienceBankingHandler;
 import com.nixholas.centralbank.banking.InteractionHandler;
 import com.nixholas.centralbank.banking.MoneyBankingHandler;
 
-public final class Bankcraft extends JavaPlugin{
-
+public final class CentralBank extends JavaPlugin{
 	public static Logger log;
 	public static Economy econ = null;
     public static Permission perms = null;

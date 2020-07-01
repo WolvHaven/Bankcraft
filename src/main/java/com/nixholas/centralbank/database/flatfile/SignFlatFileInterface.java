@@ -12,17 +12,17 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.SignDatabaseInterface;
 
 public class SignFlatFileInterface implements SignDatabaseInterface {
 	
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	private File signFile = new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"SignDatabase"+System.getProperty("file.separator")+"signs.data");
 
-	public SignFlatFileInterface(Bankcraft bankcraft) {
+	public SignFlatFileInterface(CentralBank centralBank) {
 		
-		this.bankcraft = bankcraft;
+		this.centralBank = centralBank;
 		
 		try {
 			(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"SignDatabase")).mkdir();
@@ -50,7 +50,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 		br.close();
 		fr.close();
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Type of Sign in Database!");
+			centralBank.getLogger().severe("Could not get Type of Sign in Database!");
 		}
 		return -1;
 	}
@@ -69,7 +69,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not create Sign in Database!");
+			centralBank.getLogger().severe("Could not create Sign in Database!");
 		}
 		return false;
 	}
@@ -101,7 +101,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 		return true;
 		
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not remove Sign in Database!");
+			centralBank.getLogger().severe("Could not remove Sign in Database!");
 		}
 		return false;
 	}
@@ -127,7 +127,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 		br.close();
 		fr.close();
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Amounts of Sign in Database!");
+			centralBank.getLogger().severe("Could not get Amounts of Sign in Database!");
 		}
 		return null;
 	}
@@ -159,7 +159,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 		return true;
 		
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not remove Sign in Database!");
+			centralBank.getLogger().severe("Could not remove Sign in Database!");
 		}
 		return false;
 	}
@@ -192,7 +192,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 			return true;
 			
 			} catch (Exception e) {
-				bankcraft.getLogger().severe("Could not remove Sign in Database!");
+				centralBank.getLogger().severe("Could not remove Sign in Database!");
 			}
 			return false;
 	}
@@ -210,7 +210,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 				String[] lineSplit = line.split(":");
 				if (world == null || lineSplit[3].equalsIgnoreCase(world.getName())) {
 					if (type == -1 || Integer.parseInt(lineSplit[4]) == type) {
-						loadingLocationList.add(new Location(bankcraft.getServer().getWorld(lineSplit[3]), Integer.parseInt(lineSplit[0]), Integer.parseInt(lineSplit[1]), Integer.parseInt(lineSplit[2])));
+						loadingLocationList.add(new Location(centralBank.getServer().getWorld(lineSplit[3]), Integer.parseInt(lineSplit[0]), Integer.parseInt(lineSplit[1]), Integer.parseInt(lineSplit[2])));
 					}
 				}
 			}
@@ -224,7 +224,7 @@ public class SignFlatFileInterface implements SignDatabaseInterface {
 			
 			return loadingLocationList.toArray(new Location[0]);
 			} catch (Exception e) {
-				bankcraft.getLogger().severe("Could not get Locations of Signs in Database!");
+				centralBank.getLogger().severe("Could not get Locations of Signs in Database!");
 			}
 			return null;
 	}

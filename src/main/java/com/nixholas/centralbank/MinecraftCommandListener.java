@@ -30,70 +30,70 @@ import org.bukkit.util.BlockIterator;
 
 public class MinecraftCommandListener implements CommandExecutor{
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	private ConfigurationHandler coHa;
 
-	public MinecraftCommandListener(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
-		this.coHa = bankcraft.getConfigurationHandler();
+	public MinecraftCommandListener(CentralBank centralBank) {
+		this.centralBank = centralBank;
+		this.coHa = centralBank.getConfigurationHandler();
 	}
 
 
 	@SuppressWarnings("unused")
-	private Bankcraft plugin;
+	private CentralBank plugin;
 	public Double betrag;
 
 	public void sendHelp(Player p) {
 		p.sendMessage("---Bankcraft-Help---");
 		p.sendMessage("/bank "+coHa.getString("signAndCommand.help")+" Shows the help page.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.version") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.version") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.version")+" Shoes the current version of Bankcraft.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.balance") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.balance") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.balance")+" PLAYER Shows your banked money.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.balancexp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.balancexp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.balancexp")+" PLAYER Shows your banked XP.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.deposit") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.deposit")+" AMOUNT Deposits money to your Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.withdraw") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.withdraw") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.withdraw")+" AMOUNT Withdraws money from your Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.depositxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.depositxp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.depositxp")+" AMOUNT Deposits XP to your Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.withdrawxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.withdrawxp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.withdrawxp")+" AMOUNT Withdraws XP from your Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.transfer") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.transfer")+" PLAYER AMOUNT Transfers money to another Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.transferxp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.transferxp")+" PLAYER AMOUNT Transfers XP to another Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.interesttimer") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.interesttimer")+" Shows the remaining time until the next wave of interests.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.exchange") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.exchange") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.exchange")+" AMOUNT Exchanges money to XP.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.exchangexp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.exchangexp")+" AMOUNT Exchanges XP to money.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.rankstats") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.rankstats") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstats")+" Shows the richest players.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.rankstatsxp") || Bankcraft.perms.has(p, "bankcraft.command"))
+		if (CentralBank.perms.has(p, "bankcraft.command.rankstatsxp") || CentralBank.perms.has(p, "bankcraft.command"))
 			p.sendMessage("/bank "+coHa.getString("signAndCommand.rankstatsxp")+" Shows the players with the most experience banked.");
 	}
 
 	public void sendAdminHelp(Player p) {
 		p.sendMessage("---Bankcraft-AdminHelp---");
 		p.sendMessage("/bankadmin help Shows the help page.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.set") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.set") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.set")+" PLAYER AMOUNT Sets a players money.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.setxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.setxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.setxp")+" PLAYER AMOUNT Sets a players XP.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.grant") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.grant") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.grant")+" PLAYER AMOUNT Grants a Player money.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.grantxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.grantxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.grantxp")+" PLAYER AMOUNT Grants a player XP.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.clear") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.clear") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.clear")+" PLAYER Clears money from a players Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.clearxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.clearxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.clearxp")+" PLAYER Clears XP from a players Account.");
-		if (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.databaseimport") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.databaseimport")+" OLDDATA NEWDATA Moves data from one database type to another");
-		if (Bankcraft.perms.has(p, "bankcraft.command.reloadconfig") || Bankcraft.perms.has(p, "bankcraft.command.admin"))
+		if (CentralBank.perms.has(p, "bankcraft.command.reloadconfig") || CentralBank.perms.has(p, "bankcraft.command.admin"))
 		p.sendMessage("/bankadmin "+coHa.getString("signAndCommand.admin.reloadconfig")+" Reloads the config of bankcraft.");
 		
 	}
@@ -117,32 +117,32 @@ public class MinecraftCommandListener implements CommandExecutor{
 					}
 					
 					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.version"))) {
-						p.sendMessage("This server uses Bankcraft "+bankcraft.getDescription().getVersion());
+						p.sendMessage("This server uses Bankcraft "+ centralBank.getDescription().getVersion());
 						return true;
 					}
 
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (Bankcraft.perms.has(p, "bankcraft.command.balance") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (CentralBank.perms.has(p, "bankcraft.command.balance") || CentralBank.perms.has(p, "bankcraft.command"))) {
+						return centralBank.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
 					}
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (Bankcraft.perms.has(p, "bankcraft.command.balancexp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
-					}
-					
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.interesttimer")) && (Bankcraft.perms.has(p, "bankcraft.command.interesttimer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (CentralBank.perms.has(p, "bankcraft.command.balancexp") || CentralBank.perms.has(p, "bankcraft.command"))) {
+						return centralBank.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
 					}
 					
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstats")) && (Bankcraft.perms.has(p, "bankcraft.command.rankstats") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.interesttimer")) && (CentralBank.perms.has(p, "bankcraft.command.interesttimer") || CentralBank.perms.has(p, "bankcraft.command"))) {
+						return centralBank.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
 					}
 					
-					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstatsxp")) && (Bankcraft.perms.has(p, "bankcraft.command.rankstatsxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-						return bankcraft.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstats")) && (CentralBank.perms.has(p, "bankcraft.command.rankstats") || CentralBank.perms.has(p, "bankcraft.command"))) {
+						return centralBank.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
+					}
+					
+					if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.rankstatsxp")) && (CentralBank.perms.has(p, "bankcraft.command.rankstatsxp") || CentralBank.perms.has(p, "bankcraft.command"))) {
+						return centralBank.getInteractionHandler().interact(vars[0], "", p, p.getUniqueId());
 					}
 				}
 				if (vars.length == 2) {
 					if (Util.isPositive(vars[1]) || vars[1].equalsIgnoreCase("all")) {
-						if (vars[0].equalsIgnoreCase("add") && (Bankcraft.perms.has(p, "bankcraft.admin"))) {
+						if (vars[0].equalsIgnoreCase("add") && (CentralBank.perms.has(p, "bankcraft.admin"))) {
 							BlockIterator bi = new BlockIterator(p,20);
 							Block sb = null;
 							while (bi.hasNext() &&  (sb = bi.next()).getType().equals(Material.AIR))
@@ -153,7 +153,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 								if (sign.getLine(0).contains("[Bank]")) {
 									Integer typsign = -1;
 									try {
-										typsign = bankcraft.getSignDatabaseInterface().getType(sb.getX(), sb.getY(), sb.getZ(), sb.getWorld());
+										typsign = centralBank.getSignDatabaseInterface().getType(sb.getX(), sb.getY(), sb.getZ(), sb.getWorld());
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
@@ -165,17 +165,17 @@ public class MinecraftCommandListener implements CommandExecutor{
 											World w = sb.getWorld();
 											
 											Integer newType;
-											Integer currentType = bankcraft.getSignDatabaseInterface().getType(x, y, z, w);
+											Integer currentType = centralBank.getSignDatabaseInterface().getType(x, y, z, w);
 											
 											if (currentType == 1 || currentType == 2 || currentType == 6 || currentType == 7|| currentType ==  12|| currentType ==  13) {
 												newType = currentType +2;
-												bankcraft.getSignDatabaseInterface().changeType(x, y, z, newType, w);
+												centralBank.getSignDatabaseInterface().changeType(x, y, z, newType, w);
 											}
 												
 												
-											bankcraft.getSignDatabaseInterface().addAmount(x, y, z, w, vars[1]);
+											centralBank.getSignDatabaseInterface().addAmount(x, y, z, w, vars[1]);
 											coHa.printMessage(p, "message.amountAddedSuccessfullyToSign", vars[1], p.getUniqueId());
-											bankcraft.getSignHandler().updateSign(sb,0);
+											centralBank.getSignHandler().updateSign(sb,0);
 											return true;
 											}
 
@@ -184,67 +184,67 @@ public class MinecraftCommandListener implements CommandExecutor{
 								}
 							}
 						
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (Bankcraft.perms.has(p, "bankcraft.command.balance.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {	
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (CentralBank.perms.has(p, "bankcraft.command.balance.other") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], "", p, bankcraft.getUUIDHandler().getUUID(vars[1],p));
+									  centralBank.getInteractionHandler().interact(vars[0], "", p, centralBank.getUUIDHandler().getUUID(vars[1],p));
 									  }
 								});
 							return true;
 						}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (Bankcraft.perms.has(p, "bankcraft.command.balancexp.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (CentralBank.perms.has(p, "bankcraft.command.balancexp.other") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], "", p, bankcraft.getUUIDHandler().getUUID(vars[1],p));
+									  centralBank.getInteractionHandler().interact(vars[0], "", p, centralBank.getUUIDHandler().getUUID(vars[1],p));
 									}
 								});
 							return true;
 							}
 						
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) && (Bankcraft.perms.has(p, "bankcraft.command.deposit") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) && (CentralBank.perms.has(p, "bankcraft.command.deposit") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) && (Bankcraft.perms.has(p, "bankcraft.command.withdraw") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) && (CentralBank.perms.has(p, "bankcraft.command.withdraw") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.depositxp")) && (Bankcraft.perms.has(p, "bankcraft.command.depositxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.depositxp")) && (CentralBank.perms.has(p, "bankcraft.command.depositxp") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) && (Bankcraft.perms.has(p, "bankcraft.command.withdrawxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) && (CentralBank.perms.has(p, "bankcraft.command.withdrawxp") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) && (Bankcraft.perms.has(p, "bankcraft.command.exchange") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) && (CentralBank.perms.has(p, "bankcraft.command.exchange") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) && (Bankcraft.perms.has(p, "bankcraft.command.exchangexp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) && (CentralBank.perms.has(p, "bankcraft.command.exchangexp") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
+									  centralBank.getInteractionHandler().interact(vars[0], vars[1], p, p.getUniqueId());
 									}
 								});
 							return true;
@@ -256,18 +256,18 @@ public class MinecraftCommandListener implements CommandExecutor{
 
 					} else {
 						
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (Bankcraft.perms.has(p, "bankcraft.command.balance.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balance")) && (CentralBank.perms.has(p, "bankcraft.command.balance.other") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], null, p, bankcraft.getUUIDHandler().getUUID(vars[1],p));
+									  centralBank.getInteractionHandler().interact(vars[0], null, p, centralBank.getUUIDHandler().getUUID(vars[1],p));
 									}
 								});
 							return true;
 							}
-						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (Bankcraft.perms.has(p, "bankcraft.command.balancexp.other") || Bankcraft.perms.has(p, "bankcraft.command"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						else if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.balancexp")) && (CentralBank.perms.has(p, "bankcraft.command.balancexp.other") || CentralBank.perms.has(p, "bankcraft.command"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getInteractionHandler().interact(vars[0], null, p, bankcraft.getUUIDHandler().getUUID(vars[1],p));
+									  centralBank.getInteractionHandler().interact(vars[0], null, p, centralBank.getUUIDHandler().getUUID(vars[1],p));
 									}
 								});
 							return true;
@@ -279,17 +279,17 @@ public class MinecraftCommandListener implements CommandExecutor{
 
 				if (vars.length == 3) {
 					if (Util.isPositive(vars[2]) || vars[2].equalsIgnoreCase("all")) {
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transfer")) && (Bankcraft.perms.has(p, "bankcraft.command.transfer") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transfer")) && (CentralBank.perms.has(p, "bankcraft.command.transfer") || CentralBank.perms.has(p, "bankcraft.command"))) {
 							final double amount;
 							if (vars[2].equalsIgnoreCase("all")) {
-								amount = bankcraft.getMoneyDatabaseInterface().getBalance(p.getUniqueId());
+								amount = centralBank.getMoneyDatabaseInterface().getBalance(p.getUniqueId());
 							} else {
 								amount = Double.parseDouble(vars[2]);
 							}
 							
-							Bankcraft.execService.submit(new Runnable() {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  ((MoneyBankingHandler)bankcraft.getBankingHandlers()[0]).transferFromAccountToAccount(p.getUniqueId(), bankcraft.getUUIDHandler().getUUID(vars[1],p), amount,p);
+									  ((MoneyBankingHandler) centralBank.getBankingHandlers()[0]).transferFromAccountToAccount(p.getUniqueId(), centralBank.getUUIDHandler().getUUID(vars[1],p), amount,p);
 								  }
 								});
 							
@@ -297,18 +297,18 @@ public class MinecraftCommandListener implements CommandExecutor{
 							return true;
 						} else {
 							
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transferxp")) && (Bankcraft.perms.has(p, "bankcraft.command.transferxp") || Bankcraft.perms.has(p, "bankcraft.command"))) {
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.transferxp")) && (CentralBank.perms.has(p, "bankcraft.command.transferxp") || CentralBank.perms.has(p, "bankcraft.command"))) {
 
 							final int amount;
 							if (vars[2].equalsIgnoreCase("all")) {
-								amount = bankcraft.getExperienceDatabaseInterface().getBalance(p.getUniqueId());
+								amount = centralBank.getExperienceDatabaseInterface().getBalance(p.getUniqueId());
 							} else {
 								amount = Integer.parseInt(vars[2]);
 							}
 							
-							Bankcraft.execService.submit(new Runnable() {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  ((ExperienceBankingHandler)bankcraft.getBankingHandlers()[1]).transferFromAccountToAccount(p.getUniqueId(), bankcraft.getUUIDHandler().getUUID(vars[1],p), amount,p);
+									  ((ExperienceBankingHandler) centralBank.getBankingHandlers()[1]).transferFromAccountToAccount(p.getUniqueId(), centralBank.getUUIDHandler().getUUID(vars[1],p), amount,p);
 								  }
 								});
 							
@@ -335,26 +335,26 @@ public class MinecraftCommandListener implements CommandExecutor{
 							return true;
 						}
 						
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.reloadconfig")) && (Bankcraft.perms.has(p, "bankcraft.command.reloadconfig") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-							bankcraft.reloadConfig();
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.reloadconfig")) && (CentralBank.perms.has(p, "bankcraft.command.reloadconfig") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+							centralBank.reloadConfig();
 							p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Config reloaded!");
 							return true;
 						}
 					}
 					else if (vars.length == 2) {
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.clear")) && (Bankcraft.perms.has(p, "bankcraft.command.clear") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.clear")) && (CentralBank.perms.has(p, "bankcraft.command.clear") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									 bankcraft.getMoneyDatabaseInterface().setBalance(bankcraft.getUUIDHandler().getUUID(vars[1],p), 0D);
+									 centralBank.getMoneyDatabaseInterface().setBalance(centralBank.getUUIDHandler().getUUID(vars[1],p), 0D);
 									 p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Account cleared!");
 									}
 								});
 							return true;
 						}
-						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.clearxp")) && (Bankcraft.perms.has(p, "bankcraft.command.clearxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-							Bankcraft.execService.submit(new Runnable() {
+						if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.clearxp")) && (CentralBank.perms.has(p, "bankcraft.command.clearxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+							CentralBank.execService.submit(new Runnable() {
 								  public void run() {
-									  bankcraft.getExperienceDatabaseInterface().setBalance(bankcraft.getUUIDHandler().getUUID(vars[1],p), 0);
+									  centralBank.getExperienceDatabaseInterface().setBalance(centralBank.getUUIDHandler().getUUID(vars[1],p), 0);
 									  p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "XP-Account cleared!");
 									}
 								});
@@ -363,20 +363,20 @@ public class MinecraftCommandListener implements CommandExecutor{
 					}
 					else if (vars.length == 3) {
 						if (Util.isDouble(vars[2])) {
-							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.set")) && (Bankcraft.perms.has(p, "bankcraft.command.set") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-								Bankcraft.execService.submit(new Runnable() {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.set")) && (CentralBank.perms.has(p, "bankcraft.command.set") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+								CentralBank.execService.submit(new Runnable() {
 									  public void run() {
-										  bankcraft.getMoneyDatabaseInterface().setBalance(bankcraft.getUUIDHandler().getUUID(vars[1],p), Double.parseDouble(vars[2]));
+										  centralBank.getMoneyDatabaseInterface().setBalance(centralBank.getUUIDHandler().getUUID(vars[1],p), Double.parseDouble(vars[2]));
 										  p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Account set!");
 										}
 									});
 								return true;
 							}
 
-							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.setxp")) && (Bankcraft.perms.has(p, "bankcraft.command.setxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-								Bankcraft.execService.submit(new Runnable() {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.setxp")) && (CentralBank.perms.has(p, "bankcraft.command.setxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+								CentralBank.execService.submit(new Runnable() {
 									  public void run() {
-										  bankcraft.getExperienceDatabaseInterface().setBalance(bankcraft.getUUIDHandler().getUUID(vars[1],p), Integer.parseInt(vars[2]));
+										  centralBank.getExperienceDatabaseInterface().setBalance(centralBank.getUUIDHandler().getUUID(vars[1],p), Integer.parseInt(vars[2]));
 										  p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "XP-Account set!");
 										}
 									});
@@ -384,27 +384,27 @@ public class MinecraftCommandListener implements CommandExecutor{
 							}
 
 
-							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.grant")) && (Bankcraft.perms.has(p, "bankcraft.command.grant") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-								Bankcraft.execService.submit(new Runnable() {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.grant")) && (CentralBank.perms.has(p, "bankcraft.command.grant") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+								CentralBank.execService.submit(new Runnable() {
 									  public void run() {
-										  bankcraft.getMoneyDatabaseInterface().addToAccount(bankcraft.getUUIDHandler().getUUID(vars[1],p), Double.parseDouble(vars[2]));
+										  centralBank.getMoneyDatabaseInterface().addToAccount(centralBank.getUUIDHandler().getUUID(vars[1],p), Double.parseDouble(vars[2]));
 										  p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Granted "+vars[2]+" Money to "+vars[1]+"!");
 										}
 									});
 								return true;
 							}
 
-							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.grantxp")) && (Bankcraft.perms.has(p, "bankcraft.command.grantxp") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
-								Bankcraft.execService.submit(new Runnable() {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.grantxp")) && (CentralBank.perms.has(p, "bankcraft.command.grantxp") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
+								CentralBank.execService.submit(new Runnable() {
 									  public void run() {
-										  bankcraft.getExperienceDatabaseInterface().addToAccount(bankcraft.getUUIDHandler().getUUID(vars[1],p), Integer.parseInt(vars[2]));
+										  centralBank.getExperienceDatabaseInterface().addToAccount(centralBank.getUUIDHandler().getUUID(vars[1],p), Integer.parseInt(vars[2]));
 										  p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Granted "+vars[2]+" Experience to "+vars[1]+"!");
 										}
 									});
 								return true;
 							}
 						} else {
-							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.databaseimport")) && (Bankcraft.perms.has(p, "bankcraft.command.databaseimport") || Bankcraft.perms.has(p, "bankcraft.command.admin"))) {
+							if (vars[0].equalsIgnoreCase(coHa.getString("signAndCommand.admin.databaseimport")) && (CentralBank.perms.has(p, "bankcraft.command.databaseimport") || CentralBank.perms.has(p, "bankcraft.command.admin"))) {
 								
 								p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing...");
 								
@@ -422,37 +422,37 @@ public class MinecraftCommandListener implements CommandExecutor{
 								if (vars[1].equalsIgnoreCase("flatfile")) {
 									//Load flatFile
 									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing from flatfile...");
-									loadDataMan = new DatabaseManagerFlatFile(bankcraft);
-									loadDataMoney = new MoneyFlatFileInterface(bankcraft);
-									loadDataXp = new ExperienceFlatFileInterface(bankcraft);
-									loadDataSign = new SignFlatFileInterface(bankcraft);
+									loadDataMan = new DatabaseManagerFlatFile(centralBank);
+									loadDataMoney = new MoneyFlatFileInterface(centralBank);
+									loadDataXp = new ExperienceFlatFileInterface(centralBank);
+									loadDataSign = new SignFlatFileInterface(centralBank);
 								}
 								
 								if (vars[1].equalsIgnoreCase("mysql")) {
 									//Load mysql
 									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Importing from mysql...");
-									loadDataMan = new DatabaseManagerMysql(bankcraft);
-									loadDataMoney = new MoneyMysqlInterface(bankcraft);
-									loadDataXp = new ExperienceMysqlInterface(bankcraft);
-									loadDataSign = new SignMysqlInterface(bankcraft);
+									loadDataMan = new DatabaseManagerMysql(centralBank);
+									loadDataMoney = new MoneyMysqlInterface(centralBank);
+									loadDataXp = new ExperienceMysqlInterface(centralBank);
+									loadDataSign = new SignMysqlInterface(centralBank);
 								}
 								
 								if (vars[2].equalsIgnoreCase("flatfile")) {
 									//Load flatFile
 									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Exporting to flatfile...");
-									saveDataMan = new DatabaseManagerFlatFile(bankcraft);
-									saveDataMoney = new MoneyFlatFileInterface(bankcraft);
-									saveDataXp = new ExperienceFlatFileInterface(bankcraft);
-									saveDataSign = new SignFlatFileInterface(bankcraft);
+									saveDataMan = new DatabaseManagerFlatFile(centralBank);
+									saveDataMoney = new MoneyFlatFileInterface(centralBank);
+									saveDataXp = new ExperienceFlatFileInterface(centralBank);
+									saveDataSign = new SignFlatFileInterface(centralBank);
 								}
 								
 								if (vars[2].equalsIgnoreCase("mysql")) {
 									//Load mysql
 									p.sendMessage(coHa.getString("chat.color") + coHa.getString("chat.prefix") + "Exporting to mysql...");
-									saveDataMan = new DatabaseManagerMysql(bankcraft);
-									saveDataMoney = new MoneyMysqlInterface(bankcraft);
-									saveDataXp = new ExperienceMysqlInterface(bankcraft);
-									saveDataSign = new SignMysqlInterface(bankcraft);
+									saveDataMan = new DatabaseManagerMysql(centralBank);
+									saveDataMoney = new MoneyMysqlInterface(centralBank);
+									saveDataXp = new ExperienceMysqlInterface(centralBank);
+									saveDataSign = new SignMysqlInterface(centralBank);
 								}
 								
 								//get them ready
@@ -507,7 +507,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 				}
 			}
 		} else {
-			Bankcraft.log.info("[Bankcraft] Please use this ingame!");
+			CentralBank.log.info("[Bankcraft] Please use this ingame!");
 		}
 
 		return false;

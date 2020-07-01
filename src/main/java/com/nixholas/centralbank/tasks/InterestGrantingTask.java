@@ -5,16 +5,16 @@ import java.util.TimerTask;
 import com.nixholas.centralbank.banking.BankingHandler;
 import org.bukkit.block.Sign;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 
 public class InterestGrantingTask extends TimerTask{
 	
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	private final int amountOfTimeUntilInterestInMinutes;
 	private int currentTimeUntilInterestInMinutes;
 
-	public InterestGrantingTask (Bankcraft bankcraft, int amountOfTimeUntilInterestInMinutes) {
-		this.bankcraft = bankcraft;
+	public InterestGrantingTask (CentralBank centralBank, int amountOfTimeUntilInterestInMinutes) {
+		this.centralBank = centralBank;
 		this.amountOfTimeUntilInterestInMinutes = amountOfTimeUntilInterestInMinutes;
 		this.currentTimeUntilInterestInMinutes = this.amountOfTimeUntilInterestInMinutes;
 	}
@@ -26,7 +26,7 @@ public class InterestGrantingTask extends TimerTask{
 		currentTimeUntilInterestInMinutes--;
 		
 		//Update signs
-		for (Sign sign: bankcraft.getSignHandler().getSigns(null, 16)) {
+		for (Sign sign: centralBank.getSignHandler().getSigns(null, 16)) {
 			sign.setLine(2, currentTimeUntilInterestInMinutes+"");
 			sign.update(true);
 		}
@@ -34,12 +34,12 @@ public class InterestGrantingTask extends TimerTask{
 		
 		if (currentTimeUntilInterestInMinutes<= 0) {
 			//Grant interests
-			for (BankingHandler<?> bankingHandler: bankcraft.getBankingHandlers()) {
+			for (BankingHandler<?> bankingHandler: centralBank.getBankingHandlers()) {
 				bankingHandler.grantInterests(null);
 			}
 			
-			if (Boolean.parseBoolean(bankcraft.getConfigurationHandler().getString("interest.broadcastToConsole"))) {
-				bankcraft.getLogger().info("Granted interest to all players.");
+			if (Boolean.parseBoolean(centralBank.getConfigurationHandler().getString("interest.broadcastToConsole"))) {
+				centralBank.getLogger().info("Granted interest to all players.");
 			}
 			
 			

@@ -10,17 +10,17 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.SignDatabaseInterface;
 
 public class SignMysqlInterface implements SignDatabaseInterface {
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	private Connection conn;
 
-	public SignMysqlInterface(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
-		this.conn = ((DatabaseManagerMysql)bankcraft.getDatabaseManagerInterface()).getConnection();
+	public SignMysqlInterface(CentralBank centralBank) {
+		this.centralBank = centralBank;
+		this.conn = ((DatabaseManagerMysql) centralBank.getDatabaseManagerInterface()).getConnection();
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class SignMysqlInterface implements SignDatabaseInterface {
 	 
 	        List <Location> loadingList= new ArrayList <Location>();
 	        while (result.next()) {
-	        	loadingList.add(new Location(bankcraft.getServer().getWorld(result.getString("world")),Integer.parseInt(result.getString("x")),Integer.parseInt(result.getString("y")),Integer.parseInt(result.getString("z"))));
+	        	loadingList.add(new Location(centralBank.getServer().getWorld(result.getString("world")),Integer.parseInt(result.getString("x")),Integer.parseInt(result.getString("y")),Integer.parseInt(result.getString("z"))));
 	        }
 	        return loadingList.toArray(new Location [0]);
 	        

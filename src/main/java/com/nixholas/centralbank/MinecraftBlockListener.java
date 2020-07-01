@@ -2,7 +2,6 @@ package com.nixholas.centralbank;
 
 import com.nixholas.centralbank.constants.MaterialConstants;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -15,12 +14,12 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class MinecraftBlockListener implements Listener {
 
-    private Bankcraft bankcraft;
+    private CentralBank centralBank;
     private ConfigurationHandler coHa;
 
-    public MinecraftBlockListener(Bankcraft bankcraft) {
-        this.bankcraft = bankcraft;
-        this.coHa = bankcraft.getConfigurationHandler();
+    public MinecraftBlockListener(CentralBank centralBank) {
+        this.centralBank = centralBank;
+        this.coHa = centralBank.getConfigurationHandler();
     }
 
     private static final BlockFace[] faces = new BlockFace[]{BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
@@ -44,13 +43,13 @@ public class MinecraftBlockListener implements Listener {
                 //check the found sign for the players name.
                 Sign sign = (Sign) testblock.getRelative(face).getState();
                 if (sign.getLine(0).contains("[Bank]")) {
-                    if (!Bankcraft.perms.has(p, "bankcraft.admin")) {
+                    if (!CentralBank.perms.has(p, "bankcraft.admin")) {
                         coHa.printMessage(p, "message.notAllowed", "0", p.getUniqueId(),
                                 p.getName());
                         event.setCancelled(true);
                         return;
                     } else {
-                        bankcraft.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(),
+                        centralBank.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(),
                                 sign.getWorld());
                         coHa.printMessage(p, "message.removedSignSuccessfully", "0",
                                 p.getUniqueId(), p.getName());
@@ -66,8 +65,8 @@ public class MinecraftBlockListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-                if (Bankcraft.perms.has(p, "bankcraft.admin")) {
-                    bankcraft.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
+                if (CentralBank.perms.has(p, "bankcraft.admin")) {
+                    centralBank.getSignDatabaseInterface().removeSign(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
                     coHa.printMessage(p, "message.removedSignSuccessfully", "0", p.getUniqueId(), p.getName());
                 } else {
                     event.setCancelled(true);
@@ -82,7 +81,7 @@ public class MinecraftBlockListener implements Listener {
         Player p = event.getPlayer();
         String firstRow = event.getLine(0);
         if (firstRow.equalsIgnoreCase("[Bank]")) {
-            if (Bankcraft.perms.has(p, "bankcraft.admin")) {
+            if (CentralBank.perms.has(p, "bankcraft.admin")) {
                 if (((event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.deposit")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchange")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.exchangexp")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdraw")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.withdrawxp")) | event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.depositxp"))) && (Util.isPositive(event.getLine(2))) || event.getLine(2).equalsIgnoreCase("all")) == true) {
                     //ERSTELLEN DER BANK(setting up a sign)
                     event.setLine(0, coHa.getString("signAndCommand.signColor") + "[Bank]");
@@ -147,7 +146,7 @@ public class MinecraftBlockListener implements Listener {
                         }
                         typ = 13;
                     }
-                    bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), typ, amount + "");
+                    centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), typ, amount + "");
                     coHa.printMessage(p, "message.createdSignSuccessfully", "", p.getUniqueId(), p.getName());
 
                 } else {
@@ -158,31 +157,31 @@ public class MinecraftBlockListener implements Listener {
                         int signZ = event.getBlock().getZ();
                         if (event.getLine(1).equals(coHa.getString("signAndCommand.balancexp"))) {
                             if (event.getLine(2).isEmpty()) {
-                                bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 5, "0");
+                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 5, "0");
 
                             } else {
-                                bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 11, "0");
+                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 11, "0");
 
                             }
                         } else if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.balance"))) {
                             if (event.getLine(2).isEmpty()) {
-                                bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 0, "0");
+                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 0, "0");
 
                             } else {
-                                bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 10, "0");
+                                centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 10, "0");
 
                             }
                         } else if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.interesttimer"))) {
                             //interestTimerSign
-                            event.setLine(2, "" + bankcraft.getInterestGrantingTask().getRemainingTime());
-                            bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 16, "0");
+                            event.setLine(2, "" + centralBank.getInterestGrantingTask().getRemainingTime());
+                            centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 16, "0");
                         } else if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.chatinteract"))) {
                             //chatsign
-                            bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 17, "0");
+                            centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 17, "0");
                         } else if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.rankstats"))) {
-                            bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 18, "0");
+                            centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 18, "0");
                         } else if (event.getLine(1).equalsIgnoreCase(coHa.getString("signAndCommand.rankstatsxp"))) {
-                            bankcraft.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 19, "0");
+                            centralBank.getSignDatabaseInterface().createNewSign(signX, signY, signZ, event.getBlock().getWorld(), 19, "0");
                         }
 
 

@@ -20,30 +20,30 @@ import org.bukkit.entity.Player;
 
 public class ConfigurationHandler {
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public ConfigurationHandler(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public ConfigurationHandler(CentralBank centralBank) {
+		this.centralBank = centralBank;
 		if (!(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"config.yml").exists())) {
-			Bankcraft.log.info("No config file found! Creating new one...");
-			bankcraft.saveDefaultConfig();
+			CentralBank.log.info("No config file found! Creating new one...");
+			centralBank.saveDefaultConfig();
 		}
 		try {
-			bankcraft.getConfig().load(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"config.yml"));
+			centralBank.getConfig().load(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"config.yml"));
 		} catch (Exception e) {
-			Bankcraft.log.info("Could not load config file!");
+			CentralBank.log.info("Could not load config file!");
 			e.printStackTrace();
 		}
 	}
 
 	public void printMessage(Player player, String messageKey, String amount, UUID player2) {
-		printMessage(player, messageKey, amount, player2, bankcraft.getUUIDHandler().getName(player2));
+		printMessage(player, messageKey, amount, player2, centralBank.getUUIDHandler().getName(player2));
 	}
 	
 	public void printMessage(Player player, String messageKey, String amount, UUID player2, String player2Name) {
-		if (bankcraft.getConfig().contains(messageKey)) {
+		if (centralBank.getConfig().contains(messageKey)) {
 			List<String> message = new ArrayList<String>();
-			message.add(bankcraft.getConfig().getString(messageKey));
+			message.add(centralBank.getConfig().getString(messageKey));
 			
 			if (player2 != null && !player2.equals("")) {
 				message.set(0, message.get(0).replaceAll("%player2", player2Name));
@@ -56,22 +56,22 @@ public class ConfigurationHandler {
 			}
 
 			message.set(0, message.get(0).replaceAll("%pocketXp", ""+player.getTotalExperience()));
-			message.set(0, message.get(0).replaceAll("%pocket", ""+Bankcraft.econ.getBalance(player)));
+			message.set(0, message.get(0).replaceAll("%pocket", ""+ CentralBank.econ.getBalance(player)));
 			
-			if (bankcraft.getExperienceDatabaseInterface().hasAccount(player2)) 
-				message.set(0, message.get(0).replaceAll("%balanceXp", ""+bankcraft.getExperienceDatabaseInterface().getBalance(player2)));
+			if (centralBank.getExperienceDatabaseInterface().hasAccount(player2))
+				message.set(0, message.get(0).replaceAll("%balanceXp", ""+ centralBank.getExperienceDatabaseInterface().getBalance(player2)));
 			else
 				message.set(0, message.get(0).replaceAll("%balanceXp", "0"));
 			
-			if (bankcraft.getMoneyDatabaseInterface().hasAccount(player2)) 
-				message.set(0, message.get(0).replaceAll("%balance", ""+f.format(bankcraft.getMoneyDatabaseInterface().getBalance(player2))));
+			if (centralBank.getMoneyDatabaseInterface().hasAccount(player2))
+				message.set(0, message.get(0).replaceAll("%balance", ""+f.format(centralBank.getMoneyDatabaseInterface().getBalance(player2))));
 			else
 				message.set(0, message.get(0).replaceAll("%balance", "0.00"));
 				
 			message.set(0, message.get(0).replaceAll("%player", player.getName()));
 			
-			message.set(0, message.get(0).replaceAll("%interestTimeRemaining", bankcraft.getInterestGrantingTask().getRemainingTime()+""));
-			message.set(0, message.get(0).replaceAll("%interestTimeTotal", bankcraft.getInterestGrantingTask().getTotalTime()+""));
+			message.set(0, message.get(0).replaceAll("%interestTimeRemaining", centralBank.getInterestGrantingTask().getRemainingTime()+""));
+			message.set(0, message.get(0).replaceAll("%interestTimeTotal", centralBank.getInterestGrantingTask().getTotalTime()+""));
 			
 			
 			if (message.get(0).contains("%rankTableMoney")) {
@@ -96,7 +96,7 @@ public class ConfigurationHandler {
 			}
 			
 		} else {
-			bankcraft.getLogger().severe("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
+			centralBank.getLogger().severe("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
 			player.sendMessage("Could not locate '"+messageKey+"' in the config.yml inside of the Bankcraft folder!");
 		}
 	}
@@ -122,7 +122,7 @@ public class ConfigurationHandler {
 		}
 
 		//Online/Offline interests
-		if (bankcraft.getServer().getPlayer(accountName) != null)
+		if (centralBank.getServer().getPlayer(accountName) != null)
 			interestString += "IfOnline";
 		else
 			interestString += "IfOffline";
@@ -135,14 +135,14 @@ public class ConfigurationHandler {
 	}
 	
 	public String getString(String key) {
-		if (!bankcraft.getConfig().contains(key)) {
-			bankcraft.getLogger().severe("Could not locate '"+key+"' in the config.yml inside of the Bankcraft folder! (Try generating a new one by deleting the current)");
+		if (!centralBank.getConfig().contains(key)) {
+			centralBank.getLogger().severe("Could not locate '"+key+"' in the config.yml inside of the Bankcraft folder! (Try generating a new one by deleting the current)");
 			return "errorCouldNotLocateInConfigYml:"+key;
 		} else {
 			if (key.toLowerCase().contains("color")) {
-				return "�"+bankcraft.getConfig().getString(key);
+				return "�"+ centralBank.getConfig().getString(key);
 			}
-			return bankcraft.getConfig().getString(key);
+			return centralBank.getConfig().getString(key);
 		}
 	}
 	
@@ -151,15 +151,15 @@ public class ConfigurationHandler {
 		List<String> result = new ArrayList<String>();
 		HashMap <UUID,Double> accounts = new HashMap<UUID,Double>();
 		
-		for (UUID uuid: bankcraft.getMoneyDatabaseInterface().getAccounts()) {
-			accounts.put(uuid, bankcraft.getMoneyDatabaseInterface().getBalance(uuid));
+		for (UUID uuid: centralBank.getMoneyDatabaseInterface().getAccounts()) {
+			accounts.put(uuid, centralBank.getMoneyDatabaseInterface().getBalance(uuid));
 		}
 		
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<UUID,Double>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i>=0 ; i--) {
-			result.add(bankcraft.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+f.format(sortedAccounts.get(i).getValue()));
+			result.add(centralBank.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+f.format(sortedAccounts.get(i).getValue()));
 		}
 		
 		
@@ -172,15 +172,15 @@ public class ConfigurationHandler {
 		List<String> result = new ArrayList<String>();
 		HashMap <UUID,Integer> accounts = new HashMap<UUID,Integer>();
 		
-		for (UUID uuid: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
-			accounts.put(uuid, bankcraft.getExperienceDatabaseInterface().getBalance(uuid));
+		for (UUID uuid: centralBank.getExperienceDatabaseInterface().getAccounts()) {
+			accounts.put(uuid, centralBank.getExperienceDatabaseInterface().getBalance(uuid));
 		}
 		
 		@SuppressWarnings("unchecked")
 		List <Map.Entry<UUID,Integer>> sortedAccounts = sortByComparator(accounts);
 		
 		for (int i = Math.min(Integer.parseInt(getString("chat.rankTableLength")),sortedAccounts.size())-1; i >=0; i--) {
-			result.add(bankcraft.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+sortedAccounts.get(i).getValue());
+			result.add(centralBank.getUUIDHandler().getName(sortedAccounts.get(i).getKey())+" "+sortedAccounts.get(i).getValue());
 		}
 		
 		
@@ -220,7 +220,7 @@ public class ConfigurationHandler {
 		loanLimit = Double.parseDouble(getString(interestString));
 		
 		//Player specific loans
-		Player player = bankcraft.getServer().getPlayer(accountOwner);
+		Player player = centralBank.getServer().getPlayer(accountOwner);
 		if (player != null) { //If Online
 			
 			//TODO

@@ -8,17 +8,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 
 public class UUIDHandler {
 
 	private Map<String,UUID> uuidMap = new ConcurrentHashMap <String,UUID>();
 	private Map<UUID,String> nameMap = new ConcurrentHashMap <UUID,String>();
 	
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public UUIDHandler(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public UUIDHandler(CentralBank centralBank) {
+		this.centralBank = centralBank;
 	}
 	
 	public UUID getUUID(String name) {
@@ -29,7 +29,7 @@ public class UUIDHandler {
 		try {
 			return getUUIDwE(name, observer);
 		} catch (Exception e) {
-			Bankcraft.log.severe("Could not retrieve UUID for '"+name+"'! Make sure that the server has access to the internet!");
+			CentralBank.log.severe("Could not retrieve UUID for '"+name+"'! Make sure that the server has access to the internet!");
 			e.printStackTrace();
 		}
 		return null;
@@ -46,14 +46,14 @@ public class UUIDHandler {
 			nameMap.put(observer.getUniqueId(), name);
 			uuidMap.put(name, observer.getUniqueId());
 			return observer.getUniqueId();
-		} else if ((p = bankcraft.getServer().getPlayer(name)) != null) {
+		} else if ((p = centralBank.getServer().getPlayer(name)) != null) {
 			nameMap.put(p.getUniqueId(), name);
 			uuidMap.put(name, p.getUniqueId());
 			return p.getUniqueId();
 		} else if (uuidMap.containsKey(name)) {
 			return uuidMap.get(name);
 		} else {
-			if (observer != null) bankcraft.getConfigurationHandler().printMessage(observer, "message.performingLookup", "", null, null);
+			if (observer != null) centralBank.getConfigurationHandler().printMessage(observer, "message.performingLookup", "", null, null);
 			List <String> uL = new ArrayList <String> ();
 			uL.add(name);
 			UUIDFetcher fetcher = new UUIDFetcher(uL);
@@ -67,7 +67,7 @@ public class UUIDHandler {
 	
 	public String getName(UUID uuid) {
 		Player p = null;
-		if ((p = bankcraft.getServer().getPlayer(uuid)) != null) {
+		if ((p = centralBank.getServer().getPlayer(uuid)) != null) {
 			nameMap.put(uuid, p.getName());
 			uuidMap.put(p.getName(), uuid);
 			return p.getName();

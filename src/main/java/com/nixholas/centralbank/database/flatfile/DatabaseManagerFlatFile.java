@@ -1,15 +1,15 @@
 package com.nixholas.centralbank.database.flatfile;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.DatabaseManagerInterface;
 
 public class DatabaseManagerFlatFile implements DatabaseManagerInterface{
 
 	@SuppressWarnings("unused")
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public DatabaseManagerFlatFile(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public DatabaseManagerFlatFile(CentralBank centralBank) {
+		this.centralBank = centralBank;
 		
 		setupDatabase();
 	}

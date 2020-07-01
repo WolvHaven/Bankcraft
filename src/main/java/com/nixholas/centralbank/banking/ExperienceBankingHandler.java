@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 
 public class ExperienceBankingHandler implements BankingHandler<Integer>{
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public ExperienceBankingHandler(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public ExperienceBankingHandler(CentralBank centralBank) {
+		this.centralBank = centralBank;
 	}
 	
 	@Override
@@ -20,17 +20,17 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 		if (amount <0) return transferFromAccountToPocket(accountOwner, pocketOwner, -amount, observer);
 		
 		if (ExperienceBukkitHandler.getTotalExperience(pocketOwner) >= amount) {
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+			if (centralBank.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(centralBank.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
 				ExperienceBukkitHandler.removeExperienceFromPocket(pocketOwner, amount);
-				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfullyXp", amount+"", accountOwner);
-				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
+				centralBank.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
+				centralBank.getConfigurationHandler().printMessage(observer, "message.depositedSuccessfullyXp", amount+"", accountOwner);
+				if (centralBank.getServer().getPlayer(accountOwner) != null) centralBank.getDebitorHandler().updateDebitorStatus(centralBank.getServer().getPlayer(accountOwner));
 				return true;
 			} else {
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
+				centralBank.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
 			}
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInPoket", amount+"", pocketOwner.getUniqueId(), pocketOwner.getName());
+			centralBank.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInPoket", amount+"", pocketOwner.getUniqueId(), pocketOwner.getName());
 		}
 		return false;
 	}
@@ -40,19 +40,19 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			   Player pocketOwner, Integer amount, Player observer) {
 		if (amount <0) return transferFromPocketToAccount(pocketOwner, accountOwner, -amount, observer);
 		
-		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
-			if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxPocketLimitXp"))-amount) {
-			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
+		if (centralBank.getExperienceDatabaseInterface().getBalance(accountOwner)+ centralBank.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
+			if (ExperienceBukkitHandler.getTotalExperience(pocketOwner)<= Integer.parseInt(centralBank.getConfigurationHandler().getString("general.maxPocketLimitXp"))-amount) {
+			    centralBank.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
 			    ExperienceBukkitHandler.addExperienceToPocket(pocketOwner, amount);
-			    bankcraft.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfullyXp", amount+"", accountOwner);
-			    if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
+			    centralBank.getConfigurationHandler().printMessage(observer, "message.withdrewSuccessfullyXp", amount+"", accountOwner);
+			    if (centralBank.getServer().getPlayer(accountOwner) != null) centralBank.getDebitorHandler().updateDebitorStatus(centralBank.getServer().getPlayer(accountOwner));
 			    return true;
 			   } else {
-			    bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInPocket", amount+"", pocketOwner.getUniqueId(),  pocketOwner.getName());
+			    centralBank.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInPocket", amount+"", pocketOwner.getUniqueId(),  pocketOwner.getName());
 			   }
 
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
+			centralBank.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
 		}
 		return false;
 	}
@@ -62,24 +62,24 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			UUID gettingPlayer, Integer amount, Player observer) {
 		if (amount <0) return transferFromAccountToAccount(gettingPlayer, givingPlayer, -amount, observer);
 		
-		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(gettingPlayer)) {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", gettingPlayer);
+		if (!centralBank.getExperienceDatabaseInterface().hasAccount(gettingPlayer)) {
+			centralBank.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", gettingPlayer);
 			return false;
 		}
 		
-		if (bankcraft.getExperienceDatabaseInterface().getBalance(givingPlayer)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(givingPlayer, this) >= amount) {
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
-				bankcraft.getExperienceDatabaseInterface().removeFromAccount(givingPlayer, amount);
-				bankcraft.getExperienceDatabaseInterface().addToAccount(gettingPlayer, amount);
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.transferedSuccessfullyXp", amount+"", gettingPlayer);
-				if (bankcraft.getServer().getPlayer(givingPlayer) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(givingPlayer));
+		if (centralBank.getExperienceDatabaseInterface().getBalance(givingPlayer)+ centralBank.getConfigurationHandler().getLoanLimitForPlayer(givingPlayer, this) >= amount) {
+			if (centralBank.getExperienceDatabaseInterface().getBalance(gettingPlayer)<= Integer.parseInt(centralBank.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+				centralBank.getExperienceDatabaseInterface().removeFromAccount(givingPlayer, amount);
+				centralBank.getExperienceDatabaseInterface().addToAccount(gettingPlayer, amount);
+				centralBank.getConfigurationHandler().printMessage(observer, "message.transferedSuccessfullyXp", amount+"", gettingPlayer);
+				if (centralBank.getServer().getPlayer(givingPlayer) != null) centralBank.getDebitorHandler().updateDebitorStatus(centralBank.getServer().getPlayer(givingPlayer));
 				return true;
 			} else {
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", gettingPlayer);
+				centralBank.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", gettingPlayer);
 			}
 
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", givingPlayer);
+			centralBank.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", givingPlayer);
 		}
 		return false;
 	}
@@ -87,23 +87,23 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 	@Override
 	public synchronized boolean grantInterests(Player observer) {
 		String messageKey;
-		for (UUID accountName: bankcraft.getExperienceDatabaseInterface().getAccounts()) {
+		for (UUID accountName: centralBank.getExperienceDatabaseInterface().getAccounts()) {
 			
-			double interest = bankcraft.getConfigurationHandler().getInterestForPlayer(accountName, this, bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<0);
+			double interest = centralBank.getConfigurationHandler().getInterestForPlayer(accountName, this, centralBank.getExperienceDatabaseInterface().getBalance(accountName)<0);
 			
 			
 			
-			int amount = (int)(interest*bankcraft.getExperienceDatabaseInterface().getBalance(accountName));
+			int amount = (int)(interest* centralBank.getExperienceDatabaseInterface().getBalance(accountName));
 			
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountName)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
-				bankcraft.getExperienceDatabaseInterface().addToAccount(accountName, amount);
+			if (centralBank.getExperienceDatabaseInterface().getBalance(accountName)<= Integer.parseInt(centralBank.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+				centralBank.getExperienceDatabaseInterface().addToAccount(accountName, amount);
 				messageKey = "message.grantedInterestOnXp";
 			} else {
 				messageKey = "message.couldNotGrantInterestOnXp";
 			}
 			Player player;
-			if ((player =bankcraft.getServer().getPlayer(accountName)) != null && (bankcraft.getConfigurationHandler().getString("interest.broadcastXp").equals("true") || Bankcraft.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
-				bankcraft.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getUniqueId(), player.getName());
+			if ((player = centralBank.getServer().getPlayer(accountName)) != null && (centralBank.getConfigurationHandler().getString("interest.broadcastXp").equals("true") || CentralBank.perms.has(player, "bankcraft.interest.broadcastmoney"))) {
+				centralBank.getConfigurationHandler().printMessage(player, messageKey, amount+"", player.getUniqueId(), player.getName());
 			}
 		}
 		return true;
@@ -114,17 +114,17 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			Player observer) {
 		if (amount <0) return withdrawFromAccount(accountOwner, -amount, observer);
 		
-		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
+		if (!centralBank.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
+			centralBank.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
 			return false;
 		}
 		
-			if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(bankcraft.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
-				bankcraft.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
-				if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
+			if (centralBank.getExperienceDatabaseInterface().getBalance(accountOwner)<= Integer.parseInt(centralBank.getConfigurationHandler().getString("general.maxBankLimitXp"))-amount) {
+				centralBank.getExperienceDatabaseInterface().addToAccount(accountOwner, amount);
+				if (centralBank.getServer().getPlayer(accountOwner) != null) centralBank.getDebitorHandler().updateDebitorStatus(centralBank.getServer().getPlayer(accountOwner));
 				return true;
 			} else {
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
+				centralBank.getConfigurationHandler().printMessage(observer, "message.reachedMaximumXpInAccount", amount+"", accountOwner);
 			}
 		return false;
 	}
@@ -134,18 +134,18 @@ public class ExperienceBankingHandler implements BankingHandler<Integer>{
 			Player observer) {
 		if (amount <0) return depositToAccount(accountOwner, -amount, observer);
 		
-		if (!bankcraft.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
-				bankcraft.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
+		if (!centralBank.getExperienceDatabaseInterface().hasAccount(accountOwner)) {
+				centralBank.getConfigurationHandler().printMessage(observer, "message.accountDoesNotExist", amount+"", accountOwner);
 				return false;
 			}
 		
-		if (bankcraft.getExperienceDatabaseInterface().getBalance(accountOwner)+bankcraft.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
+		if (centralBank.getExperienceDatabaseInterface().getBalance(accountOwner)+ centralBank.getConfigurationHandler().getLoanLimitForPlayer(accountOwner, this) >= amount) {
 			
-			    bankcraft.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
-			    if (bankcraft.getServer().getPlayer(accountOwner) != null) bankcraft.getDebitorHandler().updateDebitorStatus(bankcraft.getServer().getPlayer(accountOwner));
+			    centralBank.getExperienceDatabaseInterface().removeFromAccount(accountOwner, amount);
+			    if (centralBank.getServer().getPlayer(accountOwner) != null) centralBank.getDebitorHandler().updateDebitorStatus(centralBank.getServer().getPlayer(accountOwner));
 			    return true;
 		} else {
-			bankcraft.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
+			centralBank.getConfigurationHandler().printMessage(observer, "message.notEnoughXpInAccount", amount+"", accountOwner);
 		}
 		
 		return false;

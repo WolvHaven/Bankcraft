@@ -7,17 +7,17 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.UUID;
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.AccountDatabaseInterface;
 
 public class ExperienceFlatFileInterface implements
 		AccountDatabaseInterface<Integer> {
 
 	
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 
-	public ExperienceFlatFileInterface(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public ExperienceFlatFileInterface(CentralBank centralBank) {
+		this.centralBank = centralBank;
     	(new File("plugins"+System.getProperty("file.separator")+"Bankcraft"+System.getProperty("file.separator")+"Accounts")).mkdir();
 	}
 	
@@ -40,7 +40,7 @@ public class ExperienceFlatFileInterface implements
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not create Account "+player+"!");
+			centralBank.getLogger().severe("Could not create Account "+player+"!");
 		}
 		return false;
 	}
@@ -63,7 +63,7 @@ public class ExperienceFlatFileInterface implements
 			return balance;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not get Balance of "+player+"!");
+			centralBank.getLogger().severe("Could not get Balance of "+player+"!");
 		}
 		return null;
 	}
@@ -94,7 +94,7 @@ public class ExperienceFlatFileInterface implements
 			return true;
 			
 		} catch (Exception e) {
-			bankcraft.getLogger().severe("Could not set Balance of "+player+"!");
+			centralBank.getLogger().severe("Could not set Balance of "+player+"!");
 		}
 		return false;
 	}

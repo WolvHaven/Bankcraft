@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-import com.nixholas.centralbank.Bankcraft;
+import com.nixholas.centralbank.CentralBank;
 import com.nixholas.centralbank.database.DatabaseManagerInterface;
 
 public class DatabaseManagerMysql implements DatabaseManagerInterface{
@@ -28,10 +28,10 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
 	  // Databank password
 	  private String dbPassword;
 
-	private Bankcraft bankcraft;
+	private CentralBank centralBank;
 	  
-	public DatabaseManagerMysql(Bankcraft bankcraft) {
-		this.bankcraft = bankcraft;
+	public DatabaseManagerMysql(CentralBank centralBank) {
+		this.centralBank = centralBank;
 		
 		setupDatabase();
 	}
@@ -42,11 +42,11 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
        	 	//Load Drivers
             Class.forName("com.mysql.jdbc.Driver");
             
-            dbHost = bankcraft.getConfigurationHandler().getString("database.mysql.host");
-            dbPort = bankcraft.getConfigurationHandler().getString("database.mysql.port");
-            database = bankcraft.getConfigurationHandler().getString("database.mysql.databaseName");
-            dbUser = bankcraft.getConfigurationHandler().getString("database.mysql.user");
-            dbPassword = bankcraft.getConfigurationHandler().getString("database.mysql.password");
+            dbHost = centralBank.getConfigurationHandler().getString("database.mysql.host");
+            dbPort = centralBank.getConfigurationHandler().getString("database.mysql.port");
+            database = centralBank.getConfigurationHandler().getString("database.mysql.databaseName");
+            dbUser = centralBank.getConfigurationHandler().getString("database.mysql.user");
+            dbPassword = centralBank.getConfigurationHandler().getString("database.mysql.password");
             
             //Connect to database
             conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":"
@@ -74,7 +74,7 @@ public class DatabaseManagerMysql implements DatabaseManagerInterface{
 	        e.printStackTrace();
 	        return false;
 	      }
-        Bankcraft.log.info("Mysql has been set up!");
+        CentralBank.log.info("Mysql has been set up!");
 		return true;
 	}
 	
