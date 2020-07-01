@@ -1,5 +1,6 @@
 package com.nixholas.centralbank;
 
+import com.nixholas.centralbank.constants.MaterialConstants;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -10,8 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 public class MinecraftPlayerListener implements Listener{
-
-	
 	private Bankcraft bankcraft;
 	private ConfigurationHandler coHa;
 
@@ -34,7 +33,7 @@ public class MinecraftPlayerListener implements Listener{
 	public void onklick(final PlayerInteractEvent event) throws Exception {
 		final Player p = event.getPlayer();
 		if (event.getClickedBlock() != null) {
-			if (event.getClickedBlock().getType().equals(Material.WALL_SIGN) || event.getClickedBlock().getType().equals(Material.SIGN_POST)) {
+			if (MaterialConstants.Signs.contains(event.getClickedBlock().getType())) {
 				if (((Sign) event.getClickedBlock().getState()).getLine(0).contains("[Bank]")) {
 					if (!p.isSneaking()) {
 						Integer type = bankcraft.getSignDatabaseInterface().getType(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ(), event.getClickedBlock().getWorld());

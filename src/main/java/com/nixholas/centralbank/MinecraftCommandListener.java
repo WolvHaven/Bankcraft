@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.nixholas.centralbank.banking.ExperienceBankingHandler;
 import com.nixholas.centralbank.banking.MoneyBankingHandler;
+import com.nixholas.centralbank.constants.MaterialConstants;
 import com.nixholas.centralbank.database.AccountDatabaseInterface;
 import com.nixholas.centralbank.database.DatabaseManagerInterface;
 import com.nixholas.centralbank.database.SignDatabaseInterface;
@@ -147,7 +148,7 @@ public class MinecraftCommandListener implements CommandExecutor{
 							while (bi.hasNext() &&  (sb = bi.next()).getType().equals(Material.AIR))
 							{}
 							
-							if (sb.getType() == Material.WALL_SIGN) {
+							if (MaterialConstants.WalledSigns.contains(sb.getType())) {
 								Sign sign = (Sign) sb.getState();
 								if (sign.getLine(0).contains("[Bank]")) {
 									Integer typsign = -1;
