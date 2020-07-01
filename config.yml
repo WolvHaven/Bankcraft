@@ -19,7 +19,9 @@ database:
     updateToUUID: false
 
 
-general: 
+general:
+#Enable or disable the Central bank system (true/false)
+    centralBank: true
 
 #Swap left and right click interactions (false/true)
     swapClicks: false

@@ -51,10 +51,10 @@ public final class PlutusCore extends JavaPlugin {
     @Override
     public void onEnable() {
         log = getLogger();
-        log.info("Loading Centralbank " + getDescription().getVersion() + "... ");
+        log.info("Loading PlutusCore " + getDescription().getVersion() + "... ");
 
-        //Create Centralbank folder
-        (new File("plugins" + System.getProperty("file.separator") + "Centralbank")).mkdir();
+        //Create PlutusCore folder
+        (new File("plugins" + System.getProperty("file.separator") + "Plutus")).mkdir();
 
 
         //Setup Vault for economy and permissions
@@ -127,7 +127,7 @@ public final class PlutusCore extends JavaPlugin {
         //Start Tasks
         toggleTimerTasks();
 
-        log.info("Centralbank has been successfully loaded!");
+        log.info("PlutusCore has been successfully loaded!");
     }
 
     private void toggleTimerTasks() {
@@ -154,7 +154,7 @@ public final class PlutusCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        log.info("Centralbank has been disabled");
+        log.info("PlutusCore has been disabled");
     }
 
 
