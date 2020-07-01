@@ -16,13 +16,13 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double> 
 
     @Override
     public boolean hasAccount(UUID player) {
-        return (new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data")).exists();
+        return (new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data")).exists();
     }
 
     @Override
     public boolean createAccount(UUID player) {
         try {
-            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
+            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
             accountFile.createNewFile();
 
             FileWriter fw = new FileWriter(accountFile, false);
@@ -45,7 +45,7 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double> 
         }
 
         try {
-            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
+            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
 
             FileReader fr = new FileReader(accountFile);
             BufferedReader br = new BufferedReader(fr);
@@ -67,7 +67,7 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double> 
         }
 
         try {
-            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
+            File accountFile = new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "Accounts" + System.getProperty("file.separator") + player + ".data");
 
             FileReader fr = new FileReader(accountFile);
             BufferedReader br = new BufferedReader(fr);
@@ -122,7 +122,7 @@ public class MoneyFlatFileInterface implements AccountDatabaseInterface<Double> 
 
     @Override
     public UUID[] getAccounts() {
-        String[] fileNames = (new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "Accounts")).list();
+        String[] fileNames = (new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "Accounts")).list();
         for (int i = 0; i < fileNames.length; i++) {
             fileNames[i] = fileNames[i].split("\\.")[0];
         }

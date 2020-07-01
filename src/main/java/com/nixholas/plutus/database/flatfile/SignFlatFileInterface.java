@@ -12,14 +12,14 @@ import java.util.List;
 public class SignFlatFileInterface implements SignDatabaseInterface {
 
     private final PlutusCore plutusCore;
-    private final File signFile = new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "SignDatabase" + System.getProperty("file.separator") + "signs.data");
+    private final File signFile = new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "SignDatabase" + System.getProperty("file.separator") + "signs.data");
 
     public SignFlatFileInterface(PlutusCore plutusCore) {
 
         this.plutusCore = plutusCore;
 
         try {
-            (new File("plugins" + System.getProperty("file.separator") + "Centralbank" + System.getProperty("file.separator") + "SignDatabase")).mkdir();
+            (new File("plugins" + System.getProperty("file.separator") + "Plutus" + System.getProperty("file.separator") + "SignDatabase")).mkdir();
             signFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
